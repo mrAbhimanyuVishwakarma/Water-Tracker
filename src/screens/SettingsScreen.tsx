@@ -7,12 +7,21 @@ import {
   ScrollView,
   Switch,
   Alert,
+  TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CurrencyCode, UserSettings } from '../types';
 import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
+import {
+  CURRENT_APP_VERSION,
+  DEFAULT_GITHUB_REPO,
+  checkGitHubRelease,
+  UpdateCheckResult,
+} from '../utils/updater';
+import { UpdateModal } from '../components/UpdateModal';
 
 interface Props {
   settings: UserSettings;
@@ -39,6 +48,41 @@ export const SettingsScreen: React.FC<Props> = ({
   const [currency, setCurrency] = useState<CurrencyCode>(settings.currency || 'INR');
   const [sound, setSound] = useState(settings.soundEnabled);
   const [haptic, setHaptic] = useState(settings.hapticEnabled);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [updateResult, setUpdateResult] = useState<UpdateCheckResult | null>(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<string | null>(null);
+  const [githubRepo, setGithubRepo] = useState(settings.githubRepo || DEFAULT_GITHUB_REPO);
+  const [isEditingRepo, setIsEditingRepo] = useState(false);
+  const [autoCheckUpdates, setAutoCheckUpdates] = useState(settings.autoCheckUpdates !== false);
+
+  const handleCheckForUpdates = async () => {
+    try {
+      setCheckingUpdate(true);
+      setUpdateStatus('Checking GitHub for updates...');
+      feedback.triggerHaptic('light');
+
+      const result = await checkGitHubRelease(githubRepo);
+      setCheckingUpdate(false);
+
+      if (result.available) {
+        setUpdateStatus(`✨ New version ${result.latestVersion} found!`);
+        setUpdateResult(result);
+        setShowUpdateModal(true);
+      } else {
+        setUpdateStatus(`✅ You are on the latest version (${result.currentVersion})`);
+        Alert.alert(
+          'Up to Date',
+          `You are running the latest version (${result.currentVersion}). No update is available on GitHub.`,
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (err: any) {
+      setCheckingUpdate(false);
+      setUpdateStatus('Failed to check for updates');
+      Alert.alert('Update Check Failed', err?.message || 'Could not connect to GitHub.');
+    }
+  };
 
   const saveGoal = (val: number) => {
     setDailyTarget(val);
@@ -264,6 +308,93 @@ export const SettingsScreen: React.FC<Props> = ({
           </TouchableOpacity>
         </View>
 
+        {/* Section: GitHub In-App Updates */}
+        <View style={styles.card}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Ionicons name="cloud-download-outline" size={22} color="#0284C7" />
+              <Text style={styles.sectionTitle}>GitHub In-App Updates</Text>
+            </View>
+            <View style={styles.versionPill}>
+              <Text style={styles.versionPillText}>v{CURRENT_APP_VERSION} (BETA)</Text>
+            </View>
+          </View>
+          <Text style={styles.sectionSubtitle}>
+            Automatically downloads and installs updates directly from your GitHub releases.
+          </Text>
+
+          {/* Repository Display & Edit */}
+          <View style={styles.repoBox}>
+            <Ionicons name="logo-github" size={18} color="#0F172A" />
+            {isEditingRepo ? (
+              <TextInput
+                style={styles.repoInput}
+                value={githubRepo}
+                onChangeText={setGithubRepo}
+                onBlur={() => {
+                  setIsEditingRepo(false);
+                  onUpdateSettings({ githubRepo });
+                }}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            ) : (
+              <Text style={styles.repoText} numberOfLines={1}>
+                {githubRepo}
+              </Text>
+            )}
+            <TouchableOpacity
+              onPress={() => {
+                if (isEditingRepo) {
+                  onUpdateSettings({ githubRepo });
+                }
+                setIsEditingRepo(!isEditingRepo);
+              }}
+              style={styles.repoEditBtn}
+            >
+              <Ionicons name={isEditingRepo ? 'checkmark' : 'pencil'} size={16} color="#0284C7" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Auto Check Toggle */}
+          <View style={[styles.settingRow, { marginTop: 12, marginBottom: 8 }]}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rowLabel}>Check on Launch</Text>
+              <Text style={styles.rowSub}>Auto-check for updates whenever the app opens</Text>
+            </View>
+            <Switch
+              value={autoCheckUpdates}
+              onValueChange={(val) => {
+                setAutoCheckUpdates(val);
+                onUpdateSettings({ autoCheckUpdates: val });
+                feedback.triggerHaptic('light');
+              }}
+              trackColor={{ false: '#CBD5E1', true: '#0284C7' }}
+            />
+          </View>
+
+          {/* Status Message */}
+          {updateStatus && (
+            <View style={styles.updateStatusBox}>
+              <Text style={styles.updateStatusText}>{updateStatus}</Text>
+            </View>
+          )}
+
+          {/* Check Button */}
+          <TouchableOpacity
+            style={[styles.actionBtn, { marginTop: 8 }]}
+            activeOpacity={0.85}
+            disabled={checkingUpdate}
+            onPress={handleCheckForUpdates}
+          >
+            {checkingUpdate ? (
+              <ActivityIndicator size="small" color="#0284C7" />
+            ) : (
+              <Text style={styles.actionBtnText}>🔍 CHECK FOR UPDATES</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
         {/* Section: App Data */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>App Data & Reset</Text>
@@ -280,7 +411,13 @@ export const SettingsScreen: React.FC<Props> = ({
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.versionText}>Brownie Water Tracker v1.0.0 (Android & Web)</Text>
+        <Text style={styles.versionText}>Brownie Water Tracker v1.0.0 (Beta All Unlocked)</Text>
+
+        <UpdateModal
+          visible={showUpdateModal}
+          updateInfo={updateResult}
+          onClose={() => setShowUpdateModal(false)}
+        />
       </ScrollView>
     </View>
   );
@@ -520,5 +657,61 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontWeight: '500',
     marginTop: 10,
+  },
+  versionPill: {
+    backgroundColor: '#E0F2FE',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#BAE6FD',
+  },
+  versionPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#0284C7',
+  },
+  repoBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 8,
+    marginTop: 4,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  repoInput: {
+    flex: 1,
+    fontSize: 13,
+    color: '#0F172A',
+    fontWeight: '600',
+    padding: 0,
+  },
+  repoText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#0F172A',
+    fontWeight: '600',
+  },
+  repoEditBtn: {
+    padding: 4,
+  },
+  updateStatusBox: {
+    backgroundColor: '#F0FDF4',
+    padding: 10,
+    borderRadius: 12,
+    marginTop: 6,
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
+  updateStatusText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#15803D',
+    textAlign: 'center',
   },
 });

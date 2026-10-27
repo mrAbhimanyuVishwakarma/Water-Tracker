@@ -8,9 +8,11 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "@supabase/supabase-js": "^2.118.0",
     "expo": "~58.0.19",
-    "expo-av": "^16.0.8",
+    "expo-constants": "~58.0.13",
+    "expo-file-system": "~58.0.11",
     "expo-font": "~58.0.10",
     "expo-haptics": "~58.0.7",
+    "expo-intent-launcher": "~58.0.3",
     "expo-linear-gradient": "~58.0.3",
     "expo-sensors": "~58.0.4",
     "expo-status-bar": "~58.0.4",
@@ -37,15 +39,6 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint"
-  },
-  "expo": {
-    "doctor": {
-      "reactNativeDirectoryCheck": {
-        "exclude": [
-          "expo-av"
-        ]
-      }
-    }
   },
   "private": true
 }

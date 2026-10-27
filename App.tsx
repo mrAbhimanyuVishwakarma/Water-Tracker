@@ -31,6 +31,12 @@ import {
 } from './src/types';
 import { DEFAULT_SETTINGS } from './src/constants/beverages';
 import { feedback } from './src/utils/feedback';
+import {
+  checkGitHubRelease,
+  UpdateCheckResult,
+  DEFAULT_GITHUB_REPO,
+} from './src/utils/updater';
+import { UpdateModal } from './src/components/UpdateModal';
 
 type Screen = TabId | 'onboarding' | 'pool_party' | 'paywall';
 
@@ -41,6 +47,8 @@ export default function App() {
   const [history, setHistory] = useState<DayData[]>([]);
   const [isReady, setIsReady] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState<UpdateCheckResult | null>(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   // Initialize app state from persistent storage
   useEffect(() => {
@@ -71,6 +79,16 @@ export default function App() {
         setCurrentScreen('onboarding');
       }
       setIsReady(true);
+
+      // Check for GitHub in-app updates quietly on launch
+      if (effectiveSettings.autoCheckUpdates !== false) {
+        checkGitHubRelease(effectiveSettings.githubRepo || DEFAULT_GITHUB_REPO).then((res) => {
+          if (res.available && res.apkUrl) {
+            setPendingUpdate(res);
+            setShowUpdateModal(true);
+          }
+        });
+      }
     };
 
     init();
@@ -289,6 +307,13 @@ export default function App() {
           onClose={() => setShowAuthModal(false)}
           onLoginSuccess={handleLoginSuccess}
           onSignOut={handleSignOut}
+        />
+
+        {/* GitHub In-App Update Modal */}
+        <UpdateModal
+          visible={showUpdateModal}
+          updateInfo={pendingUpdate}
+          onClose={() => setShowUpdateModal(false)}
         />
       </SafeAreaProvider>
     </GestureHandlerRootView>

@@ -102,6 +102,9 @@ export interface UserSettings {
   hasUsedMascotTrial: boolean; // Persisted flag so trial can only be used once
   // User Account & Cloud Sync
   userAccount?: UserAccount | null;
+  // GitHub Auto-Updates
+  githubRepo?: string;
+  autoCheckUpdates?: boolean;
 }
 
 export interface Challenge {

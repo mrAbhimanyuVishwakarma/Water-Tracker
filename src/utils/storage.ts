@@ -21,6 +21,8 @@ export const loadSettings = async (): Promise<UserSettings> => {
       return {
         ...DEFAULT_SETTINGS,
         ...parsed,
+        isPremium: true,
+        unlockedCharacters: ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'],
         healthProfile: {
           ...DEFAULT_SETTINGS.healthProfile,
           ...(parsed.healthProfile || {}),

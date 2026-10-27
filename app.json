@@ -21,7 +21,8 @@
       "permissions": [
         "INTERNET",
         "VIBRATE",
-        "POST_NOTIFICATIONS"
+        "POST_NOTIFICATIONS",
+        "REQUEST_INSTALL_PACKAGES"
       ],
       "predictiveBackGestureEnabled": false
     },
@@ -29,7 +30,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "./plugins/withAndroidArchitectures"
     ]
   }
 }
