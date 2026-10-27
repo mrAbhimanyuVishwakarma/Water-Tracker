@@ -1,0 +1,946 @@
+﻿{
+    "cursor":  {
+                   "stack":  [
+
+                             ]
+               },
+    "recordMap":  {
+                      "__version__":  3,
+                      "block":  {
+                                    "3f5688f7-e405-8011-b30b-ccb3d06586b9":  {
+                                                                                 "spaceId":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "version":  184,
+                                                                                                             "type":  "page",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "content":  [
+                                                                                                                             "e7111879-844f-4d3a-993c-eb6fe16c8fa6",
+                                                                                                                             "04fd269f-27c2-4c80-a627-706f8cd63f77",
+                                                                                                                             "954ebf8a-20a1-4b79-9bd7-b7b7fb912b14",
+                                                                                                                             "4eb8f6d7-873a-4c6e-891f-039a92337fe4",
+                                                                                                                             "4966b176-8e98-42c4-98f1-53265e223a20",
+                                                                                                                             "1c6986e9-67dc-45c3-a0f7-0f7654a9171d",
+                                                                                                                             "639dd721-6eb5-46e4-b161-5af7521c78ac",
+                                                                                                                             "0692844e-0a2d-4f6d-8c8a-4e1ed5c51c28",
+                                                                                                                             "1c22da43-f739-4af4-b758-173a3e726b58",
+                                                                                                                             "a073074e-0253-4c36-aa22-251bfac5e9c1",
+                                                                                                                             "ababfaea-31a4-4789-b8e9-47c93f6f7f3f",
+                                                                                                                             "bd500a71-31f2-405d-844f-b91b1cf260f5",
+                                                                                                                             "99e5f1b3-ae0d-46b6-b605-813aecf4200e",
+                                                                                                                             "4ebc816f-de64-4d44-b6f2-0d739d44e669",
+                                                                                                                             "93008c60-491e-41a8-8d92-f6c6072beef8",
+                                                                                                                             "0863b8a8-1426-4eaa-b37c-89c528fb4027",
+                                                                                                                             "d8533cd4-9574-469b-b0f0-bc438e09f141",
+                                                                                                                             "8b229f68-536c-4b50-86be-d60bcdb60043",
+                                                                                                                             "48657f39-a229-4f13-9d92-1c8fa3904510",
+                                                                                                                             "e8c7d37f-e68c-453a-a55b-a8c4a107dbb9",
+                                                                                                                             "37612854-e6bb-422f-832c-293976de0563",
+                                                                                                                             "a5d69a51-a4aa-43c3-8727-76fac1d00a8d",
+                                                                                                                             "e5098bba-7508-4037-8920-1dc79720c008",
+                                                                                                                             "26eed61f-b9af-4d4c-b284-309b7a434474",
+                                                                                                                             "9cebf373-5f03-44f6-a8d1-b88d47636384",
+                                                                                                                             "dde208a2-b8b1-484b-846f-0401bf0d0931"
+                                                                                                                         ],
+                                                                                                             "format":  {
+                                                                                                                            "slug":  "interactive-animation",
+                                                                                                                            "site_id":  "3f5688f7-e405-8016-bb1b-00790c5fdeb2",
+                                                                                                                            "page_icon":  "🐵",
+                                                                                                                            "social_media_image_preview_url":  "attachment:6528f793-42b4-4965-a580-cebd5be56623:SocialMediaPreviewImage.png"
+                                                                                                                        },
+                                                                                                             "permissions":  [
+                                                                                                                                 "@{role=reader; type=public_permission; is_site=True; added_timestamp=1791669195179}"
+                                                                                                                             ],
+                                                                                                             "created_time":  1791669176393,
+                                                                                                             "last_edited_time":  1791671708304,
+                                                                                                             "parent_id":  "f8d8c93d-1e34-4444-bbbe-6f11393336b8",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "file_ids":  [
+                                                                                                                              "e205ea1e-b41c-4874-a115-07abcd71d80f",
+                                                                                                                              "6c93e34e-e695-499a-9c04-ab2d4c20965a",
+                                                                                                                              "6528f793-42b4-4965-a580-cebd5be56623"
+                                                                                                                          ],
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "f8d8c93d-1e34-4444-bbbe-6f11393336b8",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=UN1GvpOHz56YRg271aK0BA,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "f8d8c93d-1e34-4444-bbbe-6f11393336b8":  {
+                                                                                 "spaceId":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                 "value":  {
+                                                                                               "role":  "none"
+                                                                                           }
+                                                                             },
+                                    "e7111879-844f-4d3a-993c-eb6fe16c8fa6":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "e7111879-844f-4d3a-993c-eb6fe16c8fa6",
+                                                                                                             "version":  23,
+                                                                                                             "type":  "callout",
+                                                                                                             "content":  [
+                                                                                                                             "eaa84358-1106-4df1-b675-1f40dc8a129c",
+                                                                                                                             "dc6dcdb6-9747-41ef-90dd-eb5bed2f36b5"
+                                                                                                                         ],
+                                                                                                             "format":  {
+                                                                                                                            "page_icon":  "🧰",
+                                                                                                                            "block_color":  "gray_background",
+                                                                                                                            "callout_version":  2,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791670156281,
+                                                                                                             "last_edited_time":  1791671367849,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=PCYU-hqzLfNudNMGXQeDkg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "04fd269f-27c2-4c80-a627-706f8cd63f77":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "04fd269f-27c2-4c80-a627-706f8cd63f77",
+                                                                                                             "version":  6,
+                                                                                                             "type":  "sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=gPIJ5-Amy70adEEXd9lFYw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "954ebf8a-20a1-4b79-9bd7-b7b7fb912b14":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "954ebf8a-20a1-4b79-9bd7-b7b7fb912b14",
+                                                                                                             "version":  13,
+                                                                                                             "type":  "image",
+                                                                                                             "properties":  {
+                                                                                                                                "size":  "System.Object[]",
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "source":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "block_width":  192,
+                                                                                                                            "display_source":  "attachment:c0fae2d4-d046-4aa7-a9fd-47329feec088:interactive-animation-build-1.png",
+                                                                                                                            "block_alignment":  "left",
+                                                                                                                            "block_full_width":  false,
+                                                                                                                            "block_page_width":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671415284,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "file_ids":  [
+                                                                                                                              "c0fae2d4-d046-4aa7-a9fd-47329feec088"
+                                                                                                                          ],
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=knn57oDXz2AYyCIMcL4H5g,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "4eb8f6d7-873a-4c6e-891f-039a92337fe4":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "4eb8f6d7-873a-4c6e-891f-039a92337fe4",
+                                                                                                             "version":  11,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791670156281,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=gmJ7c3I9GfuLNwATbVdA0Q,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "4966b176-8e98-42c4-98f1-53265e223a20":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "4966b176-8e98-42c4-98f1-53265e223a20",
+                                                                                                             "version":  11,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[] System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791670156281,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=G_FBIGl6QYiQQf5cgRctbQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "1c6986e9-67dc-45c3-a0f7-0f7654a9171d":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "1c6986e9-67dc-45c3-a0f7-0f7654a9171d",
+                                                                                                             "version":  10,
+                                                                                                             "type":  "sub_sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671434684,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=auEF0rlUoBO_KZX2r0k9ZA,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "639dd721-6eb5-46e4-b161-5af7521c78ac":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "639dd721-6eb5-46e4-b161-5af7521c78ac",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "code",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "language":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=mM4qi4yPbQfYbDIMEWVl3Q,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "0692844e-0a2d-4f6d-8c8a-4e1ed5c51c28":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "0692844e-0a2d-4f6d-8c8a-4e1ed5c51c28",
+                                                                                                             "version":  11,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791670156281,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=ZDmZUH5EDejIAXmc3xVXNg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "1c22da43-f739-4af4-b758-173a3e726b58":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "1c22da43-f739-4af4-b758-173a3e726b58",
+                                                                                                             "version":  4,
+                                                                                                             "type":  "divider",
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=oHre_nqUtF2NK-AEOKHyGw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "a073074e-0253-4c36-aa22-251bfac5e9c1":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "a073074e-0253-4c36-aa22-251bfac5e9c1",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=FBE70tAu4kJNIf3yecaSRg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "ababfaea-31a4-4789-b8e9-47c93f6f7f3f":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "ababfaea-31a4-4789-b8e9-47c93f6f7f3f",
+                                                                                                             "version":  15,
+                                                                                                             "type":  "image",
+                                                                                                             "properties":  {
+                                                                                                                                "size":  "System.Object[]",
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "source":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "block_width":  192,
+                                                                                                                            "display_source":  "attachment:808ecce9-6a7b-4997-bb73-90fbae78d3d5:interactive-animation-build-2.png",
+                                                                                                                            "block_alignment":  "left",
+                                                                                                                            "block_full_width":  false,
+                                                                                                                            "block_page_width":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671464074,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "file_ids":  [
+                                                                                                                              "808ecce9-6a7b-4997-bb73-90fbae78d3d5"
+                                                                                                                          ],
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=U1iGvXWrWU_C3Dhuj58kKw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "bd500a71-31f2-405d-844f-b91b1cf260f5":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "bd500a71-31f2-405d-844f-b91b1cf260f5",
+                                                                                                             "version":  14,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[] System.Object[] System.Object[] System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671483232,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=mvCn1evhK1oErV2NIeSigQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "99e5f1b3-ae0d-46b6-b605-813aecf4200e":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "99e5f1b3-ae0d-46b6-b605-813aecf4200e",
+                                                                                                             "version":  10,
+                                                                                                             "type":  "sub_sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671634283,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=hKkKTCBuGozX1fCW-TzDZw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "4ebc816f-de64-4d44-b6f2-0d739d44e669":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "4ebc816f-de64-4d44-b6f2-0d739d44e669",
+                                                                                                             "version":  8,
+                                                                                                             "type":  "code",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "language":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=pI439xm9lLkmP5SCYpXddQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "93008c60-491e-41a8-8d92-f6c6072beef8":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "93008c60-491e-41a8-8d92-f6c6072beef8",
+                                                                                                             "version":  103,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671630052,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=XIp4moUfc1Umd1gqNnqWEw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "0863b8a8-1426-4eaa-b37c-89c528fb4027":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "0863b8a8-1426-4eaa-b37c-89c528fb4027",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "code",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "language":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=dDMhWIFN5I2xR9azR7z9hg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "d8533cd4-9574-469b-b0f0-bc438e09f141":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "d8533cd4-9574-469b-b0f0-bc438e09f141",
+                                                                                                             "version":  304,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671595747,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=gCgB4QqrLdCHLx53ajgu_w,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "8b229f68-536c-4b50-86be-d60bcdb60043":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "8b229f68-536c-4b50-86be-d60bcdb60043",
+                                                                                                             "version":  4,
+                                                                                                             "type":  "divider",
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=0-yYQGaN1nkr52NATJXT5g,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "48657f39-a229-4f13-9d92-1c8fa3904510":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "48657f39-a229-4f13-9d92-1c8fa3904510",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=bz0odxEHr3TbWHqakbGxIA,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "e8c7d37f-e68c-453a-a55b-a8c4a107dbb9":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "e8c7d37f-e68c-453a-a55b-a8c4a107dbb9",
+                                                                                                             "version":  13,
+                                                                                                             "type":  "image",
+                                                                                                             "properties":  {
+                                                                                                                                "size":  "System.Object[]",
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "source":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "block_width":  240,
+                                                                                                                            "display_source":  "attachment:33d01159-23ef-47e7-971a-5b980d9ee387:interactive-animation-build-3.png",
+                                                                                                                            "block_alignment":  "left",
+                                                                                                                            "block_full_width":  false,
+                                                                                                                            "block_page_width":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671682718,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "file_ids":  [
+                                                                                                                              "33d01159-23ef-47e7-971a-5b980d9ee387"
+                                                                                                                          ],
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=QDQbT03HRATdEaehEEWRIQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "37612854-e6bb-422f-832c-293976de0563":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "37612854-e6bb-422f-832c-293976de0563",
+                                                                                                             "version":  6,
+                                                                                                             "type":  "sub_sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=KWgFiJ7wgHbovQ1EBwdDtw,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "a5d69a51-a4aa-43c3-8727-76fac1d00a8d":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "a5d69a51-a4aa-43c3-8727-76fac1d00a8d",
+                                                                                                             "version":  11,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791670156281,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=BOVEIJV5qAZzFyHwuw9qCA,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "e5098bba-7508-4037-8920-1dc79720c008":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "e5098bba-7508-4037-8920-1dc79720c008",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "code",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "language":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=BNRWiDcUH1ZU5skjQ240DQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "26eed61f-b9af-4d4c-b284-309b7a434474":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "26eed61f-b9af-4d4c-b284-309b7a434474",
+                                                                                                             "version":  10,
+                                                                                                             "type":  "sub_sub_header",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "toggleable":  false,
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791671716858,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=V8z_S9YjyoQPhp33oxRzmg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "9cebf373-5f03-44f6-a8d1-b88d47636384":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "9cebf373-5f03-44f6-a8d1-b88d47636384",
+                                                                                                             "version":  11,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[] System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791670156281,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=ZpOBI9rIkXoJta7XhTvUzg,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "eaa84358-1106-4df1-b675-1f40dc8a129c":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "eaa84358-1106-4df1-b675-1f40dc8a129c",
+                                                                                                             "version":  65,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791670156281,
+                                                                                                             "last_edited_time":  1791671341360,
+                                                                                                             "parent_id":  "e7111879-844f-4d3a-993c-eb6fe16c8fa6",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=RF_FbMdQt9Je-nl1tDAJWA,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "dc6dcdb6-9747-41ef-90dd-eb5bed2f36b5":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "dc6dcdb6-9747-41ef-90dd-eb5bed2f36b5",
+                                                                                                             "version":  25,
+                                                                                                             "type":  "text",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[] System.Object[] System.Object[] System.Object[] System.Object[] System.Object[] System.Object[] System.Object[] System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791670156281,
+                                                                                                             "last_edited_time":  1791671385727,
+                                                                                                             "parent_id":  "e7111879-844f-4d3a-993c-eb6fe16c8fa6",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=IAwpnxDWAv1L5pLfnLZhjQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             },
+                                    "dde208a2-b8b1-484b-846f-0401bf0d0931":  {
+                                                                                 "value":  {
+                                                                                               "value":  {
+                                                                                                             "id":  "dde208a2-b8b1-484b-846f-0401bf0d0931",
+                                                                                                             "version":  7,
+                                                                                                             "type":  "code",
+                                                                                                             "properties":  {
+                                                                                                                                "title":  "System.Object[]",
+                                                                                                                                "language":  "System.Object[]"
+                                                                                                                            },
+                                                                                                             "format":  {
+                                                                                                                            "created_attribution":  "@{source=; triggeredBy=}",
+                                                                                                                            "last_edited_attribution":  "@{source=; triggeredBy=}"
+                                                                                                                        },
+                                                                                                             "created_time":  1791669685179,
+                                                                                                             "last_edited_time":  1791669685179,
+                                                                                                             "parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "parent_table":  "block",
+                                                                                                             "alive":  true,
+                                                                                                             "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                             "crdt_format_version":  1,
+                                                                                                             "nav_parent_table":  "block",
+                                                                                                             "nav_parent_id":  "3f5688f7-e405-8011-b30b-ccb3d06586b9",
+                                                                                                             "crdt_data":  {
+                                                                                                                               "title":  "@{r=FKUKdMgR6_YvA68AMRFYfQ,\"start\",\"end\"; n=}"
+                                                                                                                           }
+                                                                                                         },
+                                                                                               "role":  "reader"
+                                                                                           }
+                                                                             }
+                                },
+                      "custom_emoji":  {
+                                           "1ec688f7-e405-8018-a833-007a18a968d2":  {
+                                                                                        "spaceId":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                        "value":  {
+                                                                                                      "value":  {
+                                                                                                                    "id":  "1ec688f7-e405-8018-a833-007a18a968d2",
+                                                                                                                    "version":  1,
+                                                                                                                    "space_id":  "ccb30975-23a8-4655-85e8-e2950024d459",
+                                                                                                                    "name":  "jason-notion2",
+                                                                                                                    "url":  "https://s3-us-west-2.amazonaws.com/public.notion-static.com/f2cb6b81-1dee-4d6f-ac64-c69e4612517e/ChatGPT_Image_May_7_2025_09_02_52_PM.png",
+                                                                                                                    "created_time":  1746615788641,
+                                                                                                                    "created_by_id":  "7ccc162a-2e24-4125-b36d-48af707879b9",
+                                                                                                                    "created_by_table":  "notion_user",
+                                                                                                                    "alive":  true
+                                                                                                                },
+                                                                                                      "role":  "reader"
+                                                                                                  }
+                                                                                    }
+                                       }
+                  }
+}
