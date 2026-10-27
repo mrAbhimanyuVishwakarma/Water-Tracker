@@ -3,11 +3,18 @@
 # dependencies
 node_modules/
 
+# editors
+.idea/
+.vscode/
+*.iml
+
 # Expo
 .expo/
 dist/
 web-build/
 expo-env.d.ts
+.cache/
+.eslintcache
 
 # Native
 .kotlin/
@@ -17,6 +24,9 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.apk
+*.aab
+**/.cxx/
 
 # Metro
 .metro-health-check*
@@ -28,10 +38,18 @@ yarn-error.*
 
 # macOS
 .DS_Store
+Thumbs.db
 *.pem
 
 # local env files
 .env*.local
+
+# Supabase CLI local state
+supabase/.temp/
+
+# Python tooling
+__pycache__/
+*.py[cod]
 
 # typescript
 *.tsbuildinfo

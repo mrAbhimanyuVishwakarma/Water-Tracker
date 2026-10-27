@@ -49,7 +49,7 @@ for mascot in ['sloth', 'turtle', 'penguin']:
         contours[mascot] = c
         print(f"[OK] Contour for {mascot}: {len(c)} chars")
 
-with open('assets/new_mascot_contours.py', 'w') as f:
+with open('scripts/legacy/generated/new_mascot_contours.py', 'w') as f:
     f.write(f"MASCOT_CONTOURS = {repr(contours)}\n")
 
 print("Done extracting contours!")
