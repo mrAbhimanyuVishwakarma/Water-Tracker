@@ -166,14 +166,23 @@
         <!-- Actual app dashboard screenshot -->
         <div class="mockup-wrapper">
           <div class="mockup-glow" aria-hidden="true"></div>
-          <img
-            src="assets/dashboard-preview.png"
-            alt="WaterTrackerBrownie dashboard showing Manny the mammoth, 3000 ml logged, a completed daily hydration goal, and drink shortcuts."
-            class="dashboard-preview"
-            width="352"
-            height="723"
-            fetchpriority="high"
-          >
+          <div class="dashboard-phone" role="img" aria-label="WaterTrackerBrownie on an Android phone: Manny celebrates 3000 ml and a completed daily goal, with drink shortcuts and navigation below.">
+            <img src="assets/dashboard-preview.png" alt="" class="dashboard-frame" width="1183" height="2470" fetchpriority="high">
+            <div class="dashboard-display" aria-hidden="true">
+              <div class="phone-status-bar">
+                <span class="phone-time">9:41</span>
+                <span class="phone-camera"></span>
+                <span class="phone-status-icons">
+                  <svg class="phone-signal" viewBox="0 0 18 14" fill="currentColor"><rect x="0" y="10" width="3" height="4" rx=".7"/><rect x="5" y="7" width="3" height="7" rx=".7"/><rect x="10" y="4" width="3" height="10" rx=".7"/><rect x="15" width="3" height="14" rx=".7"/></svg>
+                  <span class="phone-network">5G</span>
+                  <svg class="phone-wifi" viewBox="0 0 20 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5a12 12 0 0 1 16 0M5 8a8 8 0 0 1 10 0M8 11a3 3 0 0 1 4 0"/><circle cx="10" cy="14" r="1" fill="currentColor" stroke="none"/></svg>
+                  <svg class="phone-battery" viewBox="0 0 28 14" fill="none"><rect x="1" y="1" width="23" height="12" rx="3" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="19" height="8" rx="1.5" fill="currentColor"/><path d="M26 5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+              </div>
+              <img src="assets/dashboard-screen.jpg" alt="" class="dashboard-screen-image" width="1080" height="2192" fetchpriority="high">
+              <div class="phone-navigation-bar"><span></span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
