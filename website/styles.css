@@ -580,19 +580,25 @@ img, svg {
   aspect-ratio: 1183 / 2470;
   filter: drop-shadow(0 22px 30px rgba(15, 23, 42, 0.24));
   container-type: inline-size;
+  background: transparent;
+  isolation: isolate;
 }
 .dashboard-frame {
+  position: relative;
+  z-index: 0;
+  background: transparent;
   display: block;
   width: 100%;
   height: 100%;
 }
 .dashboard-display {
   position: absolute;
-  inset: 1.45% 3.05% 1.6% 3.05%;
+  z-index: 1;
+  inset: 1.9% 4.15% 2.05% 4.15%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 12% / 5.7%;
+  border-radius: 11.5% / 5.4%;
   background: #FFFFFF;
   color: #111827;
 }
