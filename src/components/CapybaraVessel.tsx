@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
 } from 'react-native';
 import Svg, {
   Path,
@@ -22,10 +21,9 @@ import Animated, {
   withTiming,
   Easing,
   withSpring,
-  ZoomIn,
 } from 'react-native-reanimated';
 import { DrinkLog, MascotId } from '../types';
-import { feedback } from '../utils/feedback';
+import { GoalCelebration, useGoalCelebration } from './GoalCelebration';
 import { CrispVectorMascot } from './CrispVectorMascot';
 
 interface Props {
@@ -69,7 +67,8 @@ export const CapybaraVessel: React.FC<Props> = ({
   // Total logged ml and fill ratio
   const totalLogged = logs.reduce((sum, item) => sum + item.amount, 0);
   const fillPercent = Math.min(totalLogged / Math.max(dailyTarget, 1), 1.0);
-  const isFilled = totalLogged >= dailyTarget;
+  const isFilled = dailyTarget > 0 && totalLogged >= dailyTarget;
+  const autoPlayCelebration = useGoalCelebration(isFilled);
 
   // Selected mascot contour path
   const contourPath = MASCOT_CONTOURS[mascotId] || MASCOT_CONTOURS.brownie;
@@ -126,120 +125,15 @@ export const CapybaraVessel: React.FC<Props> = ({
     };
   });
 
-  // Celebration animations when water target is reached (100% full)
-  const celebScale = useSharedValue(1);
-  const celebRotate = useSharedValue(0);
-  const auraPulse = useSharedValue(0.6);
-  const sparkleFloat = useSharedValue(0);
-
-  useEffect(() => {
-    if (isFilled) {
-      // 1. Play celebration sound and heavy joyful haptic
-      feedback.triggerHaptic('success');
-      feedback.playWaterDropSound();
-
-      // 2. Joyful breathing squash-and-stretch celebration loop
-      celebScale.value = withRepeat(
-        withSequence(
-          withTiming(1.07, { duration: 900, easing: Easing.inOut(Easing.ease) }),
-          withTiming(0.98, { duration: 900, easing: Easing.inOut(Easing.ease) })
-        ),
-        -1,
-        true
-      );
-
-      // 3. Gentle happy wiggle
-      celebRotate.value = withRepeat(
-        withSequence(
-          withTiming(2.8, { duration: 800, easing: Easing.inOut(Easing.quad) }),
-          withTiming(-2.8, { duration: 800, easing: Easing.inOut(Easing.quad) })
-        ),
-        -1,
-        true
-      );
-
-      // 4. Radiant golden aura pulse
-      auraPulse.value = withRepeat(
-        withSequence(
-          withTiming(1.0, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
-          withTiming(0.45, { duration: 1200, easing: Easing.inOut(Easing.ease) })
-        ),
-        -1,
-        true
-      );
-
-      // 5. Shimmering star sparkle float
-      sparkleFloat.value = withRepeat(
-        withSequence(
-          withTiming(-8, { duration: 1400, easing: Easing.inOut(Easing.sin) }),
-          withTiming(4, { duration: 1400, easing: Easing.inOut(Easing.sin) })
-        ),
-        -1,
-        true
-      );
-    }
-  }, [isFilled]);
-
-  const celebStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: celebScale.value },
-      { rotate: `${celebRotate.value}deg` },
-    ],
-  }));
-
-  const auraStyle = useAnimatedStyle(() => ({
-    opacity: auraPulse.value,
-    transform: [{ scale: 1 + (auraPulse.value - 0.5) * 0.15 }],
-  }));
-
-  const sparkleStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: sparkleFloat.value }],
-  }));
-
   return (
-    <Animated.View style={[styles.container, { width, height }, bobbingStyle]}>
+    <Animated.View style={[styles.container, { width, height }, !isFilled && bobbingStyle]}>
       {isFilled ? (
-        // GOAL COMPLETED (100%): Premium Celebratory Animation
-        <Animated.View entering={ZoomIn.duration(650)} style={styles.celebrationWrapper}>
-          {/* Radiant Golden Vector Aura Halo */}
-          <Animated.View style={[styles.auraHalo, auraStyle]}>
-            <Svg width={width * 1.15} height={height * 1.15} viewBox="0 0 300 300">
-              <Defs>
-                <LinearGradient id="auraGold" x1="0" y1="0" x2="1" y2="1">
-                  <Stop offset="0%" stopColor="#FDE047" stopOpacity="0.75" />
-                  <Stop offset="50%" stopColor="#38BDF8" stopOpacity="0.45" />
-                  <Stop offset="100%" stopColor="#0284C7" stopOpacity="0" />
-                </LinearGradient>
-              </Defs>
-              <Circle cx="150" cy="150" r="130" fill="url(#auraGold)" />
-            </Svg>
-          </Animated.View>
-
-          {/* Floating Confetti Sparkles & Water Crystals */}
-          <Animated.View style={[styles.sparkleContainer, sparkleStyle]} pointerEvents="none">
-            <Text style={[styles.sparkleItem, { top: 0, left: 20 }]}>✨</Text>
-            <Text style={[styles.sparkleItem, { top: 12, right: 24 }]}>⭐</Text>
-            <Text style={[styles.sparkleItem, { top: 70, left: -6 }]}>💧</Text>
-            <Text style={[styles.sparkleItem, { top: 85, right: -10 }]}>✨</Text>
-            <Text style={[styles.sparkleItem, { bottom: 35, left: 16 }]}>🎉</Text>
-            <Text style={[styles.sparkleItem, { bottom: 42, right: 18 }]}>🌟</Text>
-          </Animated.View>
-
-          {/* Dancing Animated Happy Character */}
-          <Animated.View style={celebStyle}>
-            <CrispVectorMascot
-              type="sipping"
-              mascotId={mascotId}
-              width={width}
-              height={height}
-            />
-          </Animated.View>
-
-          {/* Celebratory Shimmering Badge */}
-          <View style={styles.goalCompletedBadge}>
-            <Text style={styles.goalCompletedText}>🏆 100% GOAL CRUSHED!</Text>
-          </View>
-        </Animated.View>
+        <GoalCelebration
+          mascotId={mascotId}
+          width={width}
+          height={height}
+          autoPlay={autoPlayCelebration}
+        />
       ) : (
         // IN PROGRESS: Original animal image outlined as a vessel filling with flowing fluid
         <View style={{ width, height, alignItems: 'center', justifyContent: 'center' }}>
@@ -337,53 +231,5 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  celebrationWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  outlineImage: {
-    opacity: 0.38,
-  },
-  goalCompletedBadge: {
-    position: 'absolute',
-    bottom: 8,
-    backgroundColor: '#0284C7',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 16,
-    shadowColor: 'rgba(2, 132, 199, 0.4)',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  goalCompletedText: {
-    fontSize: 12,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    letterSpacing: 0.5,
-  },
-  auraHalo: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 0,
-  },
-  sparkleContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 5,
-  },
-  sparkleItem: {
-    position: 'absolute',
-    fontSize: 22,
-    shadowColor: '#FDE047',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 6,
   },
 });

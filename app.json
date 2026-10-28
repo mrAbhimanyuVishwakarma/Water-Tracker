@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Brownie Water Tracker",
+    "name": "WaterTrackerBrownie",
     "slug": "brownie-water-tracker",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -40,8 +40,15 @@
       "expo-font",
       "./plugins/withAndroidArchitectures",
       "expo-web-browser",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-video"
     ],
-    "scheme": "browniewater"
+    "scheme": "browniewater",
+    "extra": {
+      "eas": {
+        "projectId": "11ee1542-c8cd-4729-b0ea-5d9c5920b452"
+      }
+    },
+    "owner": "mrabhimanyu"
   }
 }
