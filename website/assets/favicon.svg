@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#waterGrad)"/>
+  <!-- Capybara Brownie stylized face with drink -->
+  <circle cx="32" cy="34" r="18" fill="#8A5844"/>
+  <ellipse cx="22" cy="22" rx="4" ry="5" fill="#5C3828"/>
+  <ellipse cx="42" cy="22" rx="4" ry="5" fill="#5C3828"/>
+  <ellipse cx="32" cy="36" rx="12" ry="9" fill="#CA8656"/>
+  <!-- Snout -->
+  <ellipse cx="30" cy="35" rx="1.5" ry="2.5" fill="#3D1D16"/>
+  <ellipse cx="34" cy="35" rx="1.5" ry="2.5" fill="#3D1D16"/>
+  <!-- Eyes Zen closed happy arc -->
+  <path d="M 23 30 Q 26 28 29 30" stroke="#3D1D16" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M 35 30 Q 38 28 41 30" stroke="#3D1D16" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Water Droplet on head -->
+  <path d="M 32 8 C 32 8 38 15 38 18 C 38 21.3 35.3 24 32 24 C 28.7 24 26 21.3 26 18 C 26 15 32 8 32 8 Z" fill="#E0F2FE"/>
+</svg>

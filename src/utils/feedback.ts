@@ -3,8 +3,16 @@ import * as Haptics from 'expo-haptics';
 
 class FeedbackManager {
   private audioCtx: any = null;
+  private soundEnabled = true;
+  private hapticEnabled = true;
+
+  configure(sound: boolean, haptic: boolean) {
+    this.soundEnabled = sound;
+    this.hapticEnabled = haptic;
+  }
 
   async triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' = 'light') {
+    if (!this.hapticEnabled) return;
     try {
       // 1. Web fallback
       if (Platform.OS === 'web') {
@@ -53,6 +61,7 @@ class FeedbackManager {
   }
 
   playWaterDropSound() {
+    if (!this.soundEnabled) return;
     try {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -91,6 +100,7 @@ class FeedbackManager {
   }
 
   playPourSound() {
+    if (!this.soundEnabled) return;
     try {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
         const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;

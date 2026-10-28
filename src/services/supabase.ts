@@ -1,121 +1,137 @@
+import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createClient } from '@supabase/supabase-js';
-import { DrinkLog, UserAccount, UserSettings } from '../types';
+import { createClient, processLock, User } from '@supabase/supabase-js';
+import { Alert, AppState, Platform } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
+import { UserAccount } from '../types';
+import { installPkceCrypto } from './pkceCrypto';
 
-// Supabase project URL derived from project ref: gyekroobfguapigewibo (Mumbai region)
-export const SUPABASE_URL = 'https://gyekroobfguapigewibo.supabase.co';
+installPkceCrypto();
 
-// Publishable anon key (safe in mobile client with Row Level Security enabled)
-export const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5ZWtyb29iZmd1YXBpZ2V3aWJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwODY0MjksImV4cCI6MjEwODY2MjQyOX0.l_QjFPgBjJYUMmWgVTyoJrBDAA1MfTonzlgOyd71IGU';
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
+const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const key = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+export const isCloudConfigured = Boolean(url && key);
+const authStorageKey = `@brownie-auth:${url || 'unconfigured'}`;
+const fetchWithTimeout: typeof fetch = async (input, options) => {
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  const timer = setTimeout(abort, 20_000);
+  options?.signal?.addEventListener('abort', abort);
+  if (options?.signal?.aborted) controller.abort();
+  try { return await fetch(input, { ...options, signal: controller.signal }); }
+  finally { clearTimeout(timer); options?.signal?.removeEventListener('abort', abort); }
+};
+export const supabase = createClient(url || 'https://not-configured.supabase.co', key || 'not-configured', {
+  global: { fetch: fetchWithTimeout },
+  auth: { storage: AsyncStorage, storageKey: authStorageKey, autoRefreshToken: true, persistSession: true,
+    detectSessionInUrl: false, flowType: 'pkce', lock: processLock },
 });
+WebBrowser.maybeCompleteAuthSession();
 
-/**
- * Send 6-digit SMS OTP to user's phone number
- */
-export async function sendPhoneOtp(phoneNumber: string): Promise<{ success: boolean; error?: string }> {
-  try {
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: phoneNumber,
+export function startSessionRefresh() {
+  if (!isCloudConfigured || Platform.OS === 'web') return () => {};
+  const update = (state: string | null | undefined) => {
+    if (state === 'active') supabase.auth.startAutoRefresh();
+    else supabase.auth.stopAutoRefresh();
+  };
+  update(AppState.currentState);
+  const subscription = AppState.addEventListener('change', update);
+  return () => { subscription.remove(); supabase.auth.stopAutoRefresh(); };
+}
+
+export function accountFromUser(user: User): UserAccount {
+  return { id: user.id, email: user.email, phone: user.phone,
+    name: user.user_metadata?.full_name || user.user_metadata?.name || 'Hydration Pal',
+    authProvider: user.app_metadata.provider === 'google' ? 'google' : 'phone',
+    createdAt: new Date(user.created_at).getTime() };
+}
+
+function requireConfiguration() {
+  if (!isCloudConfigured) throw new Error('Sign-in is not available yet. Please try again later.');
+}
+
+const redirectTo = 'browniewater://auth/callback';
+const exchanges = new Map<string, Promise<void>>();
+
+export async function completeGoogleCallback(callbackUrl: string): Promise<void> {
+  requireConfiguration();
+  const callback = new URL(callbackUrl);
+  if (callback.protocol !== 'browniewater:' || callback.hostname !== 'auth' || callback.pathname !== '/callback') {
+    throw new Error('Unexpected sign-in callback.');
+  }
+  const providerError = callback.searchParams.get('error_description');
+  if (providerError) throw new Error(providerError);
+  const code = callback.searchParams.get('code');
+  if (!code) throw new Error('Sign-in did not return a verification code.');
+  if (!exchanges.has(code)) exchanges.set(code, (async () => {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) throw error;
+  })());
+  await exchanges.get(code);
+}
+
+export function startAuthCallbacks() {
+  let active = true;
+  const receive = (url: string | null) => {
+    if (!active || !url?.startsWith(redirectTo)) return;
+    void completeGoogleCallback(url).catch(() => {
+      if (active) Alert.alert('Sign-in incomplete', 'Please try signing in again.');
     });
-    if (error) {
-      return { success: false, error: error.message };
-    }
+  };
+  void Linking.getInitialURL().then(receive).catch(() => {});
+  const listener = Linking.addEventListener('url', event => receive(event.url));
+  return () => { active = false; listener.remove(); };
+}
+
+export async function signInWithGoogle(): Promise<void> {
+  requireConfiguration();
+  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google',
+    options: { redirectTo, skipBrowserRedirect: true } });
+  if (error) throw error;
+  if (!data.url) throw new Error('Google sign-in could not be started.');
+  const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+  if (result.type !== 'success') return;
+  await completeGoogleCallback(result.url);
+}
+
+export async function sendPhoneOtp(phone: string) {
+  try {
+    requireConfiguration();
+    const { error } = await supabase.auth.signInWithOtp({ phone });
+    if (error) throw error;
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to send OTP' };
-  }
+  } catch (error) { return { success: false, error: error instanceof Error ? error.message : 'Could not send code.' }; }
 }
 
-/**
- * Verify 6-digit OTP code entered by user
- */
-export async function verifyPhoneOtp(
-  phoneNumber: string,
-  token: string
-): Promise<{ success: boolean; account?: UserAccount; error?: string }> {
+export async function verifyPhoneOtp(phone: string, token: string) {
   try {
-    const { data, error } = await supabase.auth.verifyOtp({
-      phone: phoneNumber,
-      token,
-      type: 'sms',
-    });
-    if (error || !data.user) {
-      return { success: false, error: error?.message || 'Verification failed' };
-    }
-
-    const account: UserAccount = {
-      id: data.user.id,
-      phone: data.user.phone || phoneNumber,
-      name: data.user.user_metadata?.name || 'Hydration Pal',
-      authProvider: 'phone',
-      createdAt: new Date(data.user.created_at).getTime(),
-      lastSyncAt: Date.now(),
-    };
-
-    return { success: true, account };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'OTP verification error' };
-  }
+    requireConfiguration();
+    const { data, error } = await supabase.auth.verifyOtp({ phone, token, type: 'sms' });
+    if (error) throw error;
+    if (!data.session) throw new Error('Verification did not create a session.');
+    return { success: true };
+  } catch (error) { return { success: false, error: error instanceof Error ? error.message : 'Verification failed.' }; }
 }
 
-/**
- * Sync hydration progress and pro status to Supabase profile
- */
-export async function syncUserProfile(
-  userId: string,
-  settings: UserSettings
-): Promise<boolean> {
-  try {
-    const { error } = await supabase.from('profiles').upsert({
-      id: userId,
-      daily_target: settings.dailyTarget,
-      unit: settings.unit,
-      is_premium: settings.isPremium,
-      active_character: settings.activeCharacter,
-      updated_at: new Date().toISOString(),
-    });
-    return !error;
-  } catch {
-    return false;
-  }
+export async function signOutCloudUser() {
+  const { error } = await supabase.auth.signOut({ scope: 'local' });
+  if (error) throw error;
 }
 
-/**
- * Save drink log to cloud
- */
-export async function syncDrinkLog(userId: string, log: DrinkLog): Promise<boolean> {
-  try {
-    const { error } = await supabase.from('drink_logs').upsert({
-      id: log.id,
-      user_id: userId,
-      beverage_type: log.type,
-      amount: log.amount,
-      effective_amount: log.effectiveAmount,
-      color: log.color,
-      logged_at: new Date(log.timestamp).toISOString(),
-    });
-    return !error;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Sign out user from cloud
- */
-export async function signOutCloudUser(): Promise<void> {
-  try {
-    await supabase.auth.signOut();
-  } catch (e) {
-    console.warn('Sign out warning:', e);
+export async function deleteCloudAccount(expectedUserId: string) {
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  const session = sessionData.session;
+  if (sessionError || !session || session.user.id !== expectedUserId) throw new Error('Sign in again before deleting your account.');
+  const { data, error } = await supabase.functions.invoke('delete-account', {
+    headers: { Authorization: `Bearer ${session.access_token}` }, body: { confirmation: 'DELETE', expectedUserId },
+  });
+  if (error) throw error;
+  if (!data?.deleted) throw new Error('Account deletion was not confirmed. Please try again.');
+  const current = (await supabase.auth.getSession()).data.session;
+  if (current?.user.id === expectedUserId) {
+    const { error: signOutError } = await supabase.auth.signOut({ scope: 'local' });
+    // A completed deletion must not leave a persisted login if the logout request loses connectivity.
+    if (signOutError) await AsyncStorage.multiRemove([authStorageKey, `${authStorageKey}-code-verifier`]);
   }
 }

@@ -23,7 +23,7 @@ import { CupSelectorModal } from '../components/CupSelectorModal';
 import { BEVERAGES, CHALLENGES, MASCOTS } from '../constants/beverages';
 import { DrinkLog, UserSettings, BeverageConfig, DayData } from '../types';
 import { feedback } from '../utils/feedback';
-import { formatVolume } from '../utils/storage';
+import { calculateStreak, formatVolume } from '../utils/storage';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -81,7 +81,7 @@ export const DashboardScreen: React.FC<Props> = ({
           }}
         >
           <View style={styles.streakCircle}>
-            <Text style={styles.streakNumber}>{isGoalReached ? '✓' : '2'}</Text>
+            <Text style={styles.streakNumber}>{calculateStreak(history)}</Text>
           </View>
           <Text style={styles.streakLabel}>days</Text>
         </TouchableOpacity>
@@ -172,7 +172,7 @@ export const DashboardScreen: React.FC<Props> = ({
                 {activeChallenge.name}
               </Text>
               <Text style={styles.challengeCardSub}>
-                Day {activeChallenge.currentDay} of {activeChallenge.durationDays} · Tap for details
+                Tap for your daily habit prompt
               </Text>
             </View>
           </View>

@@ -1,215 +1,110 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { feedback } from '../utils/feedback';
-import { CurrencyCode, UserSettings } from '../types';
-import { PRICING_BY_CURRENCY } from '../constants/beverages';
+import { PurchasesPackage } from 'react-native-purchases';
+import { UserSettings } from '../types';
+import { buyPackage, hasPremium, loadPackages, restorePurchases } from '../services/billing';
+import { legalUrls, openLegalPage } from '../services/legal';
 import { CrispVectorMascot } from '../components/CrispVectorMascot';
 
 interface Props {
-  settings?: UserSettings;
+  settings: UserSettings;
   onClose: () => void;
-  onUpgradeSuccess: () => void;
-  onUpdateCurrency?: (currency: CurrencyCode) => void;
+  onOpenAuth: () => void;
+  onEntitlementsChanged: () => Promise<void>;
 }
 
-export const PricingPaywallScreen: React.FC<Props> = ({
-  settings,
-  onClose,
-  onUpgradeSuccess,
-  onUpdateCurrency,
-}) => {
+function formatPeriod(period: string): string {
+  const match = /^P(\d+)([DWMY])$/.exec(period);
+  if (!match) return period;
+  const units: Record<string, string> = { D: 'day', W: 'week', M: 'month', Y: 'year' };
+  return `${match[1]} ${units[match[2]]}${match[1] === '1' ? '' : 's'}`;
+}
+
+export const PricingPaywallScreen: React.FC<Props> = ({ settings, onClose, onOpenAuth, onEntitlementsChanged }) => {
   const insets = useSafeAreaInsets();
-  const [selectedPlan, setSelectedPlan] = useState<'yearly' | 'lifetime' | 'monthly'>('yearly');
-  const [currency, setCurrency] = useState<CurrencyCode>(settings?.currency || 'INR');
+  const userId = settings.userAccount?.id;
+  const [packages, setPackages] = useState<PurchasesPackage[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(Boolean(userId));
+  const [message, setMessage] = useState('');
+  const [reload, setReload] = useState(0);
+  const legalReady = Boolean(legalUrls.terms?.startsWith('https://') && legalUrls.privacy?.startsWith('https://'));
 
-  const pricing = PRICING_BY_CURRENCY[currency] || PRICING_BY_CURRENCY.INR;
+  useEffect(() => {
+    let active = true;
+    if (!userId) return;
+    loadPackages(userId).then(items => {
+      if (!active) return;
+      setPackages(items); setSelected(items[0]?.identifier || null);
+      if (!items.length) setMessage('Premium plans are not available yet. Please try again later.');
+    }).catch(error => { if (active) setMessage(error instanceof Error ? error.message : 'Could not load plans.'); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [userId, reload]);
 
-  const handleSelectCurrency = (code: CurrencyCode) => {
-    feedback.triggerHaptic('light');
-    setCurrency(code);
-    onUpdateCurrency?.(code);
-  };
-
-  const handleSubscribe = () => {
-    feedback.triggerHaptic('success');
-    feedback.playPourSound();
-    onUpgradeSuccess();
-  };
+  const perform = useCallback(async (restore: boolean) => {
+    if (!userId) { onOpenAuth(); return; }
+    if (busy) return;
+    const item = packages.find(item => item.identifier === selected);
+    if (!restore && (!item || !legalReady)) return;
+    setBusy(true); setMessage('');
+    try {
+      const info = restore ? await restorePurchases(userId) : await buyPackage(userId, item!);
+      await onEntitlementsChanged();
+      setMessage(hasPremium(info) ? 'Premium is active. Enjoy your mascots!' :
+        restore ? 'No active premium purchase was found for this account.' :
+          'Premium is not active yet. Pending purchases unlock after payment is confirmed.');
+    } catch (error) {
+      if (!(error && typeof error === 'object' && 'userCancelled' in error && error.userCancelled)) {
+        setMessage(error instanceof Error ? error.message : 'The purchase could not be completed. Please try again.');
+      }
+    } finally { setBusy(false); }
+  }, [userId, busy, packages, selected, legalReady, onEntitlementsChanged, onOpenAuth]);
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 24) }]}>
-      {/* Top Bar with Currency Selector & Close Button */}
       <View style={styles.topBar}>
-        {/* Currency Switcher */}
-        <View style={styles.currencyToggle}>
-          {(['INR', 'USD', 'EUR', 'GBP'] as CurrencyCode[]).map((c) => (
-            <TouchableOpacity
-              key={c}
-              style={[styles.currencyPill, currency === c && styles.currencyPillActive]}
-              onPress={() => handleSelectCurrency(c)}
-            >
-              <Text style={[styles.currencyText, currency === c && styles.currencyTextActive]}>
-                {c === 'INR' ? '₹ INR' : c === 'USD' ? '$ USD' : c === 'EUR' ? '€ EUR' : '£ GBP'}
-              </Text>
+        <Text style={styles.planName}>Brownie Premium</Text>
+        <TouchableOpacity accessibilityLabel="Close premium plans" style={styles.closeBtn} disabled={busy} onPress={onClose}>
+          <Text style={styles.closeText}>×</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <CrispVectorMascot type="float" mascotId="brownie" width={120} height={120} />
+        <Text style={styles.title}>{settings.isPremium ? 'Premium is active' : 'Meet the whole pool'}</Text>
+        <Text style={styles.subtitle}>Unlock all six mascots and choose your hydration companion.</Text>
+        {!userId && <Text style={styles.subtitle}>Sign in before buying so your purchase can be associated with your account. Guest history stays on this device.</Text>}
+        {loading && <ActivityIndicator style={{ margin: 20 }} accessibilityLabel="Loading plans" />}
+        <View style={[styles.plansContainer, { marginTop: 20 }]}>
+          {packages.map(item => (
+            <TouchableOpacity key={item.identifier} disabled={busy} accessibilityRole="radio"
+              accessibilityState={{ selected: selected === item.identifier }}
+              style={[styles.planCard, selected === item.identifier && styles.planCardActive]}
+              onPress={() => setSelected(item.identifier)}>
+              <Text style={styles.planName}>{item.product.title}</Text>
+              <Text style={styles.planSub}>{item.product.priceString}{item.product.subscriptionPeriod ? ` / ${formatPeriod(item.product.subscriptionPeriod)}` : ' · one-time purchase'}</Text>
             </TouchableOpacity>
           ))}
         </View>
-
-        <TouchableOpacity
-          style={styles.closeBtn}
-          onPress={() => {
-            feedback.triggerHaptic('light');
-            onClose();
-          }}
-        >
-          <Text style={styles.closeText}>✕</Text>
+        {!!message && <Text accessibilityLiveRegion="polite" style={styles.subtitle}>{message}</Text>}
+        {!legalReady && <Text style={styles.subtitle}>Purchases are not available yet. Please check back later.</Text>}
+        <TouchableOpacity style={[styles.subscribeBtn, (busy || loading || (Boolean(userId) && (!selected || !legalReady || settings.isPremium))) && { opacity: 0.5 }]}
+          disabled={busy || loading || (Boolean(userId) && (!selected || !legalReady || settings.isPremium))}
+          onPress={() => void perform(false)}>
+          {busy ? <ActivityIndicator color="#FFF" /> : <Text style={styles.subscribeBtnText}>{userId ? 'CONTINUE WITH GOOGLE PLAY' : 'SIGN IN TO CONTINUE'}</Text>}
         </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll, { paddingBottom: Math.max(insets.bottom + 30, 48) }]}
-      >
-        {/* Golden Mascot Header */}
-        <View style={styles.mascotContainer}>
-          <CrispVectorMascot
-            type="float"
-            mascotId="brownie"
-            width={120}
-            height={120}
-          />
-          <View style={styles.proCrownBadge}>
-            <Text style={styles.crownEmoji}>👑</Text>
-          </View>
-        </View>
-
-        <Text style={styles.title}>Brownie Premium</Text>
-        <Text style={styles.subtitle}>
-          Unlock all animals, custom drinks, and smart habit widgets!
-        </Text>
-
-        {/* Features Checklist */}
-        <View style={styles.featuresList}>
-          {[
-            { icon: 'paw', text: 'All Extinct & Rare Mascots (Dotti the Dodo, Manny the Mammoth)' },
-            { icon: 'cafe', text: '30+ Custom Drinks, Teas & Unlimited Presets' },
-            { icon: 'notifications', text: 'Smart Adaptive Reminders & Schedules' },
-            { icon: 'analytics', text: 'Health Trends & Detailed History Insights' },
-            { icon: 'sparkles', text: 'Fun Sound Effects & Haptic Themes' },
-          ].map((f, i) => (
-            <View key={i} style={styles.featureItem}>
-              <View style={styles.featureIconCircle}>
-                <Ionicons name={f.icon as any} size={18} color="#0284C7" />
-              </View>
-              <Text style={styles.featureText}>{f.text}</Text>
-            </View>
-          ))}
-        </View>
-
-        {/* Pricing Option Cards with 3-Day Free Trial */}
-        <View style={styles.plansContainer}>
-          {/* Yearly Tier (Best Value with 3-Day Free Trial) */}
-          <TouchableOpacity
-            style={[
-              styles.planCard,
-              selectedPlan === 'yearly' && styles.planCardActive,
-            ]}
-            onPress={() => {
-              feedback.triggerHaptic('light');
-              setSelectedPlan('yearly');
-            }}
-          >
-            <View style={styles.badgeBestValue}>
-              <Text style={styles.bestValueText}>MOST POPULAR · 3 DAYS FREE TRIAL</Text>
-            </View>
-            <View style={styles.planRow}>
-              <View>
-                <Text style={styles.planName}>Yearly Access</Text>
-                <Text style={styles.planSub}>
-                  3 days free, then {pricing.yearlyPrice} ({pricing.yearlyMonthlyEquiv})
-                </Text>
-              </View>
-              <View style={[styles.radioCircle, selectedPlan === 'yearly' && styles.radioCircleActive]} />
-            </View>
-          </TouchableOpacity>
-
-          {/* Lifetime Tier */}
-          <TouchableOpacity
-            style={[
-              styles.planCard,
-              selectedPlan === 'lifetime' && styles.planCardActive,
-            ]}
-            onPress={() => {
-              feedback.triggerHaptic('light');
-              setSelectedPlan('lifetime');
-            }}
-          >
-            <View style={styles.planRow}>
-              <View>
-                <Text style={styles.planName}>Lifetime Pass</Text>
-                <Text style={styles.planSub}>Pay once, unlock forever for {pricing.lifetimePrice}</Text>
-              </View>
-              <View style={[styles.radioCircle, selectedPlan === 'lifetime' && styles.radioCircleActive]} />
-            </View>
-          </TouchableOpacity>
-
-          {/* Monthly Tier */}
-          <TouchableOpacity
-            style={[
-              styles.planCard,
-              selectedPlan === 'monthly' && styles.planCardActive,
-            ]}
-            onPress={() => {
-              feedback.triggerHaptic('light');
-              setSelectedPlan('monthly');
-            }}
-          >
-            <View style={styles.planRow}>
-              <View>
-                <Text style={styles.planName}>Monthly</Text>
-                <Text style={styles.planSub}>{pricing.monthlyPrice}, cancel anytime</Text>
-              </View>
-              <View style={[styles.radioCircle, selectedPlan === 'monthly' && styles.radioCircleActive]} />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Action Button */}
-        <TouchableOpacity
-          style={styles.subscribeBtn}
-          activeOpacity={0.85}
-          onPress={handleSubscribe}
-        >
-          <Text style={styles.subscribeBtnText}>
-            {selectedPlan === 'yearly' ? 'START 3-DAY FREE TRIAL' : 'UPGRADE TO PREMIUM'}
-          </Text>
-        </TouchableOpacity>
-
-        <Text style={styles.guaranteeText}>
-          No commitment. Cancel anytime in Google Play Store.
-        </Text>
-
+        <Text style={styles.guaranteeText}>Subscriptions renew automatically until cancelled in Google Play. Any eligible offers and final payment terms are shown by Google Play before you confirm. Lifetime access is a one-time purchase.</Text>
         <View style={styles.footerLinks}>
-          <TouchableOpacity onPress={() => feedback.triggerHaptic('light')}>
-            <Text style={styles.linkText}>Restore Purchases</Text>
-          </TouchableOpacity>
-          <Text style={styles.bullet}>•</Text>
-          <TouchableOpacity onPress={() => feedback.triggerHaptic('light')}>
-            <Text style={styles.linkText}>Terms</Text>
-          </TouchableOpacity>
-          <Text style={styles.bullet}>•</Text>
-          <TouchableOpacity onPress={() => feedback.triggerHaptic('light')}>
-            <Text style={styles.linkText}>Privacy</Text>
-          </TouchableOpacity>
+          <TouchableOpacity disabled={busy} onPress={() => void perform(true)}><Text style={styles.linkText}>Restore Purchases</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => void openLegalPage('terms')}><Text style={styles.linkText}>Terms</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => void openLegalPage('privacy')}><Text style={styles.linkText}>Privacy</Text></TouchableOpacity>
         </View>
+        <TouchableOpacity style={{ marginTop: 20 }} disabled={busy || loading || !userId} onPress={() => { setLoading(true); setMessage(''); setReload(value => value + 1); }}><Text style={styles.linkText}>Reload plans</Text></TouchableOpacity>
+        <TouchableOpacity style={{ marginTop: 20 }} onPress={() => {
+          Linking.openURL('https://play.google.com/store/account/subscriptions').catch(() => Alert.alert('Could not open Google Play', 'Open Google Play to manage your subscriptions.'));
+        }}><Text style={styles.linkText}>Manage subscriptions</Text></TouchableOpacity>
       </ScrollView>
     </View>
   );

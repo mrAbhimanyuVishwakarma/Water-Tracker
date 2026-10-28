@@ -11,15 +11,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { UserAccount, UserSettings } from '../types';
+import { UserAccount } from '../types';
 import { feedback } from '../utils/feedback';
+import { openLegalPage } from '../services/legal';
 import {
   sendPhoneOtp,
   verifyPhoneOtp,
   signOutCloudUser,
+  signInWithGoogle,
+  deleteCloudAccount,
 } from '../services/supabase';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -28,22 +32,24 @@ interface Props {
   visible: boolean;
   userAccount?: UserAccount | null;
   onClose: () => void;
-  onLoginSuccess: (account: UserAccount) => void;
-  onSignOut: () => void;
+  syncStatus: string;
+  onSync: () => Promise<void>;
+  onDeleted: (id: string) => Promise<void>;
 }
 
 export const AuthModal: React.FC<Props> = ({
   visible,
   userAccount,
   onClose,
-  onLoginSuccess,
-  onSignOut,
+  syncStatus,
+  onSync,
+  onDeleted,
 }) => {
   const insets = useSafeAreaInsets();
   const [authMethod, setAuthMethod] = useState<'google' | 'phone'>('google');
   
   // Mobile OTP States
-  const [countryCode, setCountryCode] = useState('+91');
+  const countryCode = '+91';
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [otpSent, setOtpSent] = useState(false);
@@ -61,28 +67,15 @@ export const AuthModal: React.FC<Props> = ({
   }, [otpSent, countdown]);
 
   const handleGoogleSignIn = async () => {
-    feedback.triggerHaptic('medium');
-    setIsLoading(true);
-    setErrorMessage(null);
-
-    // Google Sign-in flow
-    setTimeout(() => {
-      setIsLoading(false);
-      const mockGoogleAccount: UserAccount = {
-        id: `google_${Date.now()}`,
-        email: 'hydration.hero@gmail.com',
-        name: 'Hydration Hero',
-        authProvider: 'google',
-        createdAt: Date.now(),
-      };
-      feedback.triggerHaptic('success');
-      feedback.playWaterDropSound();
-      onLoginSuccess(mockGoogleAccount);
-    }, 1200);
+    if (isLoading) return;
+    setIsLoading(true); setErrorMessage(null);
+    try { await signInWithGoogle(); }
+    catch (error) { setErrorMessage(error instanceof Error ? error.message : 'Sign-in failed.'); }
+    finally { setIsLoading(false); }
   };
 
   const handleSendOtp = async () => {
-    if (phoneNumber.trim().length < 10) {
+    if (!/^\d{10}$/.test(phoneNumber.replace(/\s+/g, ''))) {
       feedback.triggerHaptic('heavy');
       setErrorMessage('Please enter a valid 10-digit mobile number');
       return;
@@ -92,7 +85,11 @@ export const AuthModal: React.FC<Props> = ({
     setErrorMessage(null);
 
     const fullPhone = `${countryCode}${phoneNumber.replace(/\s+/g, '')}`;
-    await sendPhoneOtp(fullPhone);
+    const result = await sendPhoneOtp(fullPhone);
+    if (!result.success) {
+      setIsLoading(false); setErrorMessage(result.error || 'Could not send code.'); return;
+    }
+    setOtpCode('');
 
     setIsLoading(false);
     setOtpSent(true);
@@ -101,9 +98,9 @@ export const AuthModal: React.FC<Props> = ({
   };
 
   const handleVerifyOtp = async () => {
-    if (otpCode.trim().length < 4) {
+    if (!/^\d{6}$/.test(otpCode.trim())) {
       feedback.triggerHaptic('heavy');
-      setErrorMessage('Please enter the 4 or 6-digit verification code');
+      setErrorMessage('Please enter the 6-digit verification code');
       return;
     }
     feedback.triggerHaptic('medium');
@@ -114,30 +111,30 @@ export const AuthModal: React.FC<Props> = ({
     const result = await verifyPhoneOtp(fullPhone, otpCode.trim());
 
     setIsLoading(false);
-    if (result.success && result.account) {
+    if (result.success) {
       feedback.triggerHaptic('success');
-      feedback.playWaterDropSound();
-      onLoginSuccess(result.account);
-    } else {
-      // Seamless demo fallback for testing environments
-      const verifiedAccount: UserAccount = {
-        id: `phone_${Date.now()}`,
-        phone: `${countryCode} ${phoneNumber}`,
-        name: `Hydration Pal (${phoneNumber.slice(-4)})`,
-        authProvider: 'phone',
-        createdAt: Date.now(),
-        lastSyncAt: Date.now(),
-      };
-      feedback.triggerHaptic('success');
-      feedback.playWaterDropSound();
-      onLoginSuccess(verifiedAccount);
-    }
+    } else setErrorMessage(result.error || 'Verification failed. Please try again.');
   };
 
   const handleSignOutClick = async () => {
-    feedback.triggerHaptic('medium');
-    await signOutCloudUser();
-    onSignOut();
+    setIsLoading(true);
+    try { await signOutCloudUser(); onClose(); }
+    catch (error) { Alert.alert('Could not sign out', error instanceof Error ? error.message : 'Please try again.'); }
+    finally { setIsLoading(false); }
+  };
+
+  const handleDelete = () => {
+    if (!userAccount || isLoading) return;
+    const id = userAccount.id;
+    Alert.alert('Delete your account?', 'This permanently deletes your account and cloud hydration history. Your Google Play subscription must be cancelled separately in Google Play.', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete Account', style: 'destructive', onPress: async () => {
+        setIsLoading(true);
+        try { await deleteCloudAccount(id); await onDeleted(id); onClose(); }
+        catch { Alert.alert('Deletion failed', 'Your account deletion could not be completed. Please try again.'); }
+        finally { setIsLoading(false); }
+      } },
+    ]);
   };
 
   return (
@@ -145,7 +142,7 @@ export const AuthModal: React.FC<Props> = ({
       visible={visible}
       animationType="slide"
       transparent={true}
-      onRequestClose={onClose}
+      onRequestClose={() => { if (!isLoading) onClose(); }}
     >
       <View style={styles.overlay}>
         <KeyboardAvoidingView
@@ -161,12 +158,13 @@ export const AuthModal: React.FC<Props> = ({
                 </Text>
                 <Text style={styles.subtitle}>
                   {userAccount
-                    ? 'Your hydration progress is backed up securely'
-                    : 'Save your streak, drinks & Pro unlocks forever'}
+                    ? 'Manage your account and backup'
+                    : 'Sign in to back up your hydration history'}
                 </Text>
               </View>
               <TouchableOpacity
                 style={styles.closeBtn}
+                disabled={isLoading}
                 onPress={() => {
                   feedback.triggerHaptic('light');
                   onClose();
@@ -191,24 +189,31 @@ export const AuthModal: React.FC<Props> = ({
 
                 <View style={styles.syncStatusBadge}>
                   <View style={styles.greenDot} />
-                  <Text style={styles.syncStatusText}>Cloud Database Connected</Text>
+                  <Text style={styles.syncStatusText}>{syncStatus}</Text>
                 </View>
 
                 <View style={styles.syncInfoCard}>
                   <View style={styles.syncInfoRow}>
                     <Ionicons name="cloud-done-outline" size={20} color="#0284C7" />
-                    <Text style={styles.syncInfoText}>Real-time Google Play purchase restoration</Text>
+                    <Text style={styles.syncInfoText}>Purchases are managed through Google Play</Text>
                   </View>
                   <View style={styles.syncInfoRow}>
                     <Ionicons name="shield-checkmark-outline" size={20} color="#0284C7" />
-                    <Text style={styles.syncInfoText}>Cross-device hydration history sync</Text>
+                    <Text style={styles.syncInfoText}>Guest history stays separate on this device</Text>
                   </View>
                 </View>
 
+                <TouchableOpacity style={styles.primaryBtn} disabled={isLoading} onPress={() => void onSync()}>
+                  <Text style={styles.primaryBtnText}>Sync Now</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.signOutBtn} disabled={isLoading} onPress={handleDelete}>
+                  <Text style={styles.signOutText}>Delete Account</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.signOutBtn}
                   activeOpacity={0.8}
                   onPress={handleSignOutClick}
+                  disabled={isLoading}
                 >
                   <Ionicons name="log-out-outline" size={18} color="#EF4444" />
                   <Text style={styles.signOutText}>Sign Out</Text>
@@ -280,9 +285,9 @@ export const AuthModal: React.FC<Props> = ({
                       <View style={styles.googleIconCircle}>
                         <Ionicons name="logo-google" size={32} color="#4285F4" />
                       </View>
-                      <Text style={styles.googleHeroTitle}>1-Tap Google Sync</Text>
+                      <Text style={styles.googleHeroTitle}>Sign in with Google</Text>
                       <Text style={styles.googleHeroSub}>
-                        Links seamlessly with your Google Play store account to restore purchases on any phone.
+                        Use your Google account to save your hydration history. Purchases use your Google Play account.
                       </Text>
                     </View>
 
@@ -320,6 +325,7 @@ export const AuthModal: React.FC<Props> = ({
                             keyboardType="phone-pad"
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
+                            editable={!isLoading}
                             maxLength={12}
                           />
                         </View>
@@ -350,6 +356,7 @@ export const AuthModal: React.FC<Props> = ({
                           keyboardType="number-pad"
                           value={otpCode}
                           onChangeText={setOtpCode}
+                          editable={!isLoading}
                           maxLength={6}
                           autoFocus={true}
                         />
@@ -373,11 +380,11 @@ export const AuthModal: React.FC<Props> = ({
                               Resend code in {countdown}s
                             </Text>
                           ) : (
-                            <TouchableOpacity onPress={handleSendOtp}>
+                            <TouchableOpacity disabled={isLoading} onPress={handleSendOtp}>
                               <Text style={styles.resendBtnText}>Resend OTP SMS</Text>
                             </TouchableOpacity>
                           )}
-                          <TouchableOpacity onPress={() => setOtpSent(false)}>
+                          <TouchableOpacity disabled={isLoading} onPress={() => { setOtpSent(false); setOtpCode(''); }}>
                             <Text style={styles.changePhoneText}>Change number</Text>
                           </TouchableOpacity>
                         </View>
@@ -387,6 +394,10 @@ export const AuthModal: React.FC<Props> = ({
                 )}
 
                 {/* Continue as Guest Footer */}
+                <Text style={styles.subtitle}>Signing in backs up your drinks, preferences, and health profile to your account. Guest history stays on this device.</Text>
+                <TouchableOpacity onPress={() => void openLegalPage('privacy')}>
+                  <Text style={styles.guestButtonText}>Read Privacy Policy</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.guestButton}
                   onPress={() => {

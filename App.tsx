@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,175 +13,56 @@ import { SettingsScreen } from './src/screens/SettingsScreen';
 import { PricingPaywallScreen } from './src/screens/PricingPaywallScreen';
 import { AuthModal } from './src/screens/AuthModal';
 import { BottomTabBar, TabId } from './src/components/BottomTabBar';
-import {
-  loadSettings,
-  saveSettings,
-  loadTodayLogs,
-  saveTodayLogs,
-  loadHistoryDays,
-} from './src/utils/storage';
-import {
-  UserSettings,
-  DrinkLog,
-  DayData,
-  BeverageConfig,
-  MascotId,
-  CurrencyCode,
-  UserAccount,
-} from './src/types';
-import { DEFAULT_SETTINGS } from './src/constants/beverages';
+import { UserSettings, MascotId } from './src/types';
 import { feedback } from './src/utils/feedback';
-import {
-  checkGitHubRelease,
-  UpdateCheckResult,
-  DEFAULT_GITHUB_REPO,
-} from './src/utils/updater';
-import { UpdateModal } from './src/components/UpdateModal';
+import { useAccountData } from './src/hooks/useAccountData';
+import { useReminders } from './src/hooks/useReminders';
 
 type Screen = TabId | 'onboarding' | 'pool_party' | 'paywall';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('onboarding');
-  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
-  const [todayLogs, setTodayLogs] = useState<DrinkLog[]>([]);
-  const [history, setHistory] = useState<DayData[]>([]);
-  const [isReady, setIsReady] = useState(false);
+  const {
+    settings, todayLogs, history, ready: isReady, syncStatus, updateSettings: handleUpdateSettings,
+    addDrink: handleAddDrink, refreshPremium, syncNow, resetGuest, clearDeletedAccount,
+  } = useAccountData();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [pendingUpdate, setPendingUpdate] = useState<UpdateCheckResult | null>(null);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const reminderStatus = useReminders(settings, isReady);
 
-  // Initialize app state from persistent storage
+  useEffect(() => { feedback.configure(settings.soundEnabled, settings.hapticEnabled); }, [settings.soundEnabled, settings.hapticEnabled]);
+
   useEffect(() => {
-    const init = async () => {
-      const storedSettings = await loadSettings();
-      const logs = await loadTodayLogs();
-      const hist = await loadHistoryDays(14);
+    if (isReady) setCurrentScreen(settings.hasCompletedOnboarding ? 'dashboard' : 'onboarding');
+  }, [isReady, settings.hasCompletedOnboarding]);
 
-      // Verify mascot trial status: if not premium and trial has expired, ensure active mascot reverts to brownie
-      const trialActive =
-        storedSettings.mascotTrialStartedAt !== null &&
-        Date.now() - storedSettings.mascotTrialStartedAt < 60_000 &&
-        !storedSettings.isPremium;
-
-      let effectiveSettings = storedSettings;
-      if (!storedSettings.isPremium && !trialActive && storedSettings.activeCharacter !== 'brownie') {
-        effectiveSettings = { ...storedSettings, activeCharacter: 'brownie' };
-        await saveSettings(effectiveSettings);
-      }
-
-      setSettings(effectiveSettings);
-      setTodayLogs(logs);
-      setHistory(hist);
-
-      if (effectiveSettings.hasCompletedOnboarding) {
-        setCurrentScreen('dashboard');
-      } else {
-        setCurrentScreen('onboarding');
-      }
-      setIsReady(true);
-
-      // Check for GitHub in-app updates quietly on launch
-      if (effectiveSettings.autoCheckUpdates !== false) {
-        checkGitHubRelease(effectiveSettings.githubRepo || DEFAULT_GITHUB_REPO).then((res) => {
-          if (res.available && res.apkUrl) {
-            setPendingUpdate(res);
-            setShowUpdateModal(true);
-          }
-        });
-      }
-    };
-
-    init();
-  }, []);
-
-  // 1-Minute Pro Mascot Trial Watchdog
-  // Automatically reverts to brownie after 60 seconds unless user is premium
   useEffect(() => {
     if (!settings.mascotTrialStartedAt || settings.isPremium) return;
-
-    const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - (settings.mascotTrialStartedAt || 0)) / 1000);
-      if (elapsed >= 60) {
-        if (settings.activeCharacter !== 'brownie') {
-          handleUpdateSettings({ activeCharacter: 'brownie' });
-        }
+    const timer = setInterval(() => {
+      if (Date.now() - (settings.mascotTrialStartedAt || 0) >= 60_000 && settings.activeCharacter !== 'brownie') {
+        void handleUpdateSettings({ activeCharacter: 'brownie' });
       }
     }, 1000);
+    return () => clearInterval(timer);
+  }, [settings.mascotTrialStartedAt, settings.isPremium, settings.activeCharacter, handleUpdateSettings]);
 
-    return () => clearInterval(interval);
-  }, [settings.mascotTrialStartedAt, settings.isPremium, settings.activeCharacter]);
-
-  const handleUpdateSettings = async (partial: Partial<UserSettings>) => {
-    const updated = { ...settings, ...partial };
-    setSettings(updated);
-    await saveSettings(updated);
+  const handleStartMascotTrial = () => {
+    if (!settings.hasUsedMascotTrial) void handleUpdateSettings({ mascotTrialStartedAt: Date.now(), hasUsedMascotTrial: true });
   };
-
-  const handleStartMascotTrial = async () => {
-    const updated = {
-      ...settings,
-      mascotTrialStartedAt: Date.now(),
-      hasUsedMascotTrial: true,
-    };
-    setSettings(updated);
-    await saveSettings(updated);
-  };
-
-  const handleLoginSuccess = async (userAccount: UserAccount) => {
-    await handleUpdateSettings({ userAccount });
-    setShowAuthModal(false);
-  };
-
-  const handleSignOut = async () => {
-    await handleUpdateSettings({ userAccount: null });
-    setShowAuthModal(false);
-  };
-
   const handleOnboardingComplete = async (onboardingData: Partial<UserSettings>) => {
-    const updated = {
-      ...settings,
-      ...onboardingData,
-      hasCompletedOnboarding: true,
-    };
-    setSettings(updated);
-    await saveSettings(updated);
-    setCurrentScreen('dashboard');
+    await handleUpdateSettings({ ...onboardingData, hasCompletedOnboarding: true });
   };
-
-  const handleAddDrink = async (beverage: BeverageConfig, amount: number) => {
-    const effectiveAmount = Math.round(amount * beverage.hydrationMultiplier);
-    const newEntry: DrinkLog = {
-      id: `${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
-      type: beverage.type,
-      amount,
-      effectiveAmount,
-      timestamp: Date.now(),
-      color: beverage.color,
-    };
-    const updatedLogs = [...todayLogs, newEntry];
-    setTodayLogs(updatedLogs);
-    await saveTodayLogs(updatedLogs);
-
-    // Refresh history
-    const hist = await loadHistoryDays(14);
-    setHistory(hist);
+  const handleSelectMascot = (mascotId: MascotId) => {
+    const trial = settings.mascotTrialStartedAt;
+    if (mascotId !== 'brownie' && !settings.isPremium && !(trial && Date.now() - trial < 60_000) && settings.hasUsedMascotTrial) {
+      setCurrentScreen('paywall');
+      return;
+    }
+    void handleUpdateSettings({ activeCharacter: mascotId });
   };
-
-  const handleSelectMascot = async (mascotId: MascotId) => {
-    await handleUpdateSettings({ activeCharacter: mascotId });
-  };
-
-  const handleResetData = async () => {
-    const freshSettings = { ...DEFAULT_SETTINGS, hasCompletedOnboarding: false };
-    setSettings(freshSettings);
-    setTodayLogs([]);
-    await saveSettings(freshSettings);
-    await saveTodayLogs([]);
-    setCurrentScreen('onboarding');
-  };
+  const handleResetData = async () => { await resetGuest(); };
 
   if (!isReady) {
-    return <View style={styles.loadingContainer} />;
+    return <View style={styles.loadingContainer}><ActivityIndicator /><Text>{syncStatus.includes('Could not load') ? syncStatus : 'Loading your saved data…'}</Text></View>;
   }
 
   const isTabScreen =
@@ -259,6 +140,7 @@ export default function App() {
               onOpenPaywall={() => setCurrentScreen('paywall')}
               onOpenAuth={() => setShowAuthModal(true)}
               onResetData={handleResetData}
+              reminderStatus={reminderStatus}
             />
           )}
 
@@ -279,15 +161,11 @@ export default function App() {
 
           {currentScreen === 'paywall' && (
             <PricingPaywallScreen
+              key={settings.userAccount?.id || 'guest'}
               settings={settings}
               onClose={() => setCurrentScreen('settings')}
-              onUpgradeSuccess={() => {
-                handleUpdateSettings({ isPremium: true });
-                setCurrentScreen('dashboard');
-              }}
-              onUpdateCurrency={(curr: CurrencyCode) => {
-                handleUpdateSettings({ currency: curr });
-              }}
+              onOpenAuth={() => setShowAuthModal(true)}
+              onEntitlementsChanged={refreshPremium}
             />
           )}
         </View>
@@ -301,20 +179,15 @@ export default function App() {
         )}
 
         {/* Auth & Cloud Backup Modal */}
-        <AuthModal
+        {showAuthModal && <AuthModal
           visible={showAuthModal}
           userAccount={settings.userAccount}
           onClose={() => setShowAuthModal(false)}
-          onLoginSuccess={handleLoginSuccess}
-          onSignOut={handleSignOut}
-        />
+          syncStatus={syncStatus}
+          onSync={syncNow}
+          onDeleted={clearDeletedAccount}
+        />}
 
-        {/* GitHub In-App Update Modal */}
-        <UpdateModal
-          visible={showUpdateModal}
-          updateInfo={pendingUpdate}
-          onClose={() => setShowUpdateModal(false)}
-        />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

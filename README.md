@@ -12,18 +12,18 @@
 
 Brownie Water Tracker makes drinking enough water feel a little more fun. Set a personal daily goal, quickly log drinks, follow your progress, build healthy habits, and unlock a pool full of friendly mascots.
 
-This repository currently contains the developer beta, with every mascot unlocked for testing.
+This repository is being prepared for Google Play. Login, cloud backups and premium billing require the external configuration in [the launch setup guide](docs/GOOGLE_PLAY_SETUP.md). Public release and real payments are not yet verified.
 
 ## Features
 
 - Personalized daily hydration goals
 - Quick logging for water, tea, coffee, juice, milk, and electrolytes
 - Daily history, progress, and streak tracking
-- Hydration challenges and achievements
+- Hydration habit prompts and a calendar of logged goal days
 - Six animated mascots and an interactive pool party
 - Millilitre and fluid-ounce support
 - Optional account backup with Supabase
-- In-app APK update checks through GitHub Releases
+- Google Play premium purchases and restore through RevenueCat (configuration required)
 
 ## Download
 
@@ -42,7 +42,7 @@ npm install
 npx expo start
 ```
 
-Then open the project in Expo Go or press `a` to launch Android. Native modules require a development build for full functionality.
+Copy `.env.example` to `.env` and fill the public configuration values. Use a development build for Google login, reminders, and purchases; Expo Go does not verify those flows. See [Google Play setup](docs/GOOGLE_PLAY_SETUP.md).
 
 ## Checks
 

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://watertrackerbrownie.vercel.app/sitemap.xml

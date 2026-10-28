@@ -288,8 +288,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   hasCompletedOnboarding: false,
   activeChallengeId: 'caffeine_free',
   activeCharacter: 'brownie',
-  unlockedCharacters: ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'],
-  isPremium: true,
+  unlockedCharacters: ['brownie'],
+  isPremium: false,
   cupPresets: [200, 250, 330, 500],
   visibleBeverages: DEFAULT_VISIBLE_BEVERAGES,
   healthProfile: DEFAULT_HEALTH_PROFILE,
@@ -308,7 +308,6 @@ export const CHALLENGES: Challenge[] = [
     badge: '☕🚫',
     color: '#8A5844',
     durationDays: 10,
-    currentDay: 2,
     description: 'Swap one afternoon coffee for crisp water or relaxing herbal tea.',
     benefits: [
       'Deeper and more restful night sleep',
@@ -325,7 +324,6 @@ export const CHALLENGES: Challenge[] = [
     badge: '🦥💧',
     color: '#10B981',
     durationDays: 10,
-    currentDay: 1,
     description: 'Drink a full glass of water 20 minutes before every meal.',
     benefits: [
       'Boosts natural metabolic rate by up to 24%',
@@ -341,7 +339,6 @@ export const CHALLENGES: Challenge[] = [
     badge: '🐧🍊',
     color: '#F59E0B',
     durationDays: 10,
-    currentDay: 0,
     description: 'Infuse your water with fresh lemon, cucumber, or citrus slices.',
     benefits: [
       'Natural vitamin C and antioxidant intake',
@@ -357,7 +354,6 @@ export const CHALLENGES: Challenge[] = [
     badge: '🐢☀️',
     color: '#0284C7',
     durationDays: 10,
-    currentDay: 0,
     description: 'Drink 350ml of room-temperature water immediately upon waking.',
     benefits: [
       'Rehydrates brain and body after 8h sleep',

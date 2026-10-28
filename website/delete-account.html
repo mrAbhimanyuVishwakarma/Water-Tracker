@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Account - Brownie Water Tracker</title>
+  <meta name="description" content="Step-by-step account deletion instructions for Brownie Water Tracker. In-app deletion and public web request options for Google Play and Supabase compliance.">
+  <meta name="author" content="mrAbhimanyuVishwakarma">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://watertrackerbrownie.vercel.app/delete-account.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://watertrackerbrownie.vercel.app/delete-account.html">
+  <meta property="og:title" content="Account Deletion Instructions - Brownie Water Tracker">
+  <meta property="og:description" content="Learn how to delete your account and associated cloud data in Brownie Water Tracker.">
+  <meta property="og:image" content="https://watertrackerbrownie.vercel.app/assets/og-image.png">
+
+  <meta name="theme-color" content="#0284C7">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <script src="site-config.js"></script>
+  <script src="consent.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-link" aria-label="Brownie Water Tracker Home">
+        <img src="assets/favicon.svg" alt="" class="brand-icon" width="42" height="42" aria-hidden="true">
+        <span>Brownie Water</span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="download.html" class="nav-link">Download</a></li>
+          <li><a href="support.html" class="nav-link">Support</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Switch between light and dark theme">
+          <svg class="theme-icon-light" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 2a10 10 0 0 0-.19 14 10 10 0 0 0 11.89 4 1 1 0 0 0 .62-1.33 1 1 0 0 0-1-.67 8 8 0 0 1-8.32-8.32 8.06 8.06 0 0 1 3.7-6.84 1 1 0 0 0 .38-1.15 1 1 0 0 0-.9-.69H12.3z"/></svg>
+        </button>
+        <a href="download.html" class="btn btn-primary btn-sm header-cta-btn js-download-btn">Download APK</a>
+        <button type="button" class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false"><span class="hamburger-icon"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="support.html">Support</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms of Use</a></li>
+      <li><a href="delete-account.html" class="active" aria-current="page">Delete Account</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container">
+        <div class="badge">Google Play &amp; Privacy Compliance</div>
+        <h1>Account &amp; Data Deletion</h1>
+        <p>Transparent instructions to delete your cloud account and associated hydration records.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <article class="legal-content-wrapper">
+        <div class="legal-meta-box">
+          <strong>App Name:</strong> Brownie Water Tracker &nbsp;|&nbsp; 
+          <strong>Package ID:</strong> <code>com.brownie.watertracker</code> &nbsp;|&nbsp; 
+          <strong>Backend:</strong> Supabase Auth &amp; PostgreSQL RLS
+        </div>
+
+        <p>
+          In accordance with Google Play User Data policies and international privacy laws, this page provides clear instructions on how you can request the permanent deletion of your <strong>Brownie Water Tracker</strong> account and associated data.
+        </p>
+
+        <h2>Option 1: In-App Instant Deletion (Recommended)</h2>
+        <p>
+          If you currently have the app installed on your Android device and have a connected cloud account, you can permanently delete your account and all associated cloud data in seconds:
+        </p>
+        <ol>
+          <li>Open <strong>Brownie Water Tracker</strong> on your Android device.</li>
+          <li>Tap the <strong>Settings</strong> button in the top header.</li>
+          <li>Scroll down to the <strong>Account &amp; Cloud Backup</strong> section and tap <strong>MANAGE</strong>.</li>
+          <li>Tap <strong>Delete Account</strong> at the bottom of the account modal.</li>
+          <li>Review the confirmation dialog and confirm by tapping <strong>Delete My Account</strong>.</li>
+        </ol>
+        <p>
+          <strong>What happens automatically:</strong> The app invokes our authenticated Supabase Edge Function (<code>delete-account</code>), which deletes your user identity from Supabase Auth and automatically triggers a PostgreSQL cascade delete removing your profile record in <code>hydration_profiles</code> and every logged drink in <code>hydration_logs</code>. Your local account credentials and tokens are removed immediately.
+        </p>
+
+        <h2>Option 2: External Deletion Request (Without Reinstalling)</h2>
+        <p>
+          If you no longer have the app installed, lost your Android device, or prefer to request deletion externally, <strong>you do not need to reinstall the app</strong>. You may submit an external deletion request through either of the following channels:
+        </p>
+        <ul>
+          <li><strong>GitHub Issues:</strong> Open a private or confidential deletion request on our verified repository tracker: <a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/issues" target="_blank" rel="noopener noreferrer">https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/issues</a></li>
+          <li><strong>Direct Email:</strong> Email <code>REPLACE_WITH_SUPPORT_EMAIL</code> with the subject line <em>“Account Deletion Request - Brownie Water Tracker”</em>.</li>
+        </ul>
+
+        <h3>Identity Verification &amp; Turnaround Time</h3>
+        <p>
+          To protect user privacy and prevent unauthorized account deletions, you must provide the exact Google OAuth email address or mobile phone number associated with your account. A verification email or SMS confirmation code will be sent to confirm ownership before deletion is executed.
+        </p>
+        <p>
+          Verified external deletion requests are processed within <strong>3 to 7 business days</strong>. Once completed, a confirmation notice will be sent.
+        </p>
+
+        <h2>What Cloud Data Is Permanently Deleted</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.92rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-divider); text-align: left;">
+              <th style="padding: 10px 14px;">Data Category</th>
+              <th style="padding: 10px 14px;">Data Elements</th>
+              <th style="padding: 10px 14px;">Action Taken</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-divider);">
+              <td style="padding: 10px 14px;"><strong>Account Identity</strong></td>
+              <td style="padding: 10px 14px;">User ID UUID, email address, phone number, auth tokens</td>
+              <td style="padding: 10px 14px; color: #EF4444; font-weight: 700;">Permanently deleted from Supabase Auth</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-divider);">
+              <td style="padding: 10px 14px;"><strong>Hydration Profile</strong></td>
+              <td style="padding: 10px 14px;">Goal ml, unit preferences, wake/sleep hours, weight settings</td>
+              <td style="padding: 10px 14px; color: #EF4444; font-weight: 700;">Permanently wiped via foreign key cascade</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 14px;"><strong>Hydration History</strong></td>
+              <td style="padding: 10px 14px;">All recorded drink logs, timestamps, beverage types</td>
+              <td style="padding: 10px 14px; color: #EF4444; font-weight: 700;">Permanently erased from database</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Guest Mode &amp; Local Device Data</h2>
+        <p>
+          If you use Brownie Water Tracker as a guest without cloud backup, your data exists solely on your phone in local storage. You can delete all local guest data at any time by:
+        </p>
+        <ul>
+          <li>Using the in-app <strong>Reset All Data</strong> button in Settings; or</li>
+          <li>Opening Android Settings &rarr; Apps &rarr; Brownie Water Tracker &rarr; Storage &rarr; <strong>Clear Storage / Clear Data</strong>; or</li>
+          <li>Uninstalling the application from your device.</li>
+        </ul>
+
+        <h2>Important: Google Play Subscriptions Must Be Cancelled Separately</h2>
+        <div style="background-color: var(--bg-body); border-left: 4px solid #F59E0B; padding: 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 24px 0;">
+          <strong>⚠️ CRITICAL SUBSCRIPTION WARNING:</strong> Deleting your Brownie Water Tracker account or uninstalling the app <strong>does not automatically cancel an active Google Play subscription</strong>. Subscriptions are billed and managed directly by Google Play.
+        </div>
+        <p>To avoid unwanted renewal charges, cancel your subscription through Google Play before or immediately after deleting your account:</p>
+        <ol>
+          <li>Open the <strong>Google Play Store</strong> app on your Android device.</li>
+          <li>Tap your profile icon in the top right corner.</li>
+          <li>Tap <strong>Payments &amp; subscriptions</strong> &rarr; <strong>Subscriptions</strong>.</li>
+          <li>Select <strong>Brownie Water Tracker</strong> and tap <strong>Cancel subscription</strong>.</li>
+          <li>Follow the on-screen instructions to confirm cancellation.</li>
+        </ol>
+
+        <h2>Data Retained by Google or Third Parties</h2>
+        <p>
+          Google maintains purchase records and transaction invoices in accordance with financial regulations and tax compliance laws. The developer of Brownie Water Tracker does not hold, access, or have the ability to delete Google's internal financial records.
+        </p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-link">
+            <img src="assets/favicon.svg" alt="" class="brand-icon" width="36" height="36" aria-hidden="true">
+            <span>Brownie Water Tracker</span>
+          </a>
+          <p>A calm, playful Android hydration tracker starring Brownie the Zen Capybara and collectible animal friends.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul class="footer-links">
+            <li><a href="features.html">Features Overview</a></li>
+            <li><a href="download.html">Android Download</a></li>
+            <li><a href="about.html">About the Project</a></li>
+            <li><a href="support.html">Help & FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal & Safety</h4>
+          <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+            <li><a href="delete-account.html">Delete Account</a></li>
+            <li><a href="#" onclick="window.resetPrivacyConsent(event)">Cookie Settings</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases" target="_blank" rel="noopener noreferrer">Release History</a></li>
+            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/issues" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-disclaimer-card">
+          <strong>Important Wellness Notice:</strong> Brownie Water Tracker is an informational wellness and habit-tracking tool. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
+        </div>
+        <div class="footer-bottom-row">
+          <div>&copy; <span class="js-current-year">2026</span> mrAbhimanyuVishwakarma. Open source under MIT License.</div>
+          <div>Hosted on Vercel</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

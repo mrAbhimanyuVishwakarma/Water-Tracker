@@ -57,3 +57,8 @@ __pycache__/
 # generated native folders
 /ios
 /android
+/apk installer
+# Local app configuration
+.env
+.env.*
+!.env.example

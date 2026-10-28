@@ -114,7 +114,6 @@ export interface Challenge {
   badge: string;
   color: string;
   durationDays: number;
-  currentDay: number;
   description: string;
   benefits: string[];
   active: boolean;

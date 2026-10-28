@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -7,22 +7,15 @@ import {
   ScrollView,
   Switch,
   Alert,
-  TextInput,
-  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CurrencyCode, UserSettings } from '../types';
+import { UserSettings } from '../types';
 import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
-import {
-  CURRENT_APP_VERSION,
-  DEFAULT_GITHUB_REPO,
-  checkGitHubRelease,
-  UpdateCheckResult,
-} from '../utils/updater';
-import { UpdateModal } from '../components/UpdateModal';
-
+import Constants from 'expo-constants';
+import { openLegalPage } from '../services/legal';
 interface Props {
   settings: UserSettings;
   onUpdateSettings: (newSettings: Partial<UserSettings>) => void;
@@ -31,6 +24,7 @@ interface Props {
   onOpenPaywall: () => void;
   onOpenAuth: () => void;
   onResetData: () => void;
+  reminderStatus: string;
 }
 
 export const SettingsScreen: React.FC<Props> = ({
@@ -41,66 +35,20 @@ export const SettingsScreen: React.FC<Props> = ({
   onOpenPaywall,
   onOpenAuth,
   onResetData,
+  reminderStatus,
 }) => {
   const insets = useSafeAreaInsets();
-  const [dailyTarget, setDailyTarget] = useState(settings.dailyTarget);
-  const [unit, setUnit] = useState(settings.unit);
-  const [currency, setCurrency] = useState<CurrencyCode>(settings.currency || 'INR');
-  const [sound, setSound] = useState(settings.soundEnabled);
-  const [haptic, setHaptic] = useState(settings.hapticEnabled);
-  const [checkingUpdate, setCheckingUpdate] = useState(false);
-  const [updateResult, setUpdateResult] = useState<UpdateCheckResult | null>(null);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [updateStatus, setUpdateStatus] = useState<string | null>(null);
-  const [githubRepo, setGithubRepo] = useState(settings.githubRepo || DEFAULT_GITHUB_REPO);
-  const [isEditingRepo, setIsEditingRepo] = useState(false);
-  const [autoCheckUpdates, setAutoCheckUpdates] = useState(settings.autoCheckUpdates !== false);
-
-  const handleCheckForUpdates = async () => {
-    try {
-      setCheckingUpdate(true);
-      setUpdateStatus('Checking GitHub for updates...');
-      feedback.triggerHaptic('light');
-
-      const result = await checkGitHubRelease(githubRepo);
-      setCheckingUpdate(false);
-
-      if (result.available) {
-        setUpdateStatus(`✨ New version ${result.latestVersion} found!`);
-        setUpdateResult(result);
-        setShowUpdateModal(true);
-      } else {
-        setUpdateStatus(`✅ You are on the latest version (${result.currentVersion})`);
-        Alert.alert(
-          'Up to Date',
-          `You are running the latest version (${result.currentVersion}). No update is available on GitHub.`,
-          [{ text: 'OK' }]
-        );
-      }
-    } catch (err: any) {
-      setCheckingUpdate(false);
-      setUpdateStatus('Failed to check for updates');
-      Alert.alert('Update Check Failed', err?.message || 'Could not connect to GitHub.');
-    }
-  };
-
+  const { dailyTarget, unit, soundEnabled: sound, hapticEnabled: haptic } = settings;
   const saveGoal = (val: number) => {
-    setDailyTarget(val);
     onUpdateSettings({ dailyTarget: val });
     feedback.triggerHaptic('light');
   };
 
   const toggleUnit = (newUnit: 'ml' | 'oz') => {
-    setUnit(newUnit);
     onUpdateSettings({ unit: newUnit });
     feedback.triggerHaptic('light');
   };
 
-  const selectCurrency = (newCurrency: CurrencyCode) => {
-    setCurrency(newCurrency);
-    onUpdateSettings({ currency: newCurrency });
-    feedback.triggerHaptic('light');
-  };
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 24) }]}>
@@ -120,7 +68,7 @@ export const SettingsScreen: React.FC<Props> = ({
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-        {/* Pro Banner with 3-Day Trial */}
+        {/* Premium plans */}
         <TouchableOpacity
           style={styles.proBanner}
           activeOpacity={0.85}
@@ -132,11 +80,11 @@ export const SettingsScreen: React.FC<Props> = ({
           <View style={styles.proBannerLeft}>
             <Text style={styles.proBannerTitle}>👑 Brownie Premium</Text>
             <Text style={styles.proBannerSub}>
-              {settings.isPremium ? 'Active Pro Member' : '3-Day Free Trial · Unlock Sid, Turbo, Pip'}
+              {settings.isPremium ? 'Active Pro Member' : 'Unlock every mascot'}
             </Text>
           </View>
           <View style={styles.upgradeBadge}>
-            <Text style={styles.upgradeBadgeText}>{settings.isPremium ? 'PRO' : '3-DAY TRIAL'}</Text>
+            <Text style={styles.upgradeBadgeText}>{settings.isPremium ? 'PRO' : 'VIEW PLANS'}</Text>
           </View>
         </TouchableOpacity>
 
@@ -144,7 +92,7 @@ export const SettingsScreen: React.FC<Props> = ({
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Account & Cloud Backup</Text>
           <Text style={styles.sectionSubtitle}>
-            Save streak, logs & Pro purchases across all devices.
+            Back up hydration logs and preferences to your account. Guest data stays on this device.
           </Text>
           <TouchableOpacity
             style={styles.accountCard}
@@ -177,6 +125,41 @@ export const SettingsScreen: React.FC<Props> = ({
               </Text>
               <Ionicons name="chevron-forward" size={14} color="#0284C7" />
             </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Hydration Reminders</Text>
+          <Text style={styles.sectionSubtitle}>{reminderStatus}</Text>
+          <View style={styles.settingRow}>
+            <Text style={styles.rowLabel}>Enable daily reminders</Text>
+            <Switch value={settings.smartRemindersEnabled} onValueChange={value => onUpdateSettings({ smartRemindersEnabled: value })} />
+          </View>
+          <Text style={styles.sectionSubtitle}>Wake {settings.healthProfile.wakeTime} / Sleep {settings.healthProfile.sleepTime}</Text>
+          <Text style={styles.rowLabel}>Wake time</Text>
+          <View style={styles.chipRow}>
+            {['06:00', '07:00', '08:00', '09:00'].map(time => <TouchableOpacity key={time}
+              style={[styles.chip, settings.healthProfile.wakeTime === time && styles.chipActive]}
+              onPress={() => onUpdateSettings({ healthProfile: { ...settings.healthProfile, wakeTime: time } })}>
+              <Text style={styles.chipText}>{time}</Text>
+            </TouchableOpacity>)}
+          </View>
+          <Text style={styles.rowLabel}>Sleep time</Text>
+          <View style={styles.chipRow}>
+            {['21:00', '22:00', '23:00', '00:00'].map(time => <TouchableOpacity key={time}
+              style={[styles.chip, settings.healthProfile.sleepTime === time && styles.chipActive]}
+              onPress={() => onUpdateSettings({ healthProfile: { ...settings.healthProfile, sleepTime: time } })}>
+              <Text style={styles.chipText}>{time}</Text>
+            </TouchableOpacity>)}
+          </View>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            {[60, 90, 120].map(minutes => <TouchableOpacity key={minutes} style={styles.actionBtn}
+              onPress={() => onUpdateSettings({ reminderIntervalMinutes: minutes })}>
+              <Text style={styles.actionBtnText}>{settings.reminderIntervalMinutes === minutes ? '* ' : ''}{minutes} min</Text>
+            </TouchableOpacity>)}
+          </View>
+          <TouchableOpacity style={styles.actionBtn} onPress={() => { Linking.openSettings().catch(() => Alert.alert('Open device settings', 'Allow notifications for Brownie Water Tracker.')); }}>
+            <Text style={styles.actionBtnText}>Notification Permission</Text>
           </TouchableOpacity>
         </View>
 
@@ -227,45 +210,18 @@ export const SettingsScreen: React.FC<Props> = ({
           </View>
         </View>
 
-        {/* Section: Currency Preference */}
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Pricing Currency</Text>
-          <Text style={styles.sectionSubtitle}>
-            Display store and subscription prices in your local currency.
-          </Text>
-          <View style={styles.chipRow}>
-            {[
-              { code: 'INR', label: '₹ INR' },
-              { code: 'USD', label: '$ USD' },
-              { code: 'EUR', label: '€ EUR' },
-              { code: 'GBP', label: '£ GBP' },
-            ].map((c) => (
-              <TouchableOpacity
-                key={c.code}
-                style={[styles.chip, currency === c.code && styles.chipActive]}
-                onPress={() => selectCurrency(c.code as CurrencyCode)}
-              >
-                <Text style={[styles.chipText, currency === c.code && styles.chipTextActive]}>
-                  {c.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
         {/* Section: Sound & Haptics */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Audio & Haptics</Text>
 
           <View style={styles.settingRow}>
             <View>
-              <Text style={styles.rowLabel}>Water Pouring Sounds</Text>
-              <Text style={styles.rowSub}>Plays relaxing water droplet sounds</Text>
+              <Text style={styles.rowLabel}>Reminder Sounds</Text>
+              <Text style={styles.rowSub}>Play a sound with scheduled reminders</Text>
             </View>
             <Switch
               value={sound}
               onValueChange={(val) => {
-                setSound(val);
                 onUpdateSettings({ soundEnabled: val });
                 feedback.triggerHaptic('light');
               }}
@@ -281,7 +237,6 @@ export const SettingsScreen: React.FC<Props> = ({
             <Switch
               value={haptic}
               onValueChange={(val) => {
-                setHaptic(val);
                 onUpdateSettings({ hapticEnabled: val });
                 feedback.triggerHaptic('light');
               }}
@@ -308,91 +263,11 @@ export const SettingsScreen: React.FC<Props> = ({
           </TouchableOpacity>
         </View>
 
-        {/* Section: GitHub In-App Updates */}
         <View style={styles.card}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Ionicons name="cloud-download-outline" size={22} color="#0284C7" />
-              <Text style={styles.sectionTitle}>GitHub In-App Updates</Text>
-            </View>
-            <View style={styles.versionPill}>
-              <Text style={styles.versionPillText}>v{CURRENT_APP_VERSION} (BETA)</Text>
-            </View>
-          </View>
-          <Text style={styles.sectionSubtitle}>
-            Automatically downloads and installs updates directly from your GitHub releases.
-          </Text>
-
-          {/* Repository Display & Edit */}
-          <View style={styles.repoBox}>
-            <Ionicons name="logo-github" size={18} color="#0F172A" />
-            {isEditingRepo ? (
-              <TextInput
-                style={styles.repoInput}
-                value={githubRepo}
-                onChangeText={setGithubRepo}
-                onBlur={() => {
-                  setIsEditingRepo(false);
-                  onUpdateSettings({ githubRepo });
-                }}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            ) : (
-              <Text style={styles.repoText} numberOfLines={1}>
-                {githubRepo}
-              </Text>
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                if (isEditingRepo) {
-                  onUpdateSettings({ githubRepo });
-                }
-                setIsEditingRepo(!isEditingRepo);
-              }}
-              style={styles.repoEditBtn}
-            >
-              <Ionicons name={isEditingRepo ? 'checkmark' : 'pencil'} size={16} color="#0284C7" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Auto Check Toggle */}
-          <View style={[styles.settingRow, { marginTop: 12, marginBottom: 8 }]}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.rowLabel}>Check on Launch</Text>
-              <Text style={styles.rowSub}>Auto-check for updates whenever the app opens</Text>
-            </View>
-            <Switch
-              value={autoCheckUpdates}
-              onValueChange={(val) => {
-                setAutoCheckUpdates(val);
-                onUpdateSettings({ autoCheckUpdates: val });
-                feedback.triggerHaptic('light');
-              }}
-              trackColor={{ false: '#CBD5E1', true: '#0284C7' }}
-            />
-          </View>
-
-          {/* Status Message */}
-          {updateStatus && (
-            <View style={styles.updateStatusBox}>
-              <Text style={styles.updateStatusText}>{updateStatus}</Text>
-            </View>
-          )}
-
-          {/* Check Button */}
-          <TouchableOpacity
-            style={[styles.actionBtn, { marginTop: 8 }]}
-            activeOpacity={0.85}
-            disabled={checkingUpdate}
-            onPress={handleCheckForUpdates}
-          >
-            {checkingUpdate ? (
-              <ActivityIndicator size="small" color="#0284C7" />
-            ) : (
-              <Text style={styles.actionBtnText}>🔍 CHECK FOR UPDATES</Text>
-            )}
-          </TouchableOpacity>
+          <Text style={styles.sectionTitle}>Privacy & Terms</Text>
+          <TouchableOpacity style={styles.actionBtn} onPress={() => void openLegalPage('privacy')}><Text style={styles.actionBtnText}>Privacy Policy</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn} onPress={() => void openLegalPage('terms')}><Text style={styles.actionBtnText}>Terms of Use</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn} onPress={() => void openLegalPage('deletion')}><Text style={styles.actionBtnText}>Account Deletion Help</Text></TouchableOpacity>
         </View>
 
         {/* Section: App Data */}
@@ -402,7 +277,10 @@ export const SettingsScreen: React.FC<Props> = ({
             style={[styles.actionBtn, { backgroundColor: '#FEE2E2', borderColor: '#FCA5A5' }]}
             onPress={() => {
               feedback.triggerHaptic('heavy');
-              onResetData();
+              Alert.alert('Reset guest data?', 'This removes all guest history and preferences on this device.', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Reset', style: 'destructive', onPress: onResetData },
+              ]);
             }}
           >
             <Text style={[styles.actionBtnText, { color: '#DC2626' }]}>
@@ -411,13 +289,8 @@ export const SettingsScreen: React.FC<Props> = ({
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.versionText}>Brownie Water Tracker v1.0.0 (Beta All Unlocked)</Text>
+        <Text style={styles.versionText}>Brownie Water Tracker v{Constants.expoConfig?.version || '1.0.0'}</Text>
 
-        <UpdateModal
-          visible={showUpdateModal}
-          updateInfo={updateResult}
-          onClose={() => setShowUpdateModal(false)}
-        />
       </ScrollView>
     </View>
   );

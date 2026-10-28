@@ -5,14 +5,13 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { CHALLENGES } from '../constants/beverages';
-import { Challenge, DayData, UserSettings } from '../types';
+import { DayData, UserSettings } from '../types';
 import { feedback } from '../utils/feedback';
-import { formatVolume } from '../utils/storage';
+import { calculateStreak, getTodayKey } from '../utils/storage';
 
 interface Props {
   settings: UserSettings;
@@ -35,7 +34,8 @@ export const ChallengesScreen: React.FC<Props> = ({
   const selectedChallenge =
     CHALLENGES.find((c) => c.id === selectedChallengeId) || CHALLENGES[0];
 
-  const daysInMonth = Array.from({ length: 30 }, (_, i) => i + 1);
+  const today = new Date();
+  const daysInMonth = Array.from({ length: new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate() }, (_, i) => i + 1);
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 24) }]}>
@@ -101,26 +101,7 @@ export const ChallengesScreen: React.FC<Props> = ({
           <Text style={styles.challengeHeroTitle}>{selectedChallenge.name}</Text>
           <Text style={styles.challengeDesc}>{selectedChallenge.description}</Text>
 
-          {/* 10-Day Milestone Progress Circles */}
-          <View style={styles.milestoneRow}>
-            {Array.from({ length: selectedChallenge.durationDays }).map((_, idx) => {
-              const dayNum = idx + 1;
-              const isDone = dayNum <= selectedChallenge.currentDay;
-              return (
-                <View
-                  key={dayNum}
-                  style={[
-                    styles.milestoneDot,
-                    isDone && styles.milestoneDotDone,
-                  ]}
-                >
-                  <Text style={[styles.milestoneText, isDone && styles.milestoneTextDone]}>
-                    {isDone ? '✓' : dayNum}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
+          <Text style={styles.challengeDesc}>Use this challenge as a daily habit prompt.</Text>
 
           <TouchableOpacity
             style={styles.challengeActionBtn}
@@ -143,16 +124,17 @@ export const ChallengesScreen: React.FC<Props> = ({
         <View style={styles.calendarCard}>
           <View style={styles.streakBadgeContainer}>
             <View style={styles.streakCircle}>
-              <Text style={styles.streakNumber}>2</Text>
+              <Text style={styles.streakNumber}>{calculateStreak(history)}</Text>
               <Text style={styles.streakLabel}>DAY STREAK</Text>
             </View>
           </View>
 
-          <Text style={styles.sectionHeading}>Challenge Calendar</Text>
+          <Text style={styles.sectionHeading}>Hydration Calendar</Text>
           <View style={styles.calendarGrid}>
             {daysInMonth.map((d) => {
-              const isToday = d === 27;
-              const isAchieved = d === 26 || d === 27;
+              const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+              const isToday = date === getTodayKey();
+              const isAchieved = history.some(day => day.date === date && day.achieved);
               return (
                 <View
                   key={d}

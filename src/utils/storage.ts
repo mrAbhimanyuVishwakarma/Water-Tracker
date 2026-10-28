@@ -1,122 +1,77 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrinkLog, UserSettings, DayData } from '../types';
-import { DEFAULT_SETTINGS } from '../constants/beverages';
+import { backupSettings, dayKey, mergeLogs, safeSettings } from './accountData';
 
-const STORAGE_KEYS = {
-  SETTINGS: '@brownie_settings',
-  LOGS_PREFIX: '@brownie_logs_',
-  STREAK: '@brownie_streak',
-};
+export interface LocalData { settings: UserSettings; logs: DrinkLog[]; pendingLogIds: string[]; settingsRevision: number; }
+const keyFor = (userId: string | null) => `@brownie_v2:${userId || 'guest'}`;
+export const getTodayKey = dayKey;
 
-export const getTodayKey = (): string => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-};
-
-export const loadSettings = async (): Promise<UserSettings> => {
-  try {
-    const raw = await AsyncStorage.getItem(STORAGE_KEYS.SETTINGS);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return {
-        ...DEFAULT_SETTINGS,
-        ...parsed,
-        isPremium: true,
-        unlockedCharacters: ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'],
-        healthProfile: {
-          ...DEFAULT_SETTINGS.healthProfile,
-          ...(parsed.healthProfile || {}),
-        },
-      };
-    }
-  } catch (e) {
-    console.error('Failed to load settings:', e);
+export async function loadLocalData(userId: string | null): Promise<LocalData> {
+  const raw = await AsyncStorage.getItem(keyFor(userId));
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    const logs = mergeLogs(parsed.logs || [], []);
+    return { settings: safeSettings(parsed.settings), logs,
+      pendingLogIds: Array.isArray(parsed.pendingLogIds) ? parsed.pendingLogIds.filter((id: unknown) => typeof id === 'string') : logs.map(log => log.id),
+      settingsRevision: parsed.settingsRevision || 0 };
   }
-  return DEFAULT_SETTINGS;
-};
-
-export const saveSettings = async (settings: UserSettings): Promise<void> => {
-  try {
-    await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-  } catch (e) {
-    console.error('Failed to save settings:', e);
+  // Old beta data belongs to the guest workspace; never attach it to a signed-in account silently.
+  if (!userId) {
+    const oldSettings = await AsyncStorage.getItem('@brownie_settings');
+    const logKeys = (await AsyncStorage.getAllKeys()).filter(key => key.startsWith('@brownie_logs_'));
+    const oldLogs = await AsyncStorage.multiGet(logKeys);
+    const logs = oldLogs.flatMap(([, value]) => value ? JSON.parse(value) : []);
+    const data = { settings: safeSettings(oldSettings ? JSON.parse(oldSettings) : {}), logs: mergeLogs(logs, []), pendingLogIds: [] as string[], settingsRevision: 0 };
+    await saveLocalData(null, data);
+    return data;
   }
-};
+  return { settings: safeSettings({}), logs: [], pendingLogIds: [], settingsRevision: 0 };
+}
 
-export const loadTodayLogs = async (): Promise<DrinkLog[]> => {
-  try {
-    const today = getTodayKey();
-    const raw = await AsyncStorage.getItem(`${STORAGE_KEYS.LOGS_PREFIX}${today}`);
-    if (raw) {
-      return JSON.parse(raw);
-    }
-  } catch (e) {
-    console.error('Failed to load today logs:', e);
-  }
-  return [];
-};
+export async function saveLocalData(userId: string | null, data: LocalData) {
+  await AsyncStorage.setItem(keyFor(userId), JSON.stringify({
+    settings: backupSettings(data.settings), logs: data.logs, pendingLogIds: data.pendingLogIds, settingsRevision: data.settingsRevision,
+  }));
+}
 
-export const saveTodayLogs = async (logs: DrinkLog[]): Promise<void> => {
-  try {
-    const today = getTodayKey();
-    await AsyncStorage.setItem(`${STORAGE_KEYS.LOGS_PREFIX}${today}`, JSON.stringify(logs));
-  } catch (e) {
-    console.error('Failed to save today logs:', e);
-  }
-};
+export async function removeLocalAccount(userId: string) { await AsyncStorage.removeItem(keyFor(userId)); }
 
-export const loadHistoryDays = async (numDays = 7): Promise<DayData[]> => {
+export async function resetGuestData() {
+  const legacy = (await AsyncStorage.getAllKeys()).filter(key => key === '@brownie_settings' || key.startsWith('@brownie_logs_'));
+  await AsyncStorage.multiRemove([...legacy, keyFor(null)]);
+}
+
+export function historyFromLogs(logs: DrinkLog[], settings: UserSettings, numDays = 14, today = dayKey()): DayData[] {
   const result: DayData[] = [];
-  const settings = await loadSettings();
-  const now = new Date();
-
-  for (let i = numDays - 1; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i);
-    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    try {
-      const raw = await AsyncStorage.getItem(`${STORAGE_KEYS.LOGS_PREFIX}${dateStr}`);
-      const logs: DrinkLog[] = raw ? JSON.parse(raw) : [];
-      const totalAmount = logs.reduce((sum, l) => sum + l.amount, 0);
-      const totalEffectiveAmount = logs.reduce((sum, l) => sum + (l.effectiveAmount ?? l.amount), 0);
-      result.push({
-        date: dateStr,
-        logs,
-        totalAmount,
-        totalEffectiveAmount,
-        target: settings.dailyTarget,
-        achieved: totalAmount >= settings.dailyTarget,
-      });
-    } catch {
-      result.push({
-        date: dateStr,
-        logs: [],
-        totalAmount: 0,
-        totalEffectiveAmount: 0,
-        target: settings.dailyTarget,
-        achieved: false,
-      });
-    }
+  const now = new Date(`${today}T12:00:00`);
+  const byDay = new Map<string, DrinkLog[]>();
+  for (const log of logs) {
+    const key = dayKey(log.timestamp);
+    const entries = byDay.get(key) || [];
+    entries.push(log);
+    byDay.set(key, entries);
+  }
+  for (let index = numDays - 1; index >= 0; index--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - index);
+    const dateStr = dayKey(date.getTime());
+    const entries = byDay.get(dateStr) || [];
+    const totalAmount = entries.reduce((sum, log) => sum + log.amount, 0);
+    const totalEffectiveAmount = entries.reduce((sum, log) => sum + log.effectiveAmount, 0);
+    result.push({ date: dateStr, logs: entries, totalAmount, totalEffectiveAmount,
+      target: settings.dailyTarget, achieved: totalAmount >= settings.dailyTarget });
   }
   return result;
-};
+}
 
 export const calculateStreak = (history: DayData[]): number => {
   let streak = 0;
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].achieved || history[i].totalAmount > 0) {
-      streak++;
-    } else if (i !== history.length - 1) {
-      break;
-    }
+  for (let index = history.length - 1; index >= 0; index--) {
+    if (history[index].achieved) streak++;
+    else if (index !== history.length - 1) break;
   }
-  return Math.max(1, streak);
+  return streak;
 };
 
-export const formatVolume = (ml: number, unit: 'ml' | 'oz'): string => {
-  if (unit === 'oz') {
-    const oz = Math.round(ml * 0.033814);
-    return `${oz}oz`;
-  }
-  return `${Math.round(ml)}ml`;
-};
+export const formatVolume = (ml: number, unit: 'ml' | 'oz'): string =>
+  unit === 'oz' ? `${Math.round(ml * 0.033814)}oz` : `${Math.round(ml)}ml`;
