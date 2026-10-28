@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Brownie Water Tracker - Centralized Site Configuration
  * Single source of truth for repository, release, legal, and store settings.
  */
@@ -24,7 +24,7 @@ window.SITE_CONFIG = {
   
   // Support & Contact
   // Replace with a real monitored support email when available
-  supportEmail: "REPLACE_WITH_SUPPORT_EMAIL",
+  supportEmail: "mrabhimanyu@watertrackerbrownie.vercel.app",
   
   // Legal Configuration & Disclosures
   developerName: "mrAbhimanyuVishwakarma",
@@ -42,17 +42,17 @@ window.SITE_CONFIG = {
   
   // Beverages supported in app with exact hydration multipliers
   beverages: [
-    { id: "water", name: "Water", factor: 1.0, color: "#00C3E3", defaultAmount: 250, icon: "💧" },
-    { id: "green_tea", name: "Green Tea", factor: 0.95, color: "#76C62C", defaultAmount: 300, icon: "🍵" },
-    { id: "herbal_tea", name: "Herbal Tea", factor: 0.95, color: "#14B8A6", defaultAmount: 300, icon: "🫖" },
-    { id: "coffee", name: "Coffee", factor: 0.80, color: "#8A5844", defaultAmount: 200, icon: "☕" },
-    { id: "espresso", name: "Espresso", factor: 0.75, color: "#5C3828", defaultAmount: 60, icon: "⚡" },
-    { id: "juice", name: "Juice", factor: 0.85, color: "#FFA100", defaultAmount: 250, icon: "🧃" },
-    { id: "smoothie", name: "Smoothie", factor: 0.90, color: "#B044CB", defaultAmount: 350, icon: "🥤" },
-    { id: "milk", name: "Milk", factor: 0.90, color: "#F48E77", defaultAmount: 250, icon: "🥛" },
-    { id: "electrolyte", name: "Electrolyte", factor: 1.0, color: "#38BDF8", defaultAmount: 500, icon: "⚡" },
-    { id: "soda", name: "Soda", factor: 0.70, color: "#EF4444", defaultAmount: 330, icon: "🫧" },
-    { id: "alcohol", name: "Alcohol", factor: -0.50, color: "#A855F7", defaultAmount: 250, icon: "🍷" }
+    { id: "water", name: "Water", factor: 1.0, color: "#00C3E3", defaultAmount: 250, icon: "ðŸ’§" },
+    { id: "green_tea", name: "Green Tea", factor: 0.95, color: "#76C62C", defaultAmount: 300, icon: "ðŸµ" },
+    { id: "herbal_tea", name: "Herbal Tea", factor: 0.95, color: "#14B8A6", defaultAmount: 300, icon: "ðŸ«–" },
+    { id: "coffee", name: "Coffee", factor: 0.80, color: "#8A5844", defaultAmount: 200, icon: "â˜•" },
+    { id: "espresso", name: "Espresso", factor: 0.75, color: "#5C3828", defaultAmount: 60, icon: "âš¡" },
+    { id: "juice", name: "Juice", factor: 0.85, color: "#FFA100", defaultAmount: 250, icon: "ðŸ§ƒ" },
+    { id: "smoothie", name: "Smoothie", factor: 0.90, color: "#B044CB", defaultAmount: 350, icon: "ðŸ¥¤" },
+    { id: "milk", name: "Milk", factor: 0.90, color: "#F48E77", defaultAmount: 250, icon: "ðŸ¥›" },
+    { id: "electrolyte", name: "Electrolyte", factor: 1.0, color: "#38BDF8", defaultAmount: 500, icon: "âš¡" },
+    { id: "soda", name: "Soda", factor: 0.70, color: "#EF4444", defaultAmount: 330, icon: "ðŸ«§" },
+    { id: "alcohol", name: "Alcohol", factor: -0.50, color: "#A855F7", defaultAmount: 250, icon: "ðŸ·" }
   ],
 
   // Mascots verified from mobile app source
@@ -63,7 +63,7 @@ window.SITE_CONFIG = {
       species: "Capybara",
       title: "The Zen Hydrator",
       quote: "Stay cool, calm, and sip gently like a pool day.",
-      badge: "🦫",
+      badge: "ðŸ¦«",
       color: "#8A5844",
       isPro: false,
       image: "assets/brownie_sipping.png",
@@ -75,7 +75,7 @@ window.SITE_CONFIG = {
       species: "Dodo Bird",
       title: "Extinct Legend",
       quote: "Extinct in the wild, but thriving in hydration!",
-      badge: "🦤",
+      badge: "ðŸ¦¤",
       color: "#8B5CF6",
       isPro: true,
       image: "assets/dodo_sipping.png",
@@ -87,7 +87,7 @@ window.SITE_CONFIG = {
       species: "Woolly Mammoth",
       title: "Ice Age Titan",
       quote: "Big trunk, giant hydration goals! Keep sipping.",
-      badge: "🦣",
+      badge: "ðŸ¦£",
       color: "#D97706",
       isPro: true,
       image: "assets/mammoth_sipping.png",
@@ -99,7 +99,7 @@ window.SITE_CONFIG = {
       species: "Sloth",
       title: "Mindful Sipper",
       quote: "Take your time. Slow sips build lasting habits.",
-      badge: "🦥",
+      badge: "ðŸ¦¥",
       color: "#10B981",
       isPro: true,
       image: "assets/sloth_sipping.png",
@@ -111,7 +111,7 @@ window.SITE_CONFIG = {
       species: "Turtle",
       title: "Endurance Legend",
       quote: "Slow and steady wins the hydration streak.",
-      badge: "🐢",
+      badge: "ðŸ¢",
       color: "#14B8A6",
       isPro: true,
       image: "assets/turtle_sipping.png",
@@ -123,7 +123,7 @@ window.SITE_CONFIG = {
       species: "Penguin",
       title: "Ice Fresh Voyager",
       quote: "Crisp cold water makes every wave effortless!",
-      badge: "🐧",
+      badge: "ðŸ§",
       color: "#3B82F6",
       isPro: true,
       image: "assets/penguin_sipping.png",
@@ -131,3 +131,4 @@ window.SITE_CONFIG = {
     }
   ]
 };
+
