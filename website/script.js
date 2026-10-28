@@ -144,7 +144,8 @@
     // Default static fallback values are already present in HTML.
     // Fetch latest release details from GitHub API:
     fetch(config.releasesApiUrl, {
-      headers: { 'Accept': 'application/vnd.github.v3+json' }
+      cache: 'no-store',
+      headers: { 'Accept': 'application/vnd.github+json' }
     })
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -185,8 +186,8 @@
           });
 
           downloadBtns.forEach(function(btn) {
-            btn.href = apkAsset.browser_download_url;
-            btn.setAttribute('download', apkAsset.name);
+            btn.href = '/api/download';
+            btn.removeAttribute('download');
             btn.setAttribute('title', 'Direct Download: ' + apkAsset.name + ' (' + sizeMb + ')');
           });
 
