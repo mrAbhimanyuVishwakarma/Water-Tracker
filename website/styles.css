@@ -133,7 +133,13 @@ progress::-moz-progress-bar { background: var(--positive); border-radius: 99px; 
 .demo-hint { font-size: 12px; min-height: 38px; margin-top: 16px; }
 .mascot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .mascot-card { position: relative; background: var(--surface); border-radius: 12px; padding: 24px; }
-.mascot-card > img { width: 180px; aspect-ratio: 1; object-fit: contain; margin: 16px auto 24px; }
+.mascot-card > img, .mascot-animation { display: block; width: 180px; height: 180px; aspect-ratio: 1; object-fit: contain; margin: 16px auto 24px; }
+.mascot-animation { border: 0; border-radius: 0; background: transparent; }
+.mascot-gallery-controls { display: flex; justify-content: flex-end; margin: -12px 0 20px; }
+.mascot-motion-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 0 10px 12px; border: 0; background: transparent; font-size: 13px; }
+.mascot-motion-toggle:hover { text-decoration: underline; }
+.mascot-motion-toggle .icon { width: 16px; height: 16px; }
+.mascot-motion-toggle[hidden] { display: none; }
 .mascot-status { font-size: 11px; display: inline-flex; align-items: center; gap: 5px; color: var(--muted-ink); }
 .mascot-status .icon { width: 14px; height: 14px; }
 .status-positive { color: var(--positive-ink); }
@@ -228,7 +234,7 @@ td { color: var(--muted-ink); }
 .source-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; flex: 0 0 auto; }
 .contact-panel > .btn { flex: 0 0 auto; }
 .support-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding-top: 24px; }
-.support-card { padding: 28px; background: var(--surface); border-radius: 12px; }
+.support-card { padding: 28px; background: var(--surface); border: 1px solid var(--ink); border-radius: 12px; }
 .support-card h2 { font-size: 20px; margin-bottom: 16px; }
 .support-card p, .support-card li { font-size: 14px; }
 .support-card ol { padding-left: 20px; margin-block: 16px; color: var(--muted-ink); }
@@ -360,7 +366,7 @@ td { color: var(--muted-ink); }
   .demo-panel { padding: 24px; }
   .mascot-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .mascot-card { padding: 18px; }
-  .mascot-card > img { width: 150px; margin-block: 12px 18px; }
+  .mascot-card > img, .mascot-animation { width: min(150px, 100%); height: auto; margin-block: 12px 18px; }
   .mascot-card p { font-size: 13px; }
   .mascot-card h3 { font-size: 18px; }
   .steps-grid { grid-template-columns: 1fr; gap: 28px; }

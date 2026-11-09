@@ -35,6 +35,20 @@ Lato Regular and Bold are served locally from `assets/fonts/` under the included
 
 The site stays dependency-free. Navigation, FAQs, and official release links work without JavaScript. JavaScript enhances the sample hydration log, cookie preferences, and latest-release download metadata. Google Play is shown as coming soon until a real listing is configured.
 
+### Mascot animations
+
+Home and Features use the five sipping clips from the app's `assets/` directory. Website-ready derivatives live in `assets/mascots/`: H.264 MP4 with a white background matching the card surface, transparent WebM as an alternative, and small transparent WebP posters. MP4 is preferred for efficient, consistent mobile playback. The RGB background key preserves Turbo's light-green body. Source MP4s remain unchanged.
+
+Videos load and play only while their cards are visible, pause when the page is hidden, and start paused when reduced motion is requested. Each gallery has a keyboard-accessible play/pause control. Without JavaScript, clean posters remain visible.
+
+Regenerate the website media with a full FFmpeg build:
+
+```bash
+node scripts/prepare-website-mascots.cjs
+```
+
+Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, or `--posters-only` to review the key before encoding. Black outlines are applied to the three support text cards; the mascot media remains unframed.
+
 ## Redesign branch and rollback
 
 The redesign is isolated on `website-redesign`. The pre-redesign baseline is commit `2c83a8e570925df35f35bbd91fde353d7d88ba20`, also the starting point of `main` when this work began.

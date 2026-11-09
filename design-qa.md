@@ -57,3 +57,17 @@ State: default light appearance, consent previously declined, navigation and FAQ
 ## Limits and follow-up
 
 Automated accessibility scans do not establish complete WCAG compliance. Checks used desktop Chrome and responsive viewports; physical Android/iOS browser and screen-reader testing were not performed. No live deployment was requested. The redesign is saved separately on `website-redesign`; rollback information is in `website/README.md`.
+
+## Follow-up: text outlines and mascot animations
+
+The user requested black outlines only on the three Support text cards and approved replacing the five Pro mascot images on Home and Features with the app's sipping MP4s, with green backgrounds removed.
+
+- The Support cards now have a 1 px near-black outline. The mascot cards and video elements have no borders or frames.
+- The original app MP4s are preserved. A reproducible FFmpeg script derives cropped 512 × 512, 24 fps website clips and WebP posters. RGB color keying preserves the light-green turtle; a broader chroma-only key was rejected during visual review because it washed out his body.
+- MP4 playback uses white matching the existing card surface. Transparent WebM alternatives and small transparent WebP posters are also included. The five posters total approximately 135 KB.
+- Videos are muted, load on entering the viewport, pause offscreen or when the document is hidden, and honor reduced motion. Each gallery includes a keyboard-accessible play/pause control. With JavaScript disabled, clean posters remain visible and the inactive control is hidden.
+- Visual evidence: `.cache/website-redesign/mascot-update/support-text-outlines.png`, `index-desktop.png`, `features-desktop.png`, phone captures at 390 and 320 px, and `video-comparison.png`. The latter displays Turbo's original and processed video at the same 4.5-second frame, normalized to the same centered square crop, showing preserved foreground color with the backdrop removed.
+- The browser test passed 24 checks covering both galleries, the support cards, media decode and background pixels, pause/play, offscreen pause, reduced motion, no-JavaScript fallback, mobile overflow, and accessibility scans of all three affected pages. Both formats were sampled at 0.5, 4.5, and 8.5 seconds for every character. WebM background alpha is within 2/255 codec tolerance; sampled foreground remains opaque. There were no JavaScript exceptions or failed local resources. Results: `.cache/website-redesign/mascot-update/results.json`.
+- Typecheck and JavaScript syntax checks pass. Lint has zero errors and the same 27 existing mobile-app warnings.
+
+Follow-up final result: passed. No actionable P0/P1/P2 visual findings remain. Physical-device and non-Chrome playback checks remain outside the performed verification.

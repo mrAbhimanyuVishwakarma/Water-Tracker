@@ -500,6 +500,16 @@
           </div>
           <p class="section-aside">Six friends.<br />Plenty of reasons to smile.</p>
         </div>
+        <div class="mascot-gallery-controls">
+          <button type="button" class="mascot-motion-toggle" data-mascot-motion hidden>
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/pause.svg')"
+              aria-hidden="true"
+            ></span
+            ><span data-motion-label>Pause animations</span>
+          </button>
+        </div>
         <div class="mascot-grid">
           <article class="mascot-card">
             <span class="mascot-status status-positive"
@@ -522,65 +532,110 @@
           </article>
           <article class="mascot-card">
             <span class="mascot-status">Pro</span
-            ><img
-              src="assets/dodo_donut_float.png"
+            ><video
+              class="mascot-animation"
               width="180"
               height="180"
-              alt="Dotti the dodo relaxing on a pool float"
-              loading="lazy"
-            />
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/dodo-sipping.webp"
+              data-mascot-animation
+              aria-label="Dotti the dodo sipping water"
+            >
+              <source data-src="assets/mascots/dodo-sipping.mp4" type="video/mp4" />
+              <source data-src="assets/mascots/dodo-sipping.webm" type="video/webm" />
+              Dotti the dodo sipping water.
+            </video>
             <h3>Dotti</h3>
             <span class="mascot-species">Dodo</span>
             <p>A little legendary. A lot of fun.</p>
           </article>
           <article class="mascot-card">
             <span class="mascot-status">Pro</span
-            ><img
-              src="assets/mammoth_donut_float.png"
+            ><video
+              class="mascot-animation"
               width="180"
               height="180"
-              alt="Manny the woolly mammoth relaxing on a pool float"
-              loading="lazy"
-            />
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/mammoth-sipping.webp"
+              data-mascot-animation
+              aria-label="Manny the woolly mammoth sipping water"
+            >
+              <source data-src="assets/mascots/mammoth-sipping.mp4" type="video/mp4" />
+              <source data-src="assets/mascots/mammoth-sipping.webm" type="video/webm" />
+              Manny the woolly mammoth sipping water.
+            </video>
             <h3>Manny</h3>
             <span class="mascot-species">Woolly mammoth</span>
             <p>Big personality. Bigger sips.</p>
           </article>
           <article class="mascot-card">
             <span class="mascot-status">Pro</span
-            ><img
-              src="assets/sloth_donut_float.png"
+            ><video
+              class="mascot-animation"
               width="180"
               height="180"
-              alt="Sid the sloth relaxing on a pool float"
-              loading="lazy"
-            />
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/sloth-sipping.webp"
+              data-mascot-animation
+              aria-label="Sid the sloth sipping water"
+            >
+              <source data-src="assets/mascots/sloth-sipping.mp4" type="video/mp4" />
+              <source data-src="assets/mascots/sloth-sipping.webm" type="video/webm" />
+              Sid the sloth sipping water.
+            </video>
             <h3>Sid</h3>
             <span class="mascot-species">Sloth</span>
             <p>A reminder to take it slow.</p>
           </article>
           <article class="mascot-card">
             <span class="mascot-status">Pro</span
-            ><img
-              src="assets/turtle_donut_float.png"
+            ><video
+              class="mascot-animation"
               width="180"
               height="180"
-              alt="Turbo the turtle relaxing on a pool float"
-              loading="lazy"
-            />
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/turtle-sipping.webp"
+              data-mascot-animation
+              aria-label="Turbo the turtle sipping water"
+            >
+              <source data-src="assets/mascots/turtle-sipping.mp4" type="video/mp4" />
+              <source data-src="assets/mascots/turtle-sipping.webm" type="video/webm" />
+              Turbo the turtle sipping water.
+            </video>
             <h3>Turbo</h3>
             <span class="mascot-species">Turtle</span>
             <p>Steady sips win the day.</p>
           </article>
           <article class="mascot-card">
             <span class="mascot-status">Pro</span
-            ><img
-              src="assets/penguin_donut_float.png"
+            ><video
+              class="mascot-animation"
               width="180"
               height="180"
-              alt="Pip the penguin relaxing on a pool float"
-              loading="lazy"
-            />
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/penguin-sipping.webp"
+              data-mascot-animation
+              aria-label="Pip the penguin sipping water"
+            >
+              <source data-src="assets/mascots/penguin-sipping.mp4" type="video/mp4" />
+              <source data-src="assets/mascots/penguin-sipping.webm" type="video/webm" />
+              Pip the penguin sipping water.
+            </video>
             <h3>Pip</h3>
             <span class="mascot-species">Penguin</span>
             <p>Keeping your daily routine cool.</p>

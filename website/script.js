@@ -113,11 +113,95 @@
     });
   }
 
+  function initMascotAnimations() {
+    var videos = Array.from(document.querySelectorAll('video[data-mascot-animation]'));
+    if (!videos.length) return;
+    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var buttons = document.querySelectorAll('[data-mascot-motion]');
+    var paused = motionPreference.matches;
+    var inView = new Set();
+    var failed = new Set();
+
+    function updateButtonLabels() {
+      buttons.forEach(function (button) {
+        button.hidden = false;
+        button.setAttribute('aria-label', paused ? 'Play mascot animations' : 'Pause mascot animations');
+        button.querySelector('[data-motion-label]').textContent = paused ? 'Play animations' : 'Pause animations';
+        button.querySelector('.icon').style.setProperty('--icon',
+          "url('assets/icons/" + (paused ? 'play' : 'pause') + ".svg')");
+      });
+    }
+
+    function sync(video) {
+      if (failed.has(video)) return;
+      if (paused || document.hidden || !inView.has(video)) {
+        video.pause();
+        return;
+      }
+      // Do not request media until its card enters the viewport.
+      if (!video.dataset.loaded) {
+        video.querySelectorAll('source[data-src]').forEach(function (source) {
+          source.src = source.dataset.src;
+        });
+        video.dataset.loaded = 'true';
+        video.load();
+      }
+      var playing = video.play();
+      if (playing) playing.catch(function (error) {
+        // A browser can decline autoplay. Keep the clean poster and offer play.
+        if (error.name === 'NotAllowedError' && !paused && inView.has(video) && !document.hidden) {
+          paused = true;
+          videos.forEach(function (item) { item.pause(); });
+          updateButtonLabels();
+        }
+      });
+    }
+
+    videos.forEach(function (video) {
+      video.muted = true;
+      video.addEventListener('error', function () {
+        failed.add(video);
+        var poster = document.createElement('img');
+        poster.src = video.poster;
+        poster.alt = video.getAttribute('aria-label');
+        poster.width = poster.height = 180;
+        video.replaceWith(poster);
+      });
+    });
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) inView.add(entry.target);
+          else inView.delete(entry.target);
+          sync(entry.target);
+        });
+      }, { threshold: 0.15 });
+      videos.forEach(function (video) { observer.observe(video); });
+    } else {
+      videos.forEach(function (video) { inView.add(video); sync(video); });
+    }
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        paused = !paused;
+        updateButtonLabels();
+        videos.forEach(sync);
+      });
+    });
+    motionPreference.addEventListener('change', function (event) {
+      paused = event.matches;
+      updateButtonLabels();
+      videos.forEach(sync);
+    });
+    document.addEventListener('visibilitychange', function () { videos.forEach(sync); });
+    updateButtonLabels();
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initMobileMenu();
     initLatestRelease();
     initHydrationDemo();
     initPlayStore();
+    initMascotAnimations();
     document.querySelectorAll('.js-current-year').forEach(function (element) { element.textContent = new Date().getFullYear(); });
     document.querySelectorAll('[data-cookie-settings]').forEach(function (button) {
       button.addEventListener('click', function (event) {
