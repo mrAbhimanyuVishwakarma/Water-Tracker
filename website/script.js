@@ -120,8 +120,15 @@
     var visible = new Set();
     var failed = new Set();
 
+    function setSwimSpeed(pool) {
+      var swimmerWidth = pool.querySelector('.swim-swimmer').getBoundingClientRect().width;
+      // A fixed pixels-per-second rate keeps the motion steady on every viewport.
+      pool.style.setProperty('--swim-duration', ((pool.clientWidth + swimmerWidth * 2) / 45) + 's');
+    }
+
     function sync(pool) {
       var swimmer = pool.querySelector('[data-swim-animation]');
+      setSwimSpeed(pool);
       var playing = !paused && visible.has(pool) && !document.hidden && !failed.has(pool);
       pool.dataset.swimMotion = playing ? 'playing' : 'paused';
       var source = playing ? swimmer.dataset.swimAnimation : swimmer.dataset.swimPoster;
@@ -133,6 +140,7 @@
       pools.forEach(sync);
     });
     document.addEventListener('visibilitychange', function () { pools.forEach(sync); });
+    window.addEventListener('resize', function () { pools.forEach(setSwimSpeed); }, { passive: true });
     pools.forEach(function (pool) {
       pool.querySelector('[data-swim-animation]').addEventListener('error', function () {
         failed.add(pool);

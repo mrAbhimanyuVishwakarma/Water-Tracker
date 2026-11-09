@@ -125,3 +125,9 @@ Replaced the static Brownie image above the closing call to action on Home and F
 Browser verification passed 20 scenarios across Home and Features, Light and Dark, and 1920, 1440, 768, 390, and 320 px widths. Each strip reaches both page edges without horizontal overflow. Replacement, automatic playback, independent visibility, and mouse/keyboard pause/resume passed. All eight accessibility scans passed, with no JavaScript exceptions or failed local resources. Final screenshots and results are in `.cache/website-redesign/fullwidth-pools/`. Visual review covered the desktop and phone closing sections and full-width hero. Syntax and typecheck passed; lint has zero errors and the same 27 existing warnings.
 
 Full-width swimming final result: passed. No actionable P0/P1/P2 findings remain. The user-supplied replacement phone artwork and newly generated swimming clip remain pending; this update reuses the current swimming assets.
+
+## Follow-up: steady offscreen swim path
+
+Removed the visible return and turn. Brownie now travels in one direction at a constant 45 pixels per second, beginning fully beyond the left edge and ending fully beyond the right edge before the animation resets. The duration is calculated from each pool's rendered width, which keeps the speed consistent across devices.
+
+Browser geometry checks passed at 1920, 1440, 768, 390, and 320 px: the character is fully clipped at both endpoints, retains the same orientation throughout, advances monotonically, measures 45 px/s at every width, and causes no horizontal overflow. Results and midpoint captures are in `.cache/website-redesign/swim-path/`. Syntax and typecheck passed; lint has zero errors and the same 27 existing warnings.

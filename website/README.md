@@ -65,7 +65,7 @@ Support cards, feature cards, the drink demo, mascot cards, routine steps, and i
 
 The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. The strips reuse pool artwork and a transparent animated WebP derived from `assets/Recording 2026-11-09 203247.mp4`; the original recording is preserved.
 
-Brownie swims right, turns, and returns left in a loop. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
+Brownie swims from beyond the left edge to beyond the right edge at a constant 45 pixels per second. The loop resets while fully offscreen, so no turn is visible. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
 
 Regenerate the pool assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`.
 

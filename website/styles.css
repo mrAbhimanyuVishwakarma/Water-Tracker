@@ -94,18 +94,14 @@ ul, ol { padding: 0; margin: 0; }
 .mobile-menu { display: none; }
 /* Oasis composition, adapted to Brownie's existing screenshot and artwork. */
 .hero-section { padding-top: 20px; }
-.swimming-pool { --swimmer-size: 144px; --swim-duration: 18s; position: relative; width: 100%; height: 112px; overflow: hidden; isolation: isolate; margin-bottom: 36px; background: #6bd6e1; }
+.swimming-pool { --swimmer-size: 144px; --swim-duration: 36s; position: relative; width: 100%; height: 112px; overflow: hidden; isolation: isolate; margin-bottom: 36px; background: #6bd6e1; }
 .swimming-pool-water { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.swim-traveller { position: absolute; top: 0; left: 16px; width: calc(100% - var(--swimmer-size) - 72px); height: 100%; pointer-events: none; }
+.swim-traveller { position: absolute; top: 0; left: 0; width: var(--swimmer-size); height: 100%; pointer-events: none; }
 .swim-swimmer { position: absolute; left: 0; bottom: 0; width: var(--swimmer-size); max-width: none; height: auto; transform: scaleX(-1); }
-.swimming-pool[data-swim-motion] .swim-traveller,
-.swimming-pool[data-swim-motion] .swim-swimmer { animation-duration: var(--swim-duration) !important; animation-iteration-count: infinite !important; animation-play-state: paused; }
-.swimming-pool[data-swim-motion] .swim-traveller { animation-name: swim-across; animation-timing-function: ease-in-out; }
-.swimming-pool[data-swim-motion] .swim-swimmer { animation-name: swim-turn; animation-timing-function: steps(1, end); }
-.swimming-pool[data-swim-motion="playing"] .swim-traveller,
-.swimming-pool[data-swim-motion="playing"] .swim-swimmer { animation-play-state: running; }
-@keyframes swim-across { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(100%); } }
-@keyframes swim-turn { 0%, 100% { transform: scaleX(-1); } 50% { transform: scaleX(1); } }
+.swimming-pool[data-swim-motion] .swim-traveller { animation: swim-across var(--swim-duration) linear infinite; animation-play-state: paused; }
+.swimming-pool[data-swim-motion="playing"] .swim-traveller { animation-play-state: running; }
+/* Reset happens beyond the clipped edges, so no turn is visible. */
+@keyframes swim-across { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 .hero-copy { text-align: center; }
 .hero-eyebrow { justify-content: center; font-size: 11px; letter-spacing: .12em; }
 .hero-eyebrow .icon { color: var(--positive); width: 16px; height: 16px; }
@@ -403,7 +399,7 @@ td { color: var(--muted-ink); }
   .brand-link img { width: 32px; height: 32px; }
   .header-download { font-size: 12px; min-height: 44px; padding: 11px 13px; gap: 6px; }
   .hero-section { padding-top: 16px; }
-  .swimming-pool { --swimmer-size: 118px; --swim-duration: 12s; height: 88px; margin-bottom: 28px; }
+  .swimming-pool { --swimmer-size: 118px; height: 88px; margin-bottom: 28px; }
   .hero-subtitle { font-size: 18px; line-height: 1.5; margin-top: 20px; max-width: 480px; }
   .desktop-break { display: none; }
   .hero-actions { margin-top: 24px; gap: 10px; }
