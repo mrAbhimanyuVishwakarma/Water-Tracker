@@ -149,3 +149,9 @@ Measured median character-center movement between decoded frames fell from 5.82 
 Replaced the stretched raster pool background and its uneven wave edge with a CSS-rendered water surface. The water uses the existing #6bd6e1 color and a precise 32 px grid made from 1 px translucent white lines. It now remains crisp at every pixel density, has a straight top edge, and matches the scale of the website background grid without changing either theme's page background colors.
 
 Browser verification passed 16 layouts across Home and Features, Light and Dark, 1440, 390, and 320 px widths, and 1×, 2×, and 3× device pixel ratios. The checks confirmed there are no raster water elements or background URLs, the grid remains exactly 32 px, all sections span the viewport without overflow, and swimming continues automatically. Eight representative accessibility scans passed. High-density visual evidence is in `.cache/website-redesign/vector-water/`.
+
+## Follow-up: complete card outlines
+
+Added the established 1 px theme-ink outline to every content surface shown in the supplied references. Existing download and goal panels now have outlines; the beverage table has become one rounded, outlined surface; and the About philosophy, values, and open-source areas now use purpose-built padded cards. Matching floating cards, notices, contact panels, and legal information surfaces received the same treatment for visual consistency. Mobile card padding reduces to 24 px.
+
+Browser verification passed 30 responsive page layouts across Download, Features, About, Support, Privacy, and Terms in Light and Dark at 1440, 390, and 320 px. Every target has a visible solid 1 px outline and rounded corners, with no horizontal overflow. Six representative accessibility scans passed. Visual evidence is in `.cache/website-redesign/card-outlines/`.
