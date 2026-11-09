@@ -137,3 +137,9 @@ Browser geometry checks passed at 1920, 1440, 768, 390, and 320 px: the characte
 The entire closing call-to-action section on Home and Features now uses one continuous pool surface, rather than ending the water above the copy. Heading, supporting copy, eyebrow, and fine print use #131313 in both website themes. The download action uses a #131313 background with white text. The animation and pause control remain active over the same water surface.
 
 Browser verification passed 12 responsive scenarios across Home and Features, Light and Dark, and 1440, 390, and 320 px widths. The section reaches both viewport edges with no overflow; computed colors and background artwork match the specification. All eight representative accessibility scans passed. Visual evidence is in `.cache/website-redesign/water-closing/`.
+
+## Follow-up: stabilized swimming source
+
+The user's screen recording showed visible frame-to-frame wobble in the original 18 fps cutout. The swimmer was rebuilt from the cleaner `assets/capibara swimming right to left.mp4` source at 24 fps. A smooth tracking curve stabilizes the body, and color keying with green despill produces softer transparent edges. The external page movement remains the verified constant 45 px/s offscreen path.
+
+Measured median character-center movement between decoded frames fell from 5.82 px to 0.93 px; the 95th percentile fell from 10.45 px to 2.39 px. Browser captures at 1440 and 390 px show clean edges over the pool, with at most one residual green-classified pixel in the full 320 × 240 source frame. Chrome produced ten distinct consecutive rendered frames, confirming active playback. Screenshots and comparison artifacts are in `.cache/website-redesign/smooth-swimmer/` and `.cache/swim-smooth-review/`.

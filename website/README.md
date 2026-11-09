@@ -63,7 +63,7 @@ Support cards, feature cards, the drink demo, mascot cards, routine steps, and i
 
 ### Swimming pools
 
-The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. The strips reuse pool artwork and a transparent animated WebP derived from `assets/Recording 2026-11-09 203247.mp4`; the original recording is preserved.
+The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. Pool artwork is derived from `assets/Recording 2026-11-09 203247.mp4`; the transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`. Both original sources are preserved.
 
 Brownie swims from beyond the left edge to beyond the right edge at a constant 45 pixels per second. The loop resets while fully offscreen, so no turn is visible. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
 
