@@ -35,9 +35,15 @@ Lato Regular and Bold are served locally from `assets/fonts/` under the included
 
 The site stays dependency-free. Navigation, FAQs, and official release links work without JavaScript. JavaScript enhances the sample hydration log, cookie preferences, and latest-release download metadata. Google Play is shown as coming soon until a real listing is configured.
 
+### Appearance
+
+The header's appearance control offers **System**, **Dark**, and **Light**, with **System** as the default. It uses the same Phosphor icon family as the rest of the site. The selected preference is saved locally, shared across pages and tabs, and applied by `theme.js` before the stylesheet paints. System mode follows device appearance changes automatically. If storage is unavailable, the control still works for the current page. Without JavaScript, CSS follows the system preference.
+
+Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accents. The appearance menu supports native radio-keyboard navigation, Escape, and outside-click dismissal; on phones its trigger uses the selected icon to keep the header compact.
+
 ### Mascot animations
 
-Home and Features use the five sipping clips from the app's `assets/` directory. Website-ready derivatives live in `assets/mascots/`: H.264 MP4 with a white background matching the card surface, transparent WebM as an alternative, and small transparent WebP posters. MP4 is preferred for efficient, consistent mobile playback. The RGB background key preserves Turbo's light-green body. Source MP4s remain unchanged.
+Home and Features use the five sipping clips from the app's `assets/` directory. Website-ready derivatives live in `assets/mascots/`: H.264 MP4 matching the white card surface, `.dark.mp4` versions matching the dark card surface (`#232321`), transparent WebM alternatives, and small transparent WebP posters. Theme changes select the matching MP4 automatically. MP4 is preferred for efficient, consistent mobile playback. The RGB background key preserves Turbo's light-green body. Source MP4s remain unchanged.
 
 Videos load and play only while their cards are visible, pause when the page is hidden, and start paused when reduced motion is requested. Each gallery has a keyboard-accessible play/pause control. Without JavaScript, clean posters remain visible.
 
@@ -47,7 +53,7 @@ Regenerate the website media with a full FFmpeg build:
 node scripts/prepare-website-mascots.cjs
 ```
 
-Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, or `--posters-only` to review the key before encoding. Black outlines are applied to the three support text cards; the mascot media remains unframed.
+Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key before encoding, or `--dark-only` to regenerate the dark card variants. If the dark surface color changes, update the matching matte in the script and regenerate those variants. The three support text cards have a dark outline in light mode and a light outline in dark mode; the mascot media remains unframed.
 
 ## Redesign branch and rollback
 

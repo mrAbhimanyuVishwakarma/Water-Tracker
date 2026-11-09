@@ -55,6 +55,7 @@
     <link rel="manifest" href="site.webmanifest" />
 
     <!-- Privacy Consent & Site Configuration -->
+    <script src="theme.js"></script>
     <script src="site-config.js"></script>
     <script src="consent.js"></script>
 
@@ -112,6 +113,54 @@
           </ul>
         </nav>
         <div class="header-actions">
+          <details class="theme-picker" data-theme-picker hidden>
+            <summary
+              class="theme-trigger"
+              aria-label="Appearance: System"
+              title="Appearance: System"
+            >
+              <span
+                class="icon"
+                data-theme-icon
+                style="--icon: url('assets/icons/monitor.svg')"
+                aria-hidden="true"
+              ></span
+              ><span class="theme-trigger-label" data-theme-label>System</span
+              ><span
+                class="icon theme-caret"
+                style="--icon: url('assets/icons/caret-down.svg')"
+                aria-hidden="true"
+              ></span>
+            </summary>
+            <div class="theme-options">
+              <fieldset>
+                <legend class="sr-only">Color theme</legend>
+                <label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/monitor.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>System</span
+                  ><input type="radio" name="color-theme" value="system" checked /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/moon.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Dark</span><input type="radio" name="color-theme" value="dark" /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/sun.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Light</span><input type="radio" name="color-theme" value="light"
+                /></label>
+              </fieldset>
+            </div>
+          </details>
           <a href="download.html" class="btn btn-primary header-download"
             >Get the app
             <span
@@ -544,7 +593,11 @@
               data-mascot-animation
               aria-label="Dotti the dodo sipping water"
             >
-              <source data-src="assets/mascots/dodo-sipping.mp4" type="video/mp4" />
+              <source
+                data-src="assets/mascots/dodo-sipping.mp4"
+                data-src-dark="assets/mascots/dodo-sipping.dark.mp4"
+                type="video/mp4"
+              />
               <source data-src="assets/mascots/dodo-sipping.webm" type="video/webm" />
               Dotti the dodo sipping water.
             </video>
@@ -566,7 +619,11 @@
               data-mascot-animation
               aria-label="Manny the woolly mammoth sipping water"
             >
-              <source data-src="assets/mascots/mammoth-sipping.mp4" type="video/mp4" />
+              <source
+                data-src="assets/mascots/mammoth-sipping.mp4"
+                data-src-dark="assets/mascots/mammoth-sipping.dark.mp4"
+                type="video/mp4"
+              />
               <source data-src="assets/mascots/mammoth-sipping.webm" type="video/webm" />
               Manny the woolly mammoth sipping water.
             </video>
@@ -588,7 +645,11 @@
               data-mascot-animation
               aria-label="Sid the sloth sipping water"
             >
-              <source data-src="assets/mascots/sloth-sipping.mp4" type="video/mp4" />
+              <source
+                data-src="assets/mascots/sloth-sipping.mp4"
+                data-src-dark="assets/mascots/sloth-sipping.dark.mp4"
+                type="video/mp4"
+              />
               <source data-src="assets/mascots/sloth-sipping.webm" type="video/webm" />
               Sid the sloth sipping water.
             </video>
@@ -610,7 +671,11 @@
               data-mascot-animation
               aria-label="Turbo the turtle sipping water"
             >
-              <source data-src="assets/mascots/turtle-sipping.mp4" type="video/mp4" />
+              <source
+                data-src="assets/mascots/turtle-sipping.mp4"
+                data-src-dark="assets/mascots/turtle-sipping.dark.mp4"
+                type="video/mp4"
+              />
               <source data-src="assets/mascots/turtle-sipping.webm" type="video/webm" />
               Turbo the turtle sipping water.
             </video>
@@ -632,7 +697,11 @@
               data-mascot-animation
               aria-label="Pip the penguin sipping water"
             >
-              <source data-src="assets/mascots/penguin-sipping.mp4" type="video/mp4" />
+              <source
+                data-src="assets/mascots/penguin-sipping.mp4"
+                data-src-dark="assets/mascots/penguin-sipping.dark.mp4"
+                type="video/mp4"
+              />
               <source data-src="assets/mascots/penguin-sipping.webm" type="video/webm" />
               Pip the penguin sipping water.
             </video>

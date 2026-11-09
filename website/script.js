@@ -132,19 +132,26 @@
       });
     }
 
+    function loadMascot(video, theme) {
+      video.querySelectorAll('source[data-src]').forEach(function (source) {
+        source.src = theme === 'dark' && source.dataset.srcDark ? source.dataset.srcDark : source.dataset.src;
+      });
+      video.dataset.loaded = 'true';
+      video.dataset.mediaTheme = theme;
+      video.load();
+    }
+
     function sync(video) {
       if (failed.has(video)) return;
+      var theme = document.documentElement.dataset.theme || 'light';
+      if (video.dataset.loaded && video.dataset.mediaTheme !== theme) loadMascot(video, theme);
       if (paused || document.hidden || !inView.has(video)) {
         video.pause();
         return;
       }
       // Do not request media until its card enters the viewport.
       if (!video.dataset.loaded) {
-        video.querySelectorAll('source[data-src]').forEach(function (source) {
-          source.src = source.dataset.src;
-        });
-        video.dataset.loaded = 'true';
-        video.load();
+        loadMascot(video, theme);
       }
       var playing = video.play();
       if (playing) playing.catch(function (error) {
@@ -193,6 +200,7 @@
       videos.forEach(sync);
     });
     document.addEventListener('visibilitychange', function () { videos.forEach(sync); });
+    window.addEventListener('brownie:themechange', function () { videos.forEach(sync); });
     updateButtonLabels();
   }
 

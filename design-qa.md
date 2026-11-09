@@ -71,3 +71,18 @@ The user requested black outlines only on the three Support text cards and appro
 - Typecheck and JavaScript syntax checks pass. Lint has zero errors and the same 27 existing mobile-app warnings.
 
 Follow-up final result: passed. No actionable P0/P1/P2 visual findings remain. Physical-device and non-Chrome playback checks remain outside the performed verification.
+
+## Follow-up: System / Dark / Light appearance
+
+The user requested a clickable appearance selector beside the header's Get the app action, with System as the default. The existing Phosphor icon family supplies monitor, moon, and sun icons; no new icon dependency or user-supplied artwork is needed.
+
+- The control appears on all nine pages. A native disclosure contains a labeled radio group with System, Dark, and Light choices. The selected icon and label identify the preference; phone headers use the icon to preserve space. Keyboard arrow selection, Escape with focus return, and outside-click dismissal work.
+- A small blocking `theme.js` script applies the saved preference before the stylesheet paints. Missing or invalid storage values select System. System tracks device appearance changes; explicit choices override them. Preferences persist across pages and synchronize across tabs. Blocked storage does not prevent current-page switching. CSS follows the system when JavaScript is unavailable.
+- Dark mode retains Lato, spacing, radii, icon weights, and hierarchy. Warm charcoal backgrounds, lighter text, adjusted status colors, theme-aware buttons, progress tracks, legal text, and a dark footer preserve readable contrast.
+- Matching dark MP4 variants blend into mascot cards without relying on transparent-video browser support. Existing light clips and original app media remain unchanged. Visible clips update when the theme changes. Small decoded matte differences of up to three RGB levels are accepted as codec rounding; no outlines or frames were added to media.
+- Initial visual review found a brief low-contrast midpoint while button colors animated between themes, and touching header controls at 320 px. Color interpolation was removed from buttons, and spacing was retained between the compact controls. Post-fix checks confirm immediate CTA contrast and separated controls in all three modes at 1440, 390, and 320 px.
+- Browser verification passed 60 checks, including every page in Light and Dark at 1440, 390, and 320 px; preference persistence, live system changes, overrides, keyboard operation, cross-tab synchronization, blocked storage, no-JavaScript fallback, and matching video playback. All 21 accessibility scans passed, covering every page in both themes, open appearance controls, and dark cookie preferences. There were no JavaScript exceptions or failed local resources. GitHub release requests were stubbed during this appearance test.
+- Final visual evidence and results are in `.cache/website-redesign/theme-update/`: `system-final-1440.png`, `dark-final-1440.png`, `light-final-1440.png`, phone captures, Light/Dark gallery captures, and `results.json`. The header comparisons use matching viewport sizes and default page states with the appearance disclosure open. The theme variants intentionally share the same typography, control sizes, and layout.
+- Typecheck and JavaScript syntax checks pass. Lint has zero errors and the same 27 existing mobile-app warnings. Legal article text was compared with the previous commit and is unchanged.
+
+Appearance final result: passed. No actionable P0/P1/P2 issues remain. Desktop Chrome with responsive viewports was used; physical-device testing was not performed.

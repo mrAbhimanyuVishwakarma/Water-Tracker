@@ -49,6 +49,7 @@
 
     <!-- Fonts -->
 
+    <script src="theme.js"></script>
     <script src="site-config.js"></script>
     <script src="consent.js"></script>
     <link
@@ -85,6 +86,54 @@
           </ul>
         </nav>
         <div class="header-actions">
+          <details class="theme-picker" data-theme-picker hidden>
+            <summary
+              class="theme-trigger"
+              aria-label="Appearance: System"
+              title="Appearance: System"
+            >
+              <span
+                class="icon"
+                data-theme-icon
+                style="--icon: url('assets/icons/monitor.svg')"
+                aria-hidden="true"
+              ></span
+              ><span class="theme-trigger-label" data-theme-label>System</span
+              ><span
+                class="icon theme-caret"
+                style="--icon: url('assets/icons/caret-down.svg')"
+                aria-hidden="true"
+              ></span>
+            </summary>
+            <div class="theme-options">
+              <fieldset>
+                <legend class="sr-only">Color theme</legend>
+                <label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/monitor.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>System</span
+                  ><input type="radio" name="color-theme" value="system" checked /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/moon.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Dark</span><input type="radio" name="color-theme" value="dark" /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/sun.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Light</span><input type="radio" name="color-theme" value="light"
+                /></label>
+              </fieldset>
+            </div>
+          </details>
           <a href="download.html" class="btn btn-primary header-download" aria-current="page"
             >Get the app
             <span

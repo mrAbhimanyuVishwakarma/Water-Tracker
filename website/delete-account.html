@@ -30,6 +30,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
 
+    <script src="theme.js"></script>
     <script src="site-config.js"></script>
     <script src="consent.js"></script>
     <link
@@ -66,6 +67,54 @@
           </ul>
         </nav>
         <div class="header-actions">
+          <details class="theme-picker" data-theme-picker hidden>
+            <summary
+              class="theme-trigger"
+              aria-label="Appearance: System"
+              title="Appearance: System"
+            >
+              <span
+                class="icon"
+                data-theme-icon
+                style="--icon: url('assets/icons/monitor.svg')"
+                aria-hidden="true"
+              ></span
+              ><span class="theme-trigger-label" data-theme-label>System</span
+              ><span
+                class="icon theme-caret"
+                style="--icon: url('assets/icons/caret-down.svg')"
+                aria-hidden="true"
+              ></span>
+            </summary>
+            <div class="theme-options">
+              <fieldset>
+                <legend class="sr-only">Color theme</legend>
+                <label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/monitor.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>System</span
+                  ><input type="radio" name="color-theme" value="system" checked /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/moon.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Dark</span><input type="radio" name="color-theme" value="dark" /></label
+                ><label class="theme-option"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/sun.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>Light</span><input type="radio" name="color-theme" value="light"
+                /></label>
+              </fieldset>
+            </div>
+          </details>
           <a href="download.html" class="btn btn-primary header-download"
             >Get the app
             <span
@@ -204,27 +253,21 @@
                   <td style="padding: 10px 14px;">
                     User ID UUID, email address, phone number, auth tokens
                   </td>
-                  <td class="deletion-status">
-                    Permanently deleted from Supabase Auth
-                  </td>
+                  <td class="deletion-status">Permanently deleted from Supabase Auth</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border-divider);">
                   <td style="padding: 10px 14px;"><strong>Hydration Profile</strong></td>
                   <td style="padding: 10px 14px;">
                     Goal ml, unit preferences, wake/sleep hours, weight settings
                   </td>
-                  <td class="deletion-status">
-                    Permanently wiped via foreign key cascade
-                  </td>
+                  <td class="deletion-status">Permanently wiped via foreign key cascade</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 14px;"><strong>Hydration History</strong></td>
                   <td style="padding: 10px 14px;">
                     All recorded drink logs, timestamps, beverage types
                   </td>
-                  <td class="deletion-status">
-                    Permanently erased from database
-                  </td>
+                  <td class="deletion-status">Permanently erased from database</td>
                 </tr>
               </tbody>
             </table>
@@ -246,9 +289,7 @@
           </ul>
 
           <h2>Important: Google Play Subscriptions Must Be Cancelled Separately</h2>
-          <div
-            class="legal-notice"
-          >
+          <div class="legal-notice">
             <strong>⚠️ CRITICAL SUBSCRIPTION WARNING:</strong> Deleting your Brownie Water Tracker
             account or uninstalling the app
             <strong>does not automatically cancel an active Google Play subscription</strong>.
