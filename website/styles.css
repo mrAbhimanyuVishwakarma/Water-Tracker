@@ -221,10 +221,15 @@ progress::-moz-progress-bar { background: var(--positive); border-radius: 99px; 
 .faq-answer p { font-size: 15px; line-height: 1.65; }
 .faq-answer a { color: var(--positive-ink); text-decoration: underline; }
 .faq-support { margin-top: 24px; }
-.closing-section { padding-block: 64px 96px; text-align: center; }
+.closing-section { padding: 0 0 96px; text-align: center; color: #131313; background: #6bd6e1 url('assets/swimming/pool.webp') center/cover no-repeat; }
+.closing-section > .swimming-pool { background: transparent; }
+.closing-section > .swimming-pool > .swimming-pool-water { opacity: 0; }
 .closing-section .eyebrow { justify-content: center; }
 .closing-section h2 { margin-bottom: 12px; }
 .closing-copy > p:not(.eyebrow) { margin-bottom: 24px; }
+.closing-section p, .closing-section .eyebrow, .closing-section .fine-print { color: #131313; }
+.closing-section .btn-primary { color: #fff; background: #131313; border-color: #131313; }
+.closing-section .btn-primary:hover { background: #353535; }
 .closing-section .fine-print { display: block; margin-top: 14px; }
 /* Interior pages share the same typography and vertical rhythm. */
 .page-hero { padding-block: 80px 48px; text-align: center; }
@@ -434,7 +439,7 @@ td { color: var(--muted-ink); }
   .privacy-points li { font-size: 15px; }
   .faq-item summary { font-size: 15px; padding-block: 22px; }
   .faq-answer { padding-right: 24px; }
-  .closing-section { padding-block: 40px 72px; }
+  .closing-section { padding-bottom: 72px; }
   .closing-section h2 { max-width: 340px; margin-inline: auto; }
   .closing-section .eyebrow { font-size: 10px; }
   .page-hero { padding-block: 48px 24px; }

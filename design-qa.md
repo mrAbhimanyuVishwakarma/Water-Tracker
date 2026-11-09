@@ -131,3 +131,9 @@ Full-width swimming final result: passed. No actionable P0/P1/P2 findings remain
 Removed the visible return and turn. Brownie now travels in one direction at a constant 45 pixels per second, beginning fully beyond the left edge and ending fully beyond the right edge before the animation resets. The duration is calculated from each pool's rendered width, which keeps the speed consistent across devices.
 
 Browser geometry checks passed at 1920, 1440, 768, 390, and 320 px: the character is fully clipped at both endpoints, retains the same orientation throughout, advances monotonically, measures 45 px/s at every width, and causes no horizontal overflow. Results and midpoint captures are in `.cache/website-redesign/swim-path/`. Syntax and typecheck passed; lint has zero errors and the same 27 existing warnings.
+
+## Follow-up: water-filled closing section
+
+The entire closing call-to-action section on Home and Features now uses one continuous pool surface, rather than ending the water above the copy. Heading, supporting copy, eyebrow, and fine print use #131313 in both website themes. The download action uses a #131313 background with white text. The animation and pause control remain active over the same water surface.
+
+Browser verification passed 12 responsive scenarios across Home and Features, Light and Dark, and 1440, 390, and 320 px widths. The section reaches both viewport edges with no overflow; computed colors and background artwork match the specification. All eight representative accessibility scans passed. Visual evidence is in `.cache/website-redesign/water-closing/`.
