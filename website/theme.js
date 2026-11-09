@@ -5,6 +5,7 @@
   var root = document.documentElement;
   var system = window.matchMedia('(prefers-color-scheme: dark)');
   var preference = 'system';
+  var modes = ['system', 'dark', 'light'];
   var icons = { system: 'monitor', dark: 'moon', light: 'sun' };
   var labels = { system: 'System', dark: 'Dark', light: 'Light' };
 
@@ -13,17 +14,13 @@
   }
 
   function updateControls() {
-    document.querySelectorAll('[data-theme-picker]').forEach(function (picker) {
-      picker.hidden = false;
-      var summary = picker.querySelector('summary');
-      summary.setAttribute('aria-label', 'Appearance: ' + labels[preference]);
-      summary.title = 'Appearance: ' + labels[preference];
-      picker.querySelector('[data-theme-label]').textContent = labels[preference];
-      picker.querySelector('[data-theme-icon]').style.setProperty('--icon',
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+      button.hidden = false;
+      var next = modes[(modes.indexOf(preference) + 1) % modes.length];
+      button.setAttribute('aria-label', 'Appearance: ' + labels[preference] + '. Switch to ' + labels[next] + '.');
+      button.title = 'Appearance: ' + labels[preference] + '. Click for ' + labels[next] + '.';
+      button.querySelector('[data-theme-icon]').style.setProperty('--icon',
         "url('assets/icons/" + icons[preference] + ".svg')");
-      picker.querySelectorAll('input[name="color-theme"]').forEach(function (radio) {
-        radio.checked = radio.value === preference;
-      });
     });
   }
 
@@ -51,21 +48,14 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     updateControls();
-    document.querySelectorAll('[data-theme-picker]').forEach(function (picker) {
-      picker.addEventListener('change', function (event) {
-        if (event.target.name !== 'color-theme') return;
-        preference = valid(event.target.value);
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        preference = modes[(modes.indexOf(preference) + 1) % modes.length];
         try { localStorage.setItem(key, preference); } catch (error) {}
         apply();
-      });
-      document.addEventListener('click', function (event) {
-        if (!picker.contains(event.target)) picker.open = false;
-      });
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && picker.open) {
-          picker.open = false;
-          picker.querySelector('summary').focus();
-        }
+        document.querySelectorAll('[data-theme-announcement]').forEach(function (status) {
+          status.textContent = labels[preference] + ' appearance selected.';
+        });
       });
     });
   });

@@ -39,7 +39,7 @@ The site stays dependency-free. Navigation, FAQs, and official release links wor
 
 The header's appearance control offers **System**, **Dark**, and **Light**, with **System** as the default. It uses the same Phosphor icon family as the rest of the site. The selected preference is saved locally, shared across pages and tabs, and applied by `theme.js` before the stylesheet paints. System mode follows device appearance changes automatically. If storage is unavailable, the control still works for the current page. Without JavaScript, CSS follows the system preference.
 
-Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accents. The appearance menu supports native radio-keyboard navigation, Escape, and outside-click dismissal; on phones its trigger uses the selected icon to keep the header compact.
+Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accents. The appearance button displays only its monitor, moon, or sun icon. Each click cycles **System → Dark → Light → System**. The native button also works with Enter and Space, identifies the current and next choices through its accessible name and tooltip, and announces selections to screen readers.
 
 ### Mascot animations
 

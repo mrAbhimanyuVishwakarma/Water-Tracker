@@ -86,3 +86,11 @@ The user requested a clickable appearance selector beside the header's Get the a
 - Typecheck and JavaScript syntax checks pass. Lint has zero errors and the same 27 existing mobile-app warnings. Legal article text was compared with the previous commit and is unchanged.
 
 Appearance final result: passed. No actionable P0/P1/P2 issues remain. Desktop Chrome with responsive viewports was used; physical-device testing was not performed.
+
+## Follow-up: icon-only appearance cycle
+
+The appearance disclosure was replaced at the user's request by one icon-only button. Each click cycles System → Dark → Light → System, displaying the monitor, moon, and sun respectively. Visible names, the dropdown, its chevron, and radio controls were removed from all nine headers. The button retains a 44 × 44 px target, a current/next accessible name, a tooltip, and a visually hidden live announcement. Enter and Space activate the native button.
+
+Browser verification passed 16 checks: the complete cycle on every page, no visible button text or dropdown controls, keyboard activation, saved preferences, navigation, live system changes, cross-tab updates, responsive layouts at 1440/390/320 px, and the no-JavaScript System fallback. All three mode-specific accessibility scans passed, with no JavaScript exceptions or failed local resources. Palette and media behavior remain as verified above. Screenshots and results: `.cache/website-redesign/theme-cycle/`. Lint has zero errors and the same 27 existing warnings; typecheck and syntax checks pass.
+
+Icon-only cycle final result: passed. No actionable P0/P1/P2 findings remain.
