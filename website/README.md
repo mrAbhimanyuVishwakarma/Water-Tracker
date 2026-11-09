@@ -63,11 +63,11 @@ Support cards, feature cards, the drink demo, mascot cards, routine steps, and i
 
 ### Swimming pools
 
-The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. Pool artwork is derived from `assets/Recording 2026-11-09 203247.mp4`; the transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`. Both original sources are preserved.
+The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. The water surface is rendered with resolution-independent CSS using a crisp 32 px grid, so it stays sharp on high-density displays and has a clean straight edge. The transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`; the original source is preserved.
 
 Brownie swims from beyond the left edge to beyond the right edge at a constant 45 pixels per second. The loop resets while fully offscreen, so no turn is visible. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
 
-Regenerate the pool assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`.
+Regenerate the swimming assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`. The legacy raster pool derivative may still be generated for reference, but the website does not load it.
 
 ## Redesign branch and rollback
 
