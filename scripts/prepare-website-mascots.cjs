@@ -9,6 +9,14 @@ const ffmpeg = ffmpegIndex >= 0 ? process.argv[ffmpegIndex + 1] : process.env.FF
 const output = path.join(root, 'website', 'assets', 'mascots');
 const previewOnly = process.argv.includes('--posters-only');
 const darkOnly = process.argv.includes('--dark-only');
+const sizeIndex = process.argv.indexOf('--size');
+const size = sizeIndex >= 0 ? Number(process.argv[sizeIndex + 1]) : 512;
+if (![512, 720].includes(size)) throw new Error('--size must be 512 or 720');
+const highResolution = size === 720;
+const allNames = ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'];
+const onlyIndex = process.argv.indexOf('--only');
+const names = onlyIndex >= 0 ? process.argv[onlyIndex + 1].split(',') : allNames;
+if (names.some(name => !allNames.includes(name))) throw new Error('Unknown mascot in --only');
 fs.mkdirSync(output, { recursive: true });
 
 function run(args, options = {}) {
@@ -19,7 +27,7 @@ function run(args, options = {}) {
   });
 }
 
-for (const name of ['dodo', 'mammoth', 'sloth', 'turtle', 'penguin']) {
+for (const name of names) {
   const input = path.join(root, 'assets', name + '_sipping.mp4');
   // Sample the backdrop, outside the character, instead of assuming pure #00ff00.
   const color = run(['-i', input, '-vf', 'crop=32:32:0:0,scale=1:1,format=rgb24',
@@ -28,23 +36,23 @@ for (const name of ['dodo', 'mammoth', 'sloth', 'turtle', 'penguin']) {
   // Crop the empty widescreen margins; retain the entire character and its base.
   // RGB distance includes brightness, preserving the turtle's light-green body
   // while removing the darker, saturated green backdrop.
-  const subject = `crop=720:720:280:0,format=rgba,colorkey=${key}:0.10:0.035,scale=512:512:flags=lanczos,setsar=1`;
-  const dest = extension => path.join(output, name + '-sipping.' + extension);
+  const subject = `crop=720:720:280:0,format=rgba,colorkey=${key}:0.10:0.035,scale=${size}:${size}:flags=lanczos,setsar=1`;
+  const dest = extension => path.join(output, name + '-sipping' + (highResolution ? '.hd' : '') + '.' + extension);
   if (!darkOnly) run(['-ss', '0.5', '-i', input, '-vf', subject, '-frames:v', '1',
     '-c:v', 'libwebp', '-q:v', '85', '-compression_level', '6', dest('webp')]);
   if (!previewOnly) {
-    if (!darkOnly) run(['-i', input, '-vf', subject, '-r', '24', '-an', '-c:v', 'libvpx-vp9',
+    if (!darkOnly && !highResolution) run(['-i', input, '-vf', subject, '-r', '24', '-an', '-c:v', 'libvpx-vp9',
       '-pix_fmt', 'yuva420p', '-b:v', '0', '-crf', '32', '-deadline', 'good',
       '-cpu-used', '4', '-row-mt', '1', '-auto-alt-ref', '0', '-threads', '2', dest('webm')]);
     // H.264 fallback: flatten onto the exact white card surface for browsers
     // without transparent WebM support. Original app MP4s are never modified.
-    if (!darkOnly) run(['-i', input, '-f', 'lavfi', '-i', 'color=c=white:s=512x512:r=24',
+    if (!darkOnly) run(['-i', input, '-f', 'lavfi', '-i', `color=c=white:s=${size}x${size}:r=24`,
       '-filter_complex', `[0:v]${subject}[subject];[1:v][subject]overlay=shortest=1:format=auto,format=yuv420p[out]`,
       '-map', '[out]', '-r', '24', '-an', '-c:v', 'libx264', '-preset', 'medium',
       '-crf', '24', '-movflags', '+faststart', '-threads', '2', dest('mp4')]);
     // Match the dark theme's --surface (#232321) without relying on browser
     // alpha-video support. Keep this matte in sync with website/styles.css.
-    run(['-i', input, '-f', 'lavfi', '-i', 'color=c=0x232321:s=512x512:r=24',
+    run(['-i', input, '-f', 'lavfi', '-i', `color=c=0x232321:s=${size}x${size}:r=24`,
       '-filter_complex', `[0:v]${subject}[subject];[1:v][subject]overlay=shortest=1:format=auto,format=yuv420p[out]`,
       '-map', '[out]', '-r', '24', '-an', '-c:v', 'libx264', '-preset', 'medium',
       '-crf', '24', '-movflags', '+faststart', '-threads', '2', dest('dark.mp4')]);

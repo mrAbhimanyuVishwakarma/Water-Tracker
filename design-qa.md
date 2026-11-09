@@ -94,3 +94,34 @@ The appearance disclosure was replaced at the user's request by one icon-only bu
 Browser verification passed 16 checks: the complete cycle on every page, no visible button text or dropdown controls, keyboard activation, saved preferences, navigation, live system changes, cross-tab updates, responsive layouts at 1440/390/320 px, and the no-JavaScript System fallback. All three mode-specific accessibility scans passed, with no JavaScript exceptions or failed local resources. Palette and media behavior remain as verified above. Screenshots and results: `.cache/website-redesign/theme-cycle/`. Lint has zero errors and the same 27 existing warnings; typecheck and syntax checks pass.
 
 Icon-only cycle final result: passed. No actionable P0/P1/P2 findings remain.
+
+## Follow-up: phone framing, resolution, Brownie, and additional outlines
+
+The user clarified that the dashboard reference demonstrates a correctly filled phone frame, requested an animated dashboard, sharper assets across devices, the newly supplied capybara animation, and outlines around the feature cards, drink demo, mascot cards, routine steps, and FAQ disclosures.
+
+- The homepage retains the supplied 1183 px Android frame and 1080 px app screenshot. Its inner display now has white status and navigation areas, local vector status icons, and the actual camera cropped from the frame asset. The former black bands are removed. Manny animates inside the illustration area; the original metrics, goal badge, drink controls, and app navigation remain screenshot pixels. The app display stays white in both website themes. A visible pause button also controls the galleries.
+- Brownie's original green-screen MP4 is preserved in the app assets. The existing RGB keying pipeline now derives Brownie's standard media and native 720 px variants of all six mascots. Both Home and Features animate all six companions. Transparent 720 px posters support reduced motion and no-JavaScript fallback.
+- Playback chooses 512 or 720 px MP4 from the rendered width and device pixel ratio, and rechecks on resize. Supplied SVGs replace small raster Brownie and pool-float illustrations on the remaining pages. The actual source video is 720 px high, which is the maximum native video detail; the pipeline does not invent higher resolution.
+- Requested surfaces have 1 px near-black outlines in light mode and light outlines in dark mode. Each step and FAQ is an individual rounded surface. The mascot video elements themselves remain borderless. FAQ padding and focus treatment keep the disclosure usable inside its outline.
+- Browser verification passed 79 checks: all nine pages at 1440, 768, 390, and 320 px in Light and Dark, plus phone geometry, original image resolution, adaptive video at 1x through 4x pixel densities, all six gallery videos, theme changes, pause/resume, offscreen pause, reduced motion, no-JavaScript fallback, keyboard FAQ operation, and the drink demo. All 18 accessibility scans passed, covering all nine pages in both themes. No JavaScript exceptions or failed local resources were recorded. GitHub release requests were simulated during this run.
+- A focused Features check confirmed all six 720 px dark animations at a 390 px viewport with 4x pixel density. Background samples at 0.5, 4.5, and 8.5 seconds match the dark surface within codec rounding tolerance, with no green backdrop. The shared pause control also passed.
+- Visual review covered the phone at 3x density, light and dark mobile phone previews, both mascot galleries, vector illustrations, and the outlined feature, demo, step, and FAQ surfaces. Evidence: `.cache/website-redesign/dashboard-update/`, including `results.json` and `features-hd-results.json`. The reference informed device framing; the Android frame, Manny animation, and actual app UI are retained intentionally.
+- JavaScript syntax and typecheck passed. Lint has zero errors and the same 27 pre-existing mobile-app warnings. Physical-device and non-Chrome playback testing were not performed. No deployment was requested.
+
+Phone, resolution, and outline final result: passed. No actionable P0/P1/P2 findings remain.
+
+## Follow-up: background grid
+
+Added a 32 px grid with 1 px lines: black at 12% opacity in Light and white at 8% in Dark. Existing canvas and surface colors are unchanged. Browser checks confirmed both theme values, 320 px layouts, and the no-JavaScript dark System fallback. Visual evidence: `.cache/grid-light.png` and `.cache/grid-dark.png`. Typecheck passed; lint has zero errors and the same 27 existing mobile-app warnings.
+
+## Follow-up: autoplay by default
+
+At the user's request, animations now start playing by default, replacing the earlier initial pause based on reduced motion. Visible videos remain muted and looping; manual pause/resume, offscreen pause, and hidden-page pause remain available. Browser checks passed on Home and Features with both normal and reduced-motion settings, including all six gallery videos, dashboard autoplay, swimming autoplay, and shared pause/resume. Typecheck passed; lint has zero errors and the same 27 existing mobile-app warnings.
+
+## Follow-up: full-width swimming strips
+
+Replaced the static Brownie image above the closing call to action on Home and Features with the existing swimming animation. The homepage hero and both closing strips span the entire page width; text and phone content retain their original container widths. A shared observer manages each strip independently, so the visible pool plays while offscreen pools pause. The same pause controls continue to affect all animations.
+
+Browser verification passed 20 scenarios across Home and Features, Light and Dark, and 1920, 1440, 768, 390, and 320 px widths. Each strip reaches both page edges without horizontal overflow. Replacement, automatic playback, independent visibility, and mouse/keyboard pause/resume passed. All eight accessibility scans passed, with no JavaScript exceptions or failed local resources. Final screenshots and results are in `.cache/website-redesign/fullwidth-pools/`. Visual review covered the desktop and phone closing sections and full-width hero. Syntax and typecheck passed; lint has zero errors and the same 27 existing warnings.
+
+Full-width swimming final result: passed. No actionable P0/P1/P2 findings remain. The user-supplied replacement phone artwork and newly generated swimming clip remain pending; this update reuses the current swimming assets.

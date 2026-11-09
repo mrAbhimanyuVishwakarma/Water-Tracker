@@ -43,9 +43,13 @@ Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accen
 
 ### Mascot animations
 
-Home and Features use the five sipping clips from the app's `assets/` directory. Website-ready derivatives live in `assets/mascots/`: H.264 MP4 matching the white card surface, `.dark.mp4` versions matching the dark card surface (`#232321`), transparent WebM alternatives, and small transparent WebP posters. Theme changes select the matching MP4 automatically. MP4 is preferred for efficient, consistent mobile playback. The RGB background key preserves Turbo's light-green body. Source MP4s remain unchanged.
+Home and Features use all six sipping clips from the app's `assets/` directory, including Brownie. Website-ready derivatives live in `assets/mascots/`: H.264 MP4 matching the white card surface, `.dark.mp4` versions matching the dark card surface (`#232321`), transparent WebM alternatives, and transparent WebP posters. Theme changes select the matching MP4 automatically. The RGB background key preserves Turbo's light-green body. Source MP4s remain unchanged.
 
-Videos load and play only while their cards are visible, pause when the page is hidden, and start paused when reduced motion is requested. Each gallery has a keyboard-accessible play/pause control. Without JavaScript, clean posters remain visible.
+The player selects a 512 px or native 720 px (`.hd`) MP4 using the rendered size and device pixel ratio, and rechecks on resize. This keeps high-density displays sharp while smaller displays use the lighter rendition. Posters use the 720 px version. Supplied SVG artwork is used for still Brownie and pool-float illustrations; the phone frame and dashboard UI retain their original 1183 px and 1080 px widths.
+
+The homepage phone preview fills the frame's inner display with white status and navigation areas. Its camera is cropped from the real frame asset; status icons use local vector assets. Manny's animation sits in the original dashboard illustration area, while the goal badge, metrics, drink shortcuts, and navigation retain their original screenshot pixels. The phone has a visible animation pause control, and its app display stays light in either website theme.
+
+Animations start playing automatically. Videos load and play only while their cards are visible and pause when the page is hidden. Each gallery has a keyboard-accessible play/pause control. Without JavaScript, clean posters remain visible.
 
 Regenerate the website media with a full FFmpeg build:
 
@@ -53,7 +57,17 @@ Regenerate the website media with a full FFmpeg build:
 node scripts/prepare-website-mascots.cjs
 ```
 
-Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key before encoding, or `--dark-only` to regenerate the dark card variants. If the dark surface color changes, update the matching matte in the script and regenerate those variants. The three support text cards have a dark outline in light mode and a light outline in dark mode; the mascot media remains unframed.
+Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key, `--dark-only` to regenerate dark card variants, `--size 720` to create HD renditions, or `--only brownie` to process one mascot. HD output includes MP4 and WebP; standard output also includes transparent WebM. If the dark surface color changes, update the matching matte in the script and regenerate those variants.
+
+Support cards, feature cards, the drink demo, mascot cards, routine steps, and individual FAQ disclosures use a 1 px outline: near-black in light mode and light in dark mode. The video elements themselves have no border.
+
+### Swimming pools
+
+The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. The strips reuse pool artwork and a transparent animated WebP derived from `assets/Recording 2026-11-09 203247.mp4`; the original recording is preserved.
+
+Brownie swims right, turns, and returns left in a loop. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
+
+Regenerate the pool assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`.
 
 ## Redesign branch and rollback
 

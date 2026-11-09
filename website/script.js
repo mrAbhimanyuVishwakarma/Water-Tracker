@@ -113,12 +113,54 @@
     });
   }
 
+  function initSwimmingPools() {
+    var pools = Array.from(document.querySelectorAll('[data-swimming-pool]'));
+    if (!pools.length) return;
+    var paused = false;
+    var visible = new Set();
+    var failed = new Set();
+
+    function sync(pool) {
+      var swimmer = pool.querySelector('[data-swim-animation]');
+      var playing = !paused && visible.has(pool) && !document.hidden && !failed.has(pool);
+      pool.dataset.swimMotion = playing ? 'playing' : 'paused';
+      var source = playing ? swimmer.dataset.swimAnimation : swimmer.dataset.swimPoster;
+      if (swimmer.getAttribute('src') !== source) swimmer.src = source;
+    }
+
+    window.addEventListener('brownie:motionchange', function (event) {
+      paused = event.detail.paused;
+      pools.forEach(sync);
+    });
+    document.addEventListener('visibilitychange', function () { pools.forEach(sync); });
+    pools.forEach(function (pool) {
+      pool.querySelector('[data-swim-animation]').addEventListener('error', function () {
+        failed.add(pool);
+        sync(pool);
+      }, { once: true });
+    });
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+          sync(entry.target);
+        });
+      });
+      pools.forEach(function (pool) { observer.observe(pool); });
+    } else {
+      pools.forEach(function (pool) { visible.add(pool); });
+    }
+    pools.forEach(sync);
+  }
+
   function initMascotAnimations() {
     var videos = Array.from(document.querySelectorAll('video[data-mascot-animation]'));
     if (!videos.length) return;
     var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     var buttons = document.querySelectorAll('[data-mascot-motion]');
-    var paused = motionPreference.matches;
+    // Start playing by default; the shared controls let visitors pause at any time.
+    var paused = false;
     var inView = new Set();
     var failed = new Set();
 
@@ -130,28 +172,36 @@
         button.querySelector('.icon').style.setProperty('--icon',
           "url('assets/icons/" + (paused ? 'play' : 'pause') + ".svg')");
       });
+      window.dispatchEvent(new CustomEvent('brownie:motionchange', { detail: { paused: paused } }));
     }
 
-    function loadMascot(video, theme) {
+    function loadMascot(video, theme, resolution) {
       video.querySelectorAll('source[data-src]').forEach(function (source) {
-        source.src = theme === 'dark' && source.dataset.srcDark ? source.dataset.srcDark : source.dataset.src;
+        var standard = theme === 'dark' && source.dataset.srcDark ? source.dataset.srcDark : source.dataset.src;
+        var highResolution = theme === 'dark' ? source.dataset.srcDarkHd : source.dataset.srcHd;
+        source.src = resolution === 'hd' && highResolution ? highResolution : standard;
       });
       video.dataset.loaded = 'true';
       video.dataset.mediaTheme = theme;
+      video.dataset.mediaResolution = resolution;
       video.load();
     }
 
     function sync(video) {
       if (failed.has(video)) return;
-      var theme = document.documentElement.dataset.theme || 'light';
-      if (video.dataset.loaded && video.dataset.mediaTheme !== theme) loadMascot(video, theme);
-      if (paused || document.hidden || !inView.has(video)) {
+      var theme = video.dataset.fixedSurface || document.documentElement.dataset.theme || 'light';
+      var resolution = video.getBoundingClientRect().width * (window.devicePixelRatio || 1) > 512 ? 'hd' : 'standard';
+      if (document.hidden || !inView.has(video)) {
         video.pause();
         return;
       }
+      if (video.dataset.loaded && (video.dataset.mediaTheme !== theme || video.dataset.mediaResolution !== resolution)) {
+        loadMascot(video, theme, resolution);
+      }
+      if (paused) { video.pause(); return; }
       // Do not request media until its card enters the viewport.
       if (!video.dataset.loaded) {
-        loadMascot(video, theme);
+        loadMascot(video, theme, resolution);
       }
       var playing = video.play();
       if (playing) playing.catch(function (error) {
@@ -171,7 +221,9 @@
         var poster = document.createElement('img');
         poster.src = video.poster;
         poster.alt = video.getAttribute('aria-label');
-        poster.width = poster.height = 180;
+        poster.className = video.className;
+        poster.width = video.width || 180;
+        poster.height = video.height || 180;
         video.replaceWith(poster);
       });
     });
@@ -201,6 +253,11 @@
     });
     document.addEventListener('visibilitychange', function () { videos.forEach(sync); });
     window.addEventListener('brownie:themechange', function () { videos.forEach(sync); });
+    var resizeFrame;
+    window.addEventListener('resize', function () {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(function () { videos.forEach(sync); });
+    }, { passive: true });
     updateButtonLabels();
   }
 
@@ -209,6 +266,7 @@
     initLatestRelease();
     initHydrationDemo();
     initPlayStore();
+    initSwimmingPools();
     initMascotAnimations();
     document.querySelectorAll('.js-current-year').forEach(function (element) { element.textContent = new Date().getFullYear(); });
     document.querySelectorAll('[data-cookie-settings]').forEach(function (button) {

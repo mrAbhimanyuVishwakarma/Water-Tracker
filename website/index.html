@@ -165,8 +165,41 @@
       </div>
     </header>
     <main id="main-content">
-      <section class="hero-section container" aria-labelledby="hero-heading">
-        <div class="hero-copy">
+      <section class="hero-section" aria-labelledby="hero-heading">
+        <div class="swimming-pool" data-swimming-pool>
+          <img
+            class="swimming-pool-water"
+            src="assets/swimming/pool.webp"
+            width="1610"
+            height="286"
+            alt=""
+          />
+          <div class="swim-traveller" aria-hidden="true">
+            <img
+              class="swim-swimmer"
+              src="assets/swimming/brownie-swim-poster.webp"
+              data-swim-animation="assets/swimming/brownie-swim.webp"
+              data-swim-poster="assets/swimming/brownie-swim-poster.webp"
+              width="260"
+              height="200"
+              alt=""
+            />
+          </div>
+          <button
+            type="button"
+            class="mascot-motion-toggle swimming-pool-motion"
+            data-mascot-motion
+            hidden
+          >
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/pause.svg')"
+              aria-hidden="true"
+            ></span>
+            <span class="sr-only" data-motion-label>Pause animations</span>
+          </button>
+        </div>
+        <div class="hero-copy container">
           <p class="eyebrow hero-eyebrow">
             <span
               class="icon"
@@ -212,8 +245,14 @@
             >Google Play coming soon
           </p>
         </div>
-        <div class="hero-scene" aria-label="A preview of Brownie and its everyday features">
-          <figure class="phone-preview">
+        <div
+          class="hero-scene container"
+          aria-label="A preview of Brownie and its everyday features"
+        >
+          <figure
+            class="phone-preview"
+            aria-label="Brownie Water Tracker on Android: Manny, a completed 3,000 ml daily goal, drink shortcuts, and navigation"
+          >
             <img
               class="phone-frame"
               src="assets/dashboard-phone-frame.png"
@@ -221,14 +260,90 @@
               height="2470"
               alt=""
               fetchpriority="high"
-            /><img
-              class="phone-screen"
-              src="assets/dashboard-screen.jpg"
-              width="1080"
-              height="2192"
-              alt="Brownie Water Tracker dashboard showing Manny the mammoth, a completed 3,000 ml daily goal, and drink shortcuts"
-              fetchpriority="high"
             />
+            <div class="phone-display" aria-hidden="true">
+              <div class="phone-status-bar">
+                <span>9:41</span
+                ><span class="phone-status-icons"
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/phone-cell-signal-full.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span>5G</span
+                  ><span
+                    class="icon"
+                    style="--icon: url('assets/icons/phone-wifi-high.svg')"
+                    aria-hidden="true"
+                  ></span
+                  ><span
+                    class="icon phone-battery"
+                    style="--icon: url('assets/icons/phone-battery-full.svg')"
+                    aria-hidden="true"
+                  ></span
+                ></span>
+              </div>
+              <span class="phone-camera"
+                ><img src="assets/dashboard-phone-frame.png" width="1183" height="2470" alt=""
+              /></span>
+              <div class="phone-app-screen">
+                <img
+                  class="dashboard-ui"
+                  src="assets/dashboard-screen.jpg"
+                  width="1080"
+                  height="2192"
+                  alt=""
+                  fetchpriority="high"
+                />
+                <div class="dashboard-mascot-window">
+                  <video
+                    class="dashboard-mascot-animation"
+                    width="720"
+                    height="720"
+                    muted
+                    loop
+                    playsinline
+                    preload="none"
+                    poster="assets/mascots/mammoth-sipping.hd.webp"
+                    data-mascot-animation
+                    data-fixed-surface="light"
+                    aria-label="Manny the mammoth sipping water"
+                  >
+                    <source
+                      data-src="assets/mascots/mammoth-sipping.mp4"
+                      data-src-hd="assets/mascots/mammoth-sipping.hd.mp4"
+                      data-src-dark="assets/mascots/mammoth-sipping.dark.mp4"
+                      data-src-dark-hd="assets/mascots/mammoth-sipping.hd.dark.mp4"
+                      type="video/mp4"
+                    />
+                    <source data-src="assets/mascots/mammoth-sipping.webm" type="video/webm" />
+                  </video>
+                </div>
+                <img
+                  class="dashboard-goal-badge"
+                  src="assets/dashboard-screen.jpg"
+                  width="1080"
+                  height="2192"
+                  alt=""
+                />
+              </div>
+              <div class="phone-navigation-bar"><span></span></div>
+            </div>
+            <figcaption>
+              <button
+                type="button"
+                class="mascot-motion-toggle dashboard-motion-toggle"
+                data-mascot-motion
+                hidden
+              >
+                <span
+                  class="icon"
+                  style="--icon: url('assets/icons/pause.svg')"
+                  aria-hidden="true"
+                ></span
+                ><span data-motion-label>Pause animations</span>
+              </button>
+            </figcaption>
           </figure>
           <a href="features.html#personal-goals" class="floating-card floating-card-1 positive"
             ><span
@@ -541,13 +656,27 @@
                 aria-hidden="true"
               ></span
               >Included</span
-            ><img
-              src="assets/capybara_donut_float.png"
-              width="180"
-              height="180"
-              alt="Brownie the capybara relaxing on a pool float"
-              loading="lazy"
-            />
+            ><video
+              class="mascot-animation"
+              width="720"
+              height="720"
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="assets/mascots/brownie-sipping.hd.webp"
+              data-mascot-animation
+              aria-label="Brownie the capybara sipping water"
+            >
+              <source
+                data-src="assets/mascots/brownie-sipping.mp4"
+                data-src-hd="assets/mascots/brownie-sipping.hd.mp4"
+                data-src-dark="assets/mascots/brownie-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/brownie-sipping.hd.dark.mp4"
+                type="video/mp4"
+              />
+              <source data-src="assets/mascots/brownie-sipping.webm" type="video/webm" />
+            </video>
             <h3>Brownie</h3>
             <span class="mascot-species">Capybara</span>
             <p>Your calm, everyday companion.</p>
@@ -562,13 +691,15 @@
               loop
               playsinline
               preload="none"
-              poster="assets/mascots/dodo-sipping.webp"
+              poster="assets/mascots/dodo-sipping.hd.webp"
               data-mascot-animation
               aria-label="Dotti the dodo sipping water"
             >
               <source
                 data-src="assets/mascots/dodo-sipping.mp4"
+                data-src-hd="assets/mascots/dodo-sipping.hd.mp4"
                 data-src-dark="assets/mascots/dodo-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/dodo-sipping.hd.dark.mp4"
                 type="video/mp4"
               />
               <source data-src="assets/mascots/dodo-sipping.webm" type="video/webm" />
@@ -588,13 +719,15 @@
               loop
               playsinline
               preload="none"
-              poster="assets/mascots/mammoth-sipping.webp"
+              poster="assets/mascots/mammoth-sipping.hd.webp"
               data-mascot-animation
               aria-label="Manny the woolly mammoth sipping water"
             >
               <source
                 data-src="assets/mascots/mammoth-sipping.mp4"
+                data-src-hd="assets/mascots/mammoth-sipping.hd.mp4"
                 data-src-dark="assets/mascots/mammoth-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/mammoth-sipping.hd.dark.mp4"
                 type="video/mp4"
               />
               <source data-src="assets/mascots/mammoth-sipping.webm" type="video/webm" />
@@ -614,13 +747,15 @@
               loop
               playsinline
               preload="none"
-              poster="assets/mascots/sloth-sipping.webp"
+              poster="assets/mascots/sloth-sipping.hd.webp"
               data-mascot-animation
               aria-label="Sid the sloth sipping water"
             >
               <source
                 data-src="assets/mascots/sloth-sipping.mp4"
+                data-src-hd="assets/mascots/sloth-sipping.hd.mp4"
                 data-src-dark="assets/mascots/sloth-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/sloth-sipping.hd.dark.mp4"
                 type="video/mp4"
               />
               <source data-src="assets/mascots/sloth-sipping.webm" type="video/webm" />
@@ -640,13 +775,15 @@
               loop
               playsinline
               preload="none"
-              poster="assets/mascots/turtle-sipping.webp"
+              poster="assets/mascots/turtle-sipping.hd.webp"
               data-mascot-animation
               aria-label="Turbo the turtle sipping water"
             >
               <source
                 data-src="assets/mascots/turtle-sipping.mp4"
+                data-src-hd="assets/mascots/turtle-sipping.hd.mp4"
                 data-src-dark="assets/mascots/turtle-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/turtle-sipping.hd.dark.mp4"
                 type="video/mp4"
               />
               <source data-src="assets/mascots/turtle-sipping.webm" type="video/webm" />
@@ -666,13 +803,15 @@
               loop
               playsinline
               preload="none"
-              poster="assets/mascots/penguin-sipping.webp"
+              poster="assets/mascots/penguin-sipping.hd.webp"
               data-mascot-animation
               aria-label="Pip the penguin sipping water"
             >
               <source
                 data-src="assets/mascots/penguin-sipping.mp4"
+                data-src-hd="assets/mascots/penguin-sipping.hd.mp4"
                 data-src-dark="assets/mascots/penguin-sipping.dark.mp4"
+                data-src-dark-hd="assets/mascots/penguin-sipping.hd.dark.mp4"
                 type="video/mp4"
               />
               <source data-src="assets/mascots/penguin-sipping.webm" type="video/webm" />
@@ -878,31 +1017,61 @@
           ></span
         ></a>
       </section>
-      <section class="closing-section container" aria-labelledby="closing-title">
-        <img
-          src="assets/brownie_sipping.png"
-          width="120"
-          height="120"
-          alt="Brownie the capybara enjoying a drink"
-          loading="lazy"
-        />
-        <p class="eyebrow">A little water. A little company.</p>
-        <h2 id="closing-title">Make room for a better daily habit.</h2>
-        <p>Your next sip is a good place to start.</p>
-        <a
-          href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases/latest"
-          class="btn btn-primary js-download-btn"
-          ><span
-            class="icon"
-            style="--icon: url('assets/icons/android-logo.svg')"
-            aria-hidden="true"
-          ></span
-          >Get Brownie for Android<span
-            class="icon"
-            style="--icon: url('assets/icons/arrow-up-right.svg')"
-            aria-hidden="true"
-          ></span></a
-        ><span class="fine-print">Free Android beta · No account needed</span>
+      <section class="closing-section" aria-labelledby="closing-title">
+        <div class="swimming-pool" data-swimming-pool>
+          <img
+            class="swimming-pool-water"
+            src="assets/swimming/pool.webp"
+            width="1610"
+            height="286"
+            alt=""
+            loading="lazy"
+          />
+          <div class="swim-traveller" aria-hidden="true">
+            <img
+              class="swim-swimmer"
+              src="assets/swimming/brownie-swim-poster.webp"
+              data-swim-animation="assets/swimming/brownie-swim.webp"
+              data-swim-poster="assets/swimming/brownie-swim-poster.webp"
+              width="260"
+              height="200"
+              alt=""
+              loading="lazy"
+            />
+          </div>
+          <button
+            type="button"
+            class="mascot-motion-toggle swimming-pool-motion"
+            data-mascot-motion
+            hidden
+          >
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/pause.svg')"
+              aria-hidden="true"
+            ></span>
+            <span class="sr-only" data-motion-label>Pause animations</span>
+          </button>
+        </div>
+        <div class="closing-copy container">
+          <p class="eyebrow">A little water. A little company.</p>
+          <h2 id="closing-title">Make room for a better daily habit.</h2>
+          <p>Your next sip is a good place to start.</p>
+          <a
+            href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases/latest"
+            class="btn btn-primary js-download-btn"
+            ><span
+              class="icon"
+              style="--icon: url('assets/icons/android-logo.svg')"
+              aria-hidden="true"
+            ></span
+            >Get Brownie for Android<span
+              class="icon"
+              style="--icon: url('assets/icons/arrow-up-right.svg')"
+              aria-hidden="true"
+            ></span></a
+          ><span class="fine-print">Free Android beta · No account needed</span>
+        </div>
       </section>
     </main>
     <footer class="site-footer">
