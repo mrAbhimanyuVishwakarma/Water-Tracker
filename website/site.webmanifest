@@ -4,8 +4,8 @@
   "description": "A playful, calming Android hydration tracker starring Brownie the capybara and friends.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#F0F9FF",
-  "theme_color": "#0284C7",
+  "background_color": "#FEFCF9",
+  "theme_color": "#FEFCF9",
   "icons": [
     {
       "src": "assets/favicon-32x32.png",

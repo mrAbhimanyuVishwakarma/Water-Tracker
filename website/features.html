@@ -1,360 +1,594 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Features - Brownie Water Tracker for Android</title>
-  <meta name="description" content="Explore every feature in Brownie Water Tracker: personalized goal calculations, 11 beverage hydration multipliers, waking-hours reminders, and the mascot pool party.">
-  <meta name="keywords" content="Brownie Water Tracker features, hydration multiplier, beverage tracking, water goal calculator, capybara pool party, streak calendar">
-  <meta name="author" content="mrAbhimanyuVishwakarma">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://watertrackerbrownie.vercel.app/features.html">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Features - Brownie Water Tracker for Android</title>
+    <meta
+      name="description"
+      content="Explore every feature in Brownie Water Tracker: personalized goal calculations, 11 beverage hydration multipliers, waking-hours reminders, and the mascot pool party."
+    />
+    <meta
+      name="keywords"
+      content="Brownie Water Tracker features, hydration multiplier, beverage tracking, water goal calculator, capybara pool party, streak calendar"
+    />
+    <meta name="author" content="mrAbhimanyuVishwakarma" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://watertrackerbrownie.vercel.app/features.html" />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://watertrackerbrownie.vercel.app/features.html">
-  <meta property="og:title" content="Features - Brownie Water Tracker">
-  <meta property="og:description" content="Personalized hydration algorithms, 11 beverage multipliers, waking-hours reminders, and a mascot pool party.">
-  <meta property="og:image" content="https://watertrackerbrownie.vercel.app/assets/og-image.png">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://watertrackerbrownie.vercel.app/features.html" />
+    <meta property="og:title" content="Features - Brownie Water Tracker" />
+    <meta
+      property="og:description"
+      content="Personalized hydration algorithms, 11 beverage multipliers, waking-hours reminders, and a mascot pool party."
+    />
+    <meta
+      property="og:image"
+      content="https://watertrackerbrownie.vercel.app/assets/og-image.png"
+    />
 
-  <!-- Twitter / X -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Features - Brownie Water Tracker">
-  <meta name="twitter:description" content="Explore the verified capabilities of Brownie Water Tracker for Android.">
-  <meta name="twitter:image" content="https://watertrackerbrownie.vercel.app/assets/og-image.png">
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Features - Brownie Water Tracker" />
+    <meta
+      name="twitter:description"
+      content="Explore the verified capabilities of Brownie Water Tracker for Android."
+    />
+    <meta
+      name="twitter:image"
+      content="https://watertrackerbrownie.vercel.app/assets/og-image.png"
+    />
 
-  <!-- Theme Color -->
-  <meta name="theme-color" content="#0284C7">
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FEFCF9" />
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Fonts -->
 
-  <script src="site-config.js"></script>
-  <script src="consent.js"></script>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-
-  <!-- Header -->
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <a href="index.html" class="brand-link" aria-label="Brownie Water Tracker Home">
-        <img src="assets/favicon.svg" alt="" class="brand-icon" width="42" height="42" aria-hidden="true">
-        <span>Brownie Water</span>
-      </a>
-
-      <nav aria-label="Primary Navigation">
-        <ul class="nav-links">
-          <li><a href="index.html" class="nav-link">Home</a></li>
-          <li><a href="features.html" class="nav-link active" aria-current="page">Features</a></li>
-          <li><a href="download.html" class="nav-link">Download</a></li>
-          <li><a href="support.html" class="nav-link">Support</a></li>
-          <li><a href="about.html" class="nav-link">About</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-actions">
-        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Switch between light and dark theme">
-          <svg class="theme-icon-light" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
-          </svg>
-          <svg class="theme-icon-dark" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12.3 2a10 10 0 0 0-.19 14 10 10 0 0 0 11.89 4 1 1 0 0 0 .62-1.33 1 1 0 0 0-1-.67 8 8 0 0 1-8.32-8.32 8.06 8.06 0 0 1 3.7-6.84 1 1 0 0 0 .38-1.15 1 1 0 0 0-.9-.69H12.3z"/>
-          </svg>
-        </button>
-
-        <a href="/api/download" class="btn btn-primary btn-sm header-cta-btn js-download-btn">
-          Download APK
-        </a>
-
-        <button type="button" class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-          <span class="hamburger-icon"></span>
-        </button>
+    <script src="site-config.js"></script>
+    <script src="consent.js"></script>
+    <link
+      rel="preload"
+      href="assets/fonts/lato-latin-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/lato-latin-bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="brand-link" aria-label="Brownie Water Tracker home"
+          ><img src="assets/icon.png" width="36" height="36" alt="" /><span
+            >Brownie<span class="brand-secondary"> Water</span></span
+          ></a
+        >
+        <nav class="desktop-nav" aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="features.html" aria-current="page">Features</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="support.html">Support</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <a href="download.html" class="btn btn-primary header-download"
+            >Get the app
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/arrow-up-right.svg')"
+              aria-hidden="true"
+            ></span
+          ></a>
+          <details class="mobile-menu">
+            <summary aria-label="Navigation menu">
+              <span
+                class="icon"
+                style="--icon: url('assets/icons/list.svg')"
+                aria-hidden="true"
+              ></span
+              ><span class="sr-only">Menu</span>
+            </summary>
+            <nav aria-label="Mobile navigation">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="features.html" aria-current="page">Features</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="download.html">Download for Android</a></li>
+              </ul>
+            </nav>
+          </details>
+        </div>
       </div>
-    </div>
-  </header>
-
-  <!-- Mobile Drawer -->
-  <div class="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation">
-    <ul class="mobile-nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="features.html" class="active" aria-current="page">Features</a></li>
-      <li><a href="download.html">Download</a></li>
-      <li><a href="support.html">Support</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-      <li><a href="terms.html">Terms of Use</a></li>
-      <li><a href="delete-account.html">Delete Account</a></li>
-    </ul>
-  </div>
-
-  <main id="main-content">
-    <section class="page-hero">
-      <div class="container">
-        <div class="badge">In-Depth Tour</div>
-        <h1>Engineered for Mindful Hydration</h1>
-        <p>
-          Discover how Brownie Water Tracker transforms daily fluid intake into a calming, rewarding habit grounded in real mathematics and user respect.
+    </header>
+    <main id="main-content">
+      <section class="page-hero container">
+        <p class="eyebrow">Thoughtfully simple</p>
+        <h1>Made for your everyday.</h1>
+        <p class="page-lead">
+          A personal goal. A helpful reminder. A friend by your side. Get to know the little things
+          that make Brownie feel different.
         </p>
-      </div>
-    </section>
-
-    <!-- Detailed Features Breakdown -->
-    <section style="padding: 70px 0;">
-      <div class="container" style="display: flex; flex-direction: column; gap: 60px;">
-        
-        <!-- 1. Personalized Daily Goal Algorithm -->
-        <article class="feature-card" style="padding: 40px; border-radius: var(--radius-xl);">
-          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
-            <div class="feature-icon-wrapper" style="width: 64px; height: 64px; font-size: 2rem;">🧮</div>
-            <div style="flex: 1; min-width: 280px;">
-              <h2>Personalized Hydration Formula</h2>
-              <p>
-                Instead of forcing a generic 2-liter rule on everyone, Brownie calculates a personalized target between <strong>1,500 ml</strong> and <strong>4,500 ml</strong> using your physical profile:
-              </p>
-              <ul style="margin: 16px 0 16px 20px; color: var(--text-secondary); line-height: 1.7;">
-                <li><strong>Base Requirement:</strong> 35 ml per kilogram of body weight (supporting both kilograms and pounds).</li>
-                <li><strong>Activity Adjustment:</strong> Adds +350 ml for moderate activity, +700 ml for high activity, and +1,100 ml for athletes.</li>
-                <li><strong>Climate Adjustment:</strong> Adds +400 ml for hot environments and +300 ml for dry climates.</li>
-                <li><strong>Custom Flexibility:</strong> Override the recommendation anytime with your own target in milliliters (ml) or fluid ounces (oz).</li>
-              </ul>
-            </div>
+      </section>
+      <section class="section container feature-detail" id="personal-goals">
+        <div>
+          <span
+            class="icon detail-icon"
+            style="--icon: url('assets/icons/target.svg')"
+            aria-hidden="true"
+          ></span>
+          <div class="section-intro">
+            <p class="eyebrow">01 / Your own pace</p>
+            <h2>A goal with you in mind.</h2>
+            <p>
+              Set a target that suits your routine, or let Brownie suggest one based on your
+              profile.
+            </p>
           </div>
-        </article>
-
-        <!-- 2. Beverage Multipliers Table -->
-        <article class="feature-card" style="padding: 40px; border-radius: var(--radius-xl);">
-          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
-            <div class="feature-icon-wrapper" style="width: 64px; height: 64px; font-size: 2rem;">🍵</div>
-            <div style="flex: 1; min-width: 280px;">
-              <h2>11 Beverage Hydration Multipliers</h2>
-              <p>
-                Drinking 300 ml of tea or 200 ml of coffee hydrates differently than drinking pure spring water. Brownie Water Tracker factors in net hydration multipliers:
-              </p>
-              
-              <div style="overflow-x: auto; margin-top: 20px;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
-                  <thead>
-                    <tr style="border-bottom: 2px solid var(--border-divider); color: var(--text-main);">
-                      <th style="padding: 12px 16px;">Beverage</th>
-                      <th style="padding: 12px 16px;">Preset Amount</th>
-                      <th style="padding: 12px 16px;">Multiplier</th>
-                      <th style="padding: 12px 16px;">Net Hydration</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">💧 Pure Water</td>
-                      <td style="padding: 12px 16px;">250 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #0284C7;">1.0x</td>
-                      <td style="padding: 12px 16px;">+250 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🍵 Green Tea</td>
-                      <td style="padding: 12px 16px;">300 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #76C62C;">0.95x</td>
-                      <td style="padding: 12px 16px;">+285 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🫖 Herbal Tea</td>
-                      <td style="padding: 12px 16px;">300 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #14B8A6;">0.95x</td>
-                      <td style="padding: 12px 16px;">+285 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">☕ Drip Coffee</td>
-                      <td style="padding: 12px 16px;">200 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #8A5844;">0.80x</td>
-                      <td style="padding: 12px 16px;">+160 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">⚡ Espresso</td>
-                      <td style="padding: 12px 16px;">60 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #5C3828;">0.75x</td>
-                      <td style="padding: 12px 16px;">+45 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🧃 Fruit Juice</td>
-                      <td style="padding: 12px 16px;">250 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #FFA100;">0.85x</td>
-                      <td style="padding: 12px 16px;">+213 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🥤 Smoothie</td>
-                      <td style="padding: 12px 16px;">350 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #B044CB;">0.90x</td>
-                      <td style="padding: 12px 16px;">+315 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🥛 Dairy / Nut Milk</td>
-                      <td style="padding: 12px 16px;">250 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #F48E77;">0.90x</td>
-                      <td style="padding: 12px 16px;">+225 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">⚡ Electrolyte Drink</td>
-                      <td style="padding: 12px 16px;">500 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #38BDF8;">1.00x</td>
-                      <td style="padding: 12px 16px;">+500 ml</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-divider);">
-                      <td style="padding: 12px 16px;">🫧 Soda</td>
-                      <td style="padding: 12px 16px;">330 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #EF4444;">0.70x</td>
-                      <td style="padding: 12px 16px;">+231 ml</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 12px 16px;">🍷 Alcoholic Beverage</td>
-                      <td style="padding: 12px 16px;">250 ml</td>
-                      <td style="padding: 12px 16px; font-weight: 700; color: #A855F7;">-0.50x</td>
-                      <td style="padding: 12px 16px; color: #EF4444;">-125 ml (Dehydrating)</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+          <p>
+            Switch between millilitres and US fluid ounces, customize your cups, and adjust your
+            goal whenever you need.
+          </p>
+        </div>
+        <div class="info-panel">
+          <p class="eyebrow">How the suggestion works</p>
+          <dl class="formula-list">
+            <div>
+              <dt>Starting point</dt>
+              <dd>35 ml per kg of body weight</dd>
             </div>
-          </div>
-        </article>
-
-        <!-- 3. Habit Prompts & Streaks -->
-        <article class="feature-card" style="padding: 40px; border-radius: var(--radius-xl);">
-          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
-            <div class="feature-icon-wrapper" style="width: 64px; height: 64px; font-size: 2rem;">📅</div>
-            <div style="flex: 1; min-width: 280px;">
-              <h2>Truthful Streaks & Monthly Calendar</h2>
-              <p>
-                Many habit apps manufacture fake achievements to keep you clicking. Brownie keeps it honest:
-              </p>
-              <ul style="margin: 16px 0 16px 20px; color: var(--text-secondary); line-height: 1.7;">
-                <li><strong>Saved Data Only:</strong> A day counts as completed only when your logged hydration reaches your configured goal.</li>
-                <li><strong>Visual Calendar:</strong> A dedicated monthly calendar displays every successful goal day with a celebratory droplet dot.</li>
-                <li><strong>Habit Prompts:</strong> Receive mindful prompts (like drinking a glass upon waking or rehydrating post-workout) without pressure.</li>
-              </ul>
+            <div>
+              <dt>Activity</dt>
+              <dd>+350 to +1,100 ml</dd>
             </div>
-          </div>
-        </article>
-
-        <!-- 4. Waking-Hours Reminders -->
-        <article class="feature-card" style="padding: 40px; border-radius: var(--radius-xl);">
-          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
-            <div class="feature-icon-wrapper" style="width: 64px; height: 64px; font-size: 2rem;">🌙</div>
-            <div style="flex: 1; min-width: 280px;">
-              <h2>Smart Sleep-Aware Reminders</h2>
-              <p>
-                Brownie respects your rest. Notifications are scheduled locally strictly within your configured waking schedule:
-              </p>
-              <ul style="margin: 16px 0 16px 20px; color: var(--text-secondary); line-height: 1.7;">
-                <li><strong>Custom Wake & Sleep Times:</strong> Set your active hours (for example, wake at 07:30 and sleep at 23:00).</li>
-                <li><strong>Zero Middle-of-the-Night Alerts:</strong> Reminders cancel and reschedule automatically outside waking windows.</li>
-                <li><strong>Dedicated Android Notification Channel:</strong> Switch between subtle quiet chime or standard sound channel directly in Android settings.</li>
-              </ul>
+            <div>
+              <dt>Climate</dt>
+              <dd>+300 ml dry / +400 ml hot</dd>
             </div>
-          </div>
-        </article>
-
-        <!-- 5. Brownie's Pool Party -->
-        <article class="feature-card" style="padding: 40px; border-radius: var(--radius-xl);">
-          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
-            <div class="feature-icon-wrapper" style="width: 64px; height: 64px; font-size: 2rem;">🦫</div>
-            <div style="flex: 1; min-width: 280px;">
-              <h2>The Mascot Pool Party Experience</h2>
-              <p>
-                Hydration should feel cheerful. As you log drinks, watch the app's interactive pool fill with gentle waves. Brownie floats happily in a donut ring, joined by your unlocked mascot friends!
-              </p>
-              <div style="display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap;">
-                <span class="badge">🦫 Brownie (Capybara) · Free</span>
-                <span class="badge badge-pro">🦤 Dotti (Dodo) · Pro</span>
-                <span class="badge badge-pro">🦣 Manny (Mammoth) · Pro</span>
-                <span class="badge badge-pro">🦥 Sid (Sloth) · Pro</span>
-                <span class="badge badge-pro">🐢 Turbo (Turtle) · Pro</span>
-                <span class="badge badge-pro">🐧 Pip (Penguin) · Pro</span>
-              </div>
+            <div>
+              <dt>Suggested range</dt>
+              <dd>1,500–4,500 ml per day</dd>
             </div>
+          </dl>
+          <p class="fine-print">
+            An app estimate for habit tracking. Individual needs vary; follow your clinician’s
+            advice if you have a prescribed fluid target.
+          </p>
+        </div>
+      </section>
+      <section class="section container" id="beverages">
+        <div class="split-heading">
+          <div class="section-intro">
+            <p class="eyebrow">02 / More than water</p>
+            <h2>Your cup of tea counts, too.</h2>
+            <p>
+              Choose from 11 drink types. Brownie applies its own multiplier to estimate each
+              drink’s contribution to your daily goal.
+            </p>
           </div>
+          <a href="index.html#try-brownie" class="text-link"
+            >Try the drink preview
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/arrow-up-right.svg')"
+              aria-hidden="true"
+            ></span
+          ></a>
+        </div>
+        <div
+          class="table-scroll"
+          role="region"
+          aria-label="Beverage hydration estimates"
+          tabindex="0"
+        >
+          <table>
+            <caption class="sr-only">
+              Default drink sizes and the app’s estimated hydration contributions
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Your drink</th>
+                <th scope="col">Preset size</th>
+                <th scope="col">App multiplier</th>
+                <th scope="col">Estimated contribution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Water</th>
+                <td>250 ml</td>
+                <td>1.00×</td>
+                <td>250 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Green tea</th>
+                <td>300 ml</td>
+                <td>0.95×</td>
+                <td>285 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Herbal tea</th>
+                <td>300 ml</td>
+                <td>0.95×</td>
+                <td>285 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Coffee</th>
+                <td>200 ml</td>
+                <td>0.80×</td>
+                <td>160 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Espresso</th>
+                <td>60 ml</td>
+                <td>0.75×</td>
+                <td>45 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Juice</th>
+                <td>250 ml</td>
+                <td>0.85×</td>
+                <td>213 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Smoothie</th>
+                <td>350 ml</td>
+                <td>0.90×</td>
+                <td>315 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Milk</th>
+                <td>250 ml</td>
+                <td>0.90×</td>
+                <td>225 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Electrolyte</th>
+                <td>500 ml</td>
+                <td>1.00×</td>
+                <td>500 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Soda</th>
+                <td>330 ml</td>
+                <td>0.70×</td>
+                <td>231 ml</td>
+              </tr>
+              <tr>
+                <th scope="row">Alcohol</th>
+                <td>250 ml</td>
+                <td>−0.50×</td>
+                <td>−125 ml</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fine-print table-note">
+          These are the app’s tracking estimates, not clinical measurements or medical
+          recommendations.
+        </p>
+      </section>
+      <section class="section container detail-pair">
+        <article id="reminders">
+          <span
+            class="icon detail-icon"
+            style="--icon: url('assets/icons/bell.svg')"
+            aria-hidden="true"
+          ></span>
+          <div class="section-intro">
+            <p class="eyebrow">03 / A timely nudge</p>
+            <h2>A reminder. Not an interruption.</h2>
+            <p>
+              Choose your wake and sleep times. Brownie schedules reminders around your waking
+              hours, so your rest stays yours.
+            </p>
+          </div>
+          <p>
+            Adjust or disable notifications in settings. For help with Android battery restrictions,
+            visit our <a href="support.html#reminder-help">reminder guide</a>.
+          </p>
         </article>
-
-      </div>
-    </section>
-
-    <!-- Bottom CTA -->
-    <section class="cta-section">
+        <article id="progress">
+          <span
+            class="icon detail-icon"
+            style="--icon: url('assets/icons/calendar-check.svg')"
+            aria-hidden="true"
+          ></span>
+          <div class="section-intro">
+            <p class="eyebrow">04 / Small wins</p>
+            <h2>Progress you can look back on.</h2>
+            <p>
+              Daily drink history and a monthly calendar keep your routine in view. A completed goal
+              day counts toward your streak.
+            </p>
+          </div>
+          <p>
+            Your history reflects the drinks you’ve logged, giving you a simple picture of how your
+            habit is taking shape.
+          </p>
+        </article>
+      </section>
+      <section class="section container" id="companions">
+        <div class="section-intro">
+          <p class="eyebrow">05 / Your daily company</p>
+          <h2>Meet the pool party.</h2>
+          <p>
+            Brownie comes with the free app. An optional Pro upgrade adds Dotti, Manny, Sid, Turbo,
+            and Pip.
+          </p>
+        </div>
+        <div class="mascot-grid">
+          <article class="mascot-card">
+            <span class="mascot-status status-positive"
+              ><span
+                class="icon"
+                style="--icon: url('assets/icons/check-circle.svg')"
+                aria-hidden="true"
+              ></span
+              >Included</span
+            ><img
+              src="assets/capybara_donut_float.png"
+              width="180"
+              height="180"
+              alt="Brownie the capybara relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Brownie</h3>
+            <span class="mascot-species">Capybara</span>
+            <p>Your calm, everyday companion.</p>
+          </article>
+          <article class="mascot-card">
+            <span class="mascot-status">Pro</span
+            ><img
+              src="assets/dodo_donut_float.png"
+              width="180"
+              height="180"
+              alt="Dotti the dodo relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Dotti</h3>
+            <span class="mascot-species">Dodo</span>
+            <p>A little legendary. A lot of fun.</p>
+          </article>
+          <article class="mascot-card">
+            <span class="mascot-status">Pro</span
+            ><img
+              src="assets/mammoth_donut_float.png"
+              width="180"
+              height="180"
+              alt="Manny the woolly mammoth relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Manny</h3>
+            <span class="mascot-species">Woolly mammoth</span>
+            <p>Big personality. Bigger sips.</p>
+          </article>
+          <article class="mascot-card">
+            <span class="mascot-status">Pro</span
+            ><img
+              src="assets/sloth_donut_float.png"
+              width="180"
+              height="180"
+              alt="Sid the sloth relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Sid</h3>
+            <span class="mascot-species">Sloth</span>
+            <p>A reminder to take it slow.</p>
+          </article>
+          <article class="mascot-card">
+            <span class="mascot-status">Pro</span
+            ><img
+              src="assets/turtle_donut_float.png"
+              width="180"
+              height="180"
+              alt="Turbo the turtle relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Turbo</h3>
+            <span class="mascot-species">Turtle</span>
+            <p>Steady sips win the day.</p>
+          </article>
+          <article class="mascot-card">
+            <span class="mascot-status">Pro</span
+            ><img
+              src="assets/penguin_donut_float.png"
+              width="180"
+              height="180"
+              alt="Pip the penguin relaxing on a pool float"
+              loading="lazy"
+            />
+            <h3>Pip</h3>
+            <span class="mascot-species">Penguin</span>
+            <p>Keeping your daily routine cool.</p>
+          </article>
+        </div>
+      </section>
+      <section class="section container privacy-layout" id="privacy">
+        <div>
+          <span
+            class="icon detail-icon"
+            style="--icon: url('assets/icons/shield-check.svg')"
+            aria-hidden="true"
+          ></span>
+          <div class="section-intro">
+            <p class="eyebrow">06 / Always your choice</p>
+            <h2>Start with a sip.<br />Skip the sign-up.</h2>
+            <p>
+              Use Brownie as a guest with your data on your phone. An account and cloud backup are
+              optional.
+            </p>
+          </div>
+          <a href="privacy.html" class="text-link"
+            >Read our privacy policy
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/arrow-up-right.svg')"
+              aria-hidden="true"
+            ></span
+          ></a>
+        </div>
+        <ul class="privacy-points">
+          <li>
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/check-circle.svg')"
+              aria-hidden="true"
+            ></span
+            >Guest mode from the start
+          </li>
+          <li>
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/check-circle.svg')"
+              aria-hidden="true"
+            ></span
+            >Local storage for your daily logs
+          </li>
+          <li>
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/check-circle.svg')"
+              aria-hidden="true"
+            ></span
+            >Optional backup when you sign in
+          </li>
+          <li>
+            <span
+              class="icon"
+              style="--icon: url('assets/icons/check-circle.svg')"
+              aria-hidden="true"
+            ></span
+            >Delete your data in settings
+          </li>
+        </ul>
+      </section>
+      <section class="closing-section container" aria-labelledby="closing-title">
+        <img
+          src="assets/brownie_sipping.png"
+          width="120"
+          height="120"
+          alt="Brownie the capybara enjoying a drink"
+          loading="lazy"
+        />
+        <p class="eyebrow">A little water. A little company.</p>
+        <h2 id="closing-title">Make room for a better daily habit.</h2>
+        <p>Your next sip is a good place to start.</p>
+        <a
+          href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases/latest"
+          class="btn btn-primary js-download-btn"
+          ><span
+            class="icon"
+            style="--icon: url('assets/icons/android-logo.svg')"
+            aria-hidden="true"
+          ></span
+          >Get Brownie for Android<span
+            class="icon"
+            style="--icon: url('assets/icons/arrow-up-right.svg')"
+            aria-hidden="true"
+          ></span></a
+        ><span class="fine-print">Free Android beta · No account needed</span>
+      </section>
+    </main>
+    <footer class="site-footer">
       <div class="container">
-        <div class="cta-box">
-          <h2>Experience Brownie on Your Android Device</h2>
-          <p>Download the free beta release from GitHub and start building your hydration streak today.</p>
-          <div class="cta-actions">
-            <a href="/api/download" class="btn btn-white btn-lg js-download-btn">
-              Download Latest APK
-            </a>
-            <a href="download.html" class="btn btn-outline-white btn-lg">
-              Installation Instructions
-            </a>
+        <div class="footer-intro">
+          <a href="index.html" class="brand-link"
+            ><img src="assets/icon.png" width="36" height="36" alt="" /><span
+              >Brownie Water</span
+            ></a
+          >
+          <p>A little water.<br />A little better, every day.</p>
+        </div>
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h2>Product</h2>
+            <ul>
+              <li><a href="features.html">Features</a></li>
+              <li><a href="download.html">Get the Android app</a></li>
+              <li><a href="index.html#try-brownie">Try a sip</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2>Support</h2>
+            <ul>
+              <li><a href="support.html">Help & FAQs</a></li>
+              <li><a href="support.html#reminder-help">Reminder help</a></li>
+              <li><a href="delete-account.html">Delete your account</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2>Community</h2>
+            <ul>
+              <li>
+                <a
+                  href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Source code</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Release notes</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Ideas & feedback</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h2>The small print</h2>
+            <ul>
+              <li><a href="privacy.html">Privacy policy</a></li>
+              <li><a href="terms.html">Terms of use</a></li>
+              <li><a href="about.html">About Brownie</a></li>
+              <li>
+                <button class="footer-cookie" type="button" data-cookie-settings>
+                  Cookie settings
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="brand-link">
-            <img src="assets/favicon.svg" alt="" class="brand-icon" width="36" height="36" aria-hidden="true">
-            <span>Brownie Water Tracker</span>
-          </a>
-          <p>A calm, playful Android hydration tracker starring Brownie the Zen Capybara and collectible animal friends.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul class="footer-links">
-            <li><a href="features.html">Features Overview</a></li>
-            <li><a href="download.html">Android Download</a></li>
-            <li><a href="about.html">About the Project</a></li>
-            <li><a href="support.html">Help & FAQ</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Legal & Safety</h4>
-          <ul class="footer-links">
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Use</a></li>
-            <li><a href="delete-account.html">Delete Account</a></li>
-            <li><a href="#" onclick="window.resetPrivacyConsent(event)">Cookie Settings</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Community</h4>
-          <ul class="footer-links">
-            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases" target="_blank" rel="noopener noreferrer">Release History</a></li>
-            <li><a href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/issues" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
-          </ul>
+        <div class="footer-bottom">
+          <p>© <span class="js-current-year">2026</span> Brownie Water Tracker</p>
+          <p>A wellness companion. Not medical advice.</p>
+          <a
+            href="https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Made in the open.</a
+          >
         </div>
       </div>
-      <div class="footer-bottom">
-        <div class="footer-disclaimer-card">
-          <strong>Important Wellness Notice:</strong> Brownie Water Tracker is an informational wellness and habit-tracking tool. It is not a medical device and does not diagnose, treat, cure, or prevent any medical condition.
-        </div>
-        <div class="footer-bottom-row">
-          <div>&copy; <span class="js-current-year">2026</span> mrAbhimanyuVishwakarma. Open source under MIT License.</div>
-          <div>Hosted on Vercel</div>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="script.js" defer></script>
-</body>
+    </footer>
+    <script src="script.js" defer></script>
+  </body>
 </html>
-
