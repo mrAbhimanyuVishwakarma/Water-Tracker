@@ -155,3 +155,9 @@ Browser verification passed 16 layouts across Home and Features, Light and Dark,
 Added the established 1 px theme-ink outline to every content surface shown in the supplied references. Existing download and goal panels now have outlines; the beverage table has become one rounded, outlined surface; and the About philosophy, values, and open-source areas now use purpose-built padded cards. Matching floating cards, notices, contact panels, and legal information surfaces received the same treatment for visual consistency. Mobile card padding reduces to 24 px.
 
 Browser verification passed 30 responsive page layouts across Download, Features, About, Support, Privacy, and Terms in Light and Dark at 1440, 390, and 320 px. Every target has a visible solid 1 px outline and rounded corners, with no horizontal overflow. Six representative accessibility scans passed. Visual evidence is in `.cache/website-redesign/card-outlines/`.
+
+## Follow-up: delete-account readability cards
+
+Reorganized the account-deletion instructions into separate semantic, outlined cards for the introduction, both deletion methods, deleted cloud data, guest data, subscription cancellation, and third-party retention. Each card uses the existing surface color, rounded corners, and responsive padding. The critical Google Play subscription card uses the coral warning outline while retaining the outlined warning nested inside it.
+
+Browser verification passed eight layouts in Light and Dark at 1440, 768, 390, and 320 px. All six instruction cards, the introduction, and the metadata panel have visible outlines and padding, the page has no horizontal overflow, and four representative accessibility scans passed. Visual evidence is in `.cache/website-redesign/delete-account-cards/`.
