@@ -29,6 +29,17 @@ New to websites? Follow [How to create a website](<../how to create a website>) 
 7. `support.html` - Android notification troubleshooting, FAQ accordion, and GitHub Issues support routing.
 8. `about.html` - Origin story of Brownie the Zen Capybara, design philosophy, and open-source architecture.
 9. `404.html` - Branded error screen with return navigation.
+10. `donate.html` - Sponsor, Donate, and Pro Member options, including UPI donation details and in-app Pro guidance.
+
+### Supporting Brownie
+
+The Donate navigation entry opens `donate.html`. Every footer links to Sponsor, Donate, and Pro Member, and About links to the support page. Navigation switches to the mobile menu at 860 px to keep all five links usable.
+
+The page uses the approved developer accounts from the AxePower reference: [GitHub Sponsors](https://github.com/sponsors/mrAbhimanyuVishwakarma), [Buy Me a Coffee](https://buymeacoffee.com/mrabhimanyu), and UPI `abhimanyuvishwakarma5120@sbi` for Abhimanyu Vishwakarma. The original QR image is preserved in `assets/support/upi-qr.png`. The displayed `upi-qr.svg` encodes that image's exact decoded payment payload with a four-module quiet zone, so the code stays sharp at phone sizes. Its payee matches the displayed UPI ID and payment link. Update the QR, displayed address, and payment link together when changing the payee. External payments happen on the chosen service or UPI app; the website contains no checkout or payment-status handling.
+
+The UPI copy button uses the browser clipboard with an announced success or manual-copy message. The selectable address, payment links, and QR remain available without JavaScript. Pro is described separately from donations: the core app stays free, and Pro adds five companions. Prices come from the Android app and Google Play, rather than being hard-coded on the website. Pro instructions state that purchases will be available in the Google Play release.
+
+The Sponsor, Donate, and Pro Member cards, payment-details panel, and Free/Pro comparison table have a 1 px theme-ink outline with rounded corners. About's open-source panel and Support's contact panel remain transparent and borderless.
 
 ## Design
 
@@ -62,7 +73,7 @@ node scripts/prepare-website-mascots.cjs
 
 Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key, `--dark-only` to regenerate dark card variants, `--size 720` to create HD renditions, or `--only brownie` to process one mascot. HD output includes MP4 and WebP; standard output also includes transparent WebM. If the dark surface color changes, update the matching matte in the script and regenerate those variants.
 
-Support cards, feature cards, the drink demo, mascot cards, routine steps, and individual FAQ disclosures use a 1 px outline: near-black in light mode and light in dark mode. The video elements themselves have no border. The same treatment covers interior-page content panels: download and goal-calculation panels, beverage tables, About philosophy and value panels, notices, and legal information boxes. About's open-source panel and Support's contact panel use borderless surfaces, with 64 px of space before the water section on desktop and 32 px on phones.
+Support cards, feature cards, the drink demo, mascot cards, routine steps, and individual FAQ disclosures use a 1 px outline: near-black in light mode and light in dark mode. The video elements themselves have no border. The same treatment covers interior-page content panels: download and goal-calculation panels, beverage tables, About philosophy and value panels, notices, and legal information boxes. About's open-source panel and Support's contact panel have transparent backgrounds and no border, allowing the page grid to show through. They leave 64 px before the water section on desktop and 32 px on phones.
 
 ### Swimming pools
 
@@ -93,7 +104,7 @@ Review earlier versions with Git history. For a shared branch, use a reviewed re
 | `assets/` | Website fonts, icons, illustrations, and prepared animation files |
 | `vercel.json` | Clean URLs, caching, and response headers |
 
-Each HTML page contains its own navigation, closing section, and footer. When changing shared markup, update all nine pages. Shared CSS and JavaScript changes apply across pages automatically.
+Each HTML page contains its own navigation, closing section, and footer. When changing shared markup, update all ten pages. Shared CSS and JavaScript changes apply across pages automatically.
 
 ## Local Preview
 
