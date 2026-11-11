@@ -35,6 +35,8 @@ The beta APK supports ARM64 Android devices and x86_64 emulators. Android may as
 
 The [Brownie website](https://watertrackerbrownie.vercel.app) has its own HTML, CSS, JavaScript, and media in `website/`. It can be previewed without installing the mobile app's dependencies.
 
+On Windows, double-click `testlocal.bat` to start the preview and open [http://localhost:3000](http://localhost:3000) in your browser. Python 3 must be installed. Keep the preview window open; press Ctrl+C to stop it.
+
 From the repository root, with Python installed:
 
 ```bash
