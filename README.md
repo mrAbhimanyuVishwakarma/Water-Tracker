@@ -45,7 +45,9 @@ python -m http.server 3000 --bind 127.0.0.1 --directory website
 
 Open [http://127.0.0.1:3000](http://127.0.0.1:3000). Stop the preview with Ctrl+C in the terminal.
 
-The website defaults to Light appearance and remembers explicit Light, Dark, or System choices. Brownie swims left to right and back above the black footer on all nine pages, including About. Animation controls pause and resume the pool and mascot videos together. The homepage also has a working sample drink log and an animated phone preview.
+The website defaults to Light appearance and remembers explicit Light, Dark, or System choices. Brownie swims left to right and back above the black footer on all ten pages, including About. Animation controls pause and resume the pool and mascot videos together. The homepage also has a working sample drink log and an animated phone preview.
+
+The [Support Brownie page](website/donate.html) offers GitHub sponsorship, Buy Me a Coffee, a UPI QR code and copyable address, and a free-versus-Pro comparison. Donations support development; Pro is a separate purchase through the Android app's Google Play release.
 
 Start with the [beginner website guide](<how to create a website>) for a first HTML/CSS/JavaScript project, local preview instructions, and GitHub/Vercel publishing steps. See the [website README](website/README.md) for file locations, animation assets, and hosting settings. Browser verification is recorded in [design-qa.md](design-qa.md).
 

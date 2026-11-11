@@ -19,7 +19,7 @@
         summary.focus();
       }
     });
-    window.matchMedia('(min-width: 701px)').addEventListener('change', function (event) {
+    window.matchMedia('(min-width: 861px)').addEventListener('change', function (event) {
       if (event.matches) menu.open = false;
     });
   }
@@ -110,6 +110,26 @@
       anchor.target = '_blank';
       anchor.rel = 'noopener noreferrer';
       area.replaceChildren(anchor);
+    });
+  }
+
+  function initDonationCopy() {
+    var button = document.querySelector('[data-copy-upi]');
+    var value = document.getElementById('donation-upi-id');
+    var status = document.querySelector('[data-copy-status]');
+    if (!button || !value || !status) return;
+    button.hidden = false;
+    function failed() {
+      status.dataset.state = 'error';
+      status.textContent = 'Copy is unavailable. Select the UPI ID above to copy it.';
+    }
+    button.addEventListener('click', function () {
+      if (!window.isSecureContext || !navigator.clipboard) { failed(); return; }
+      button.disabled = true;
+      navigator.clipboard.writeText(value.textContent.trim()).then(function () {
+        status.dataset.state = 'success';
+        status.textContent = 'UPI ID copied.';
+      }).catch(failed).finally(function () { button.disabled = false; });
     });
   }
 
@@ -280,6 +300,7 @@
     initLatestRelease();
     initHydrationDemo();
     initPlayStore();
+    initDonationCopy();
     initSwimmingPools();
     initMascotAnimations();
     document.querySelectorAll('.js-current-year').forEach(function (element) { element.textContent = new Date().getFullYear(); });
