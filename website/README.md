@@ -62,13 +62,15 @@ node scripts/prepare-website-mascots.cjs
 
 Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key, `--dark-only` to regenerate dark card variants, `--size 720` to create HD renditions, or `--only brownie` to process one mascot. HD output includes MP4 and WebP; standard output also includes transparent WebM. If the dark surface color changes, update the matching matte in the script and regenerate those variants.
 
-Support cards, feature cards, the drink demo, mascot cards, routine steps, and individual FAQ disclosures use a 1 px outline: near-black in light mode and light in dark mode. The video elements themselves have no border. The same treatment covers interior-page content panels: download and goal-calculation panels, beverage tables, About philosophy and value panels, open-source and contact panels, notices, and legal information boxes.
+Support cards, feature cards, the drink demo, mascot cards, routine steps, and individual FAQ disclosures use a 1 px outline: near-black in light mode and light in dark mode. The video elements themselves have no border. The same treatment covers interior-page content panels: download and goal-calculation panels, beverage tables, About philosophy and value panels, notices, and legal information boxes. About's open-source panel and Support's contact panel use borderless surfaces, with 64 px of space before the water section on desktop and 32 px on phones.
 
 ### Swimming pools
 
-The homepage hero and the closing section immediately above the black footer on every page use swimming pool strips spanning the full page width, including About, Support, Download, legal pages, and 404. The text remains inside the usual content container. The water surface is rendered with resolution-independent CSS using a crisp 32 px grid, so it stays sharp on high-density displays and has a clean straight edge. The transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`; the original source is preserved.
+The homepage hero and the closing section immediately above the black footer on every page use swimming pool strips spanning the full page width, including About, Support, Download, legal pages, and 404. The text remains inside the usual content container. The water surface uses a crisp 32 px CSS grid. The hero water meets the header directly and has an animated wave along its bottom edge; every closing water section has an animated wave along its top edge. Small local SVG masks keep the curves sharp at any pixel density. The transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`; the original source is preserved.
 
 Brownie swims left to right, turns to face left at the right edge, and swims back in a continuous loop at 45 pixels per second. The complete swimmer stays within the pool at both ends. Translation and facing animations share the same duration and pause state. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together, and also work on pages without mascot videos. Without JavaScript, a still pool and capybara remain visible.
+
+The shoreline moves independently of the stationary water grid in a seamless ten-second loop. Only the narrow edge is animated. Waves follow the same pause, visibility, and hidden-page state as their swimmer, and stay static with reduced motion or without JavaScript. The page's background grid shows through the curved edges in both appearances.
 
 Regenerate the swimming assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`. The legacy raster pool derivative may still be generated for reference, but the website does not load it.
 
@@ -94,6 +96,8 @@ Review earlier versions with Git history. For a shared branch, use a reviewed re
 Each HTML page contains its own navigation, closing section, and footer. When changing shared markup, update all nine pages. Shared CSS and JavaScript changes apply across pages automatically.
 
 ## Local Preview
+
+On Windows, double-click `testlocal.bat` in the repository root. It starts the server before opening `http://localhost:3000` in your browser. Double-clicking again reopens the same preview if it is already running. Keep its window open while working, and press Ctrl+C to stop it. If another application uses that port, run `testlocal.bat --port 3001`. Python 3 is required.
 
 Run this from the repository root with Python installed:
 

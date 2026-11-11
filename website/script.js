@@ -133,6 +133,10 @@
       setSwimSpeed(pool);
       var playing = !paused && visible.has(pool) && !document.hidden && !failed.has(pool);
       pool.dataset.swimMotion = playing ? 'playing' : 'paused';
+      // The closing shoreline belongs to the whole water section, outside the strip.
+      if (pool.parentElement.classList.contains('closing-section')) {
+        pool.parentElement.dataset.swimMotion = pool.dataset.swimMotion;
+      }
       var source = playing ? swimmer.dataset.swimAnimation : swimmer.dataset.swimPoster;
       if (swimmer.getAttribute('src') !== source) swimmer.src = source;
     }
