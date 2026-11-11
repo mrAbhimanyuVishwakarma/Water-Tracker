@@ -10,6 +10,7 @@
 
   var STORAGE_KEY = 'brownie-consent-choice'; // 'granted' | 'denied'
   var banner = null;
+  var previousFocus = null;
 
   function readChoice() {
     try {
@@ -31,17 +32,21 @@
     if (banner) {
       banner.style.display = 'none';
       banner.setAttribute('aria-hidden', 'true');
+      if (previousFocus && document.contains(previousFocus)) {
+        previousFocus.focus();
+        previousFocus = null;
+      }
     }
   }
 
-  function showBanner() {
+  function showBanner(moveFocus) {
     if (!banner) {
       banner = createBanner();
     }
     banner.style.display = 'block';
     banner.setAttribute('aria-hidden', 'false');
     var acceptBtn = banner.querySelector('[data-consent="accept"]');
-    if (acceptBtn) {
+    if (moveFocus && acceptBtn) {
       acceptBtn.focus();
     }
   }
@@ -107,9 +112,10 @@
   // Expose reset function for footer link
   window.resetPrivacyConsent = function(e) {
     if (e && e.preventDefault) e.preventDefault();
+    previousFocus = document.activeElement;
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (err) {}
-    showBanner();
+    showBanner(true);
   };
 })();
