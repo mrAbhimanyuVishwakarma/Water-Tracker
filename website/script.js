@@ -122,8 +122,10 @@
 
     function setSwimSpeed(pool) {
       var swimmerWidth = pool.querySelector('.swim-swimmer').getBoundingClientRect().width;
-      // A fixed pixels-per-second rate keeps the motion steady on every viewport.
-      pool.style.setProperty('--swim-duration', ((pool.clientWidth + swimmerWidth * 2) / 45) + 's');
+      // Keep the entire swimmer in the pool and cover both legs at 45 px/second.
+      var distance = Math.max(0, pool.clientWidth - swimmerWidth);
+      pool.style.setProperty('--swim-distance', distance + 'px');
+      pool.style.setProperty('--swim-duration', Math.max(1, distance * 2 / 45) + 's');
     }
 
     function sync(pool) {
@@ -164,7 +166,7 @@
 
   function initMascotAnimations() {
     var videos = Array.from(document.querySelectorAll('video[data-mascot-animation]'));
-    if (!videos.length) return;
+    if (!videos.length && !document.querySelector('[data-swimming-pool]')) return;
     var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     var buttons = document.querySelectorAll('[data-mascot-motion]');
     // Start playing by default; the shared controls let visitors pause at any time.

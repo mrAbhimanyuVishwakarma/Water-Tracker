@@ -1,16 +1,16 @@
-/* Runs before styles paint; System follows the device unless a choice was saved. */
+/* Runs before styles paint; use Light unless an appearance choice was saved. */
 (function () {
   'use strict';
   var key = 'brownie-theme';
   var root = document.documentElement;
   var system = window.matchMedia('(prefers-color-scheme: dark)');
-  var preference = 'system';
-  var modes = ['system', 'dark', 'light'];
+  var preference = 'light';
+  var modes = ['light', 'dark', 'system'];
   var icons = { system: 'monitor', dark: 'moon', light: 'sun' };
   var labels = { system: 'System', dark: 'Dark', light: 'Light' };
 
   function valid(value) {
-    return value === 'dark' || value === 'light' || value === 'system' ? value : 'system';
+    return value === 'dark' || value === 'light' || value === 'system' ? value : 'light';
   }
 
   function updateControls() {

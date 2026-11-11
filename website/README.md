@@ -6,11 +6,14 @@ Official website for **Brownie Water Tracker**, a calm, friendly Android hydrati
 - **GitHub Repository:** [mrAbhimanyuVishwakarma/Water-Tracker](https://github.com/mrAbhimanyuVishwakarma/Water-Tracker)
 - **Latest Release:** [GitHub Releases](https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases/latest)
 
+New to websites? Follow [How to create a website](<../how to create a website>) for a small practice project and step-by-step instructions for working on this site.
+
 ---
 
 ## Website Architecture
 
 - **Stack:** Semantic HTML5, Modern CSS, Dependency-free Vanilla JavaScript.
+- **Hosting:** Static pages on Vercel, with an optional Node.js download redirect at `api/download.js`.
 - **Privacy First:** No advertising cookies, no trackers loaded without explicit user consent.
 - **Progressive Enhancement:** Downloads fall back statically to GitHub Releases and dynamically query the GitHub Releases API to resolve direct `.apk` downloads, file size, and publication dates.
 - **Accessibility:** Semantic landmarks, native disclosure menus and FAQs, visible keyboard focus, responsive layouts, and reduced-motion support. Browser and accessibility check results are recorded in the repository's `design-qa.md`.
@@ -37,9 +40,9 @@ The site stays dependency-free. Navigation, FAQs, and official release links wor
 
 ### Appearance
 
-The header's appearance control offers **System**, **Dark**, and **Light**, with **System** as the default. It uses the same Phosphor icon family as the rest of the site. The selected preference is saved locally, shared across pages and tabs, and applied by `theme.js` before the stylesheet paints. System mode follows device appearance changes automatically. If storage is unavailable, the control still works for the current page. Without JavaScript, CSS follows the system preference.
+The header's appearance control offers **Light**, **Dark**, and **System**, with **Light** as the default regardless of device appearance. It uses the same Phosphor icon family as the rest of the site. The selected preference is saved locally, shared across pages and tabs, and applied by `theme.js` before the stylesheet paints. System mode follows device appearance changes automatically. If storage is unavailable, the control still works for the current page. Without JavaScript, CSS also defaults to Light.
 
-Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accents. The appearance button displays only its monitor, moon, or sun icon. Each click cycles **System → Dark → Light → System**. The native button also works with Enter and Space, identifies the current and next choices through its accessible name and tooltip, and announces selections to screen readers.
+Dark mode uses warm charcoal surfaces, lighter text, and matching semantic accents. The appearance button displays only its sun, moon, or monitor icon. Each click cycles **Light → Dark → System → Light**. The native button also works with Enter and Space, identifies the current and next choices through its accessible name and tooltip, and announces selections to screen readers.
 
 ### Mascot animations
 
@@ -63,49 +66,63 @@ Support cards, feature cards, the drink demo, mascot cards, routine steps, and i
 
 ### Swimming pools
 
-The homepage hero and the closing sections on Home and Features use swimming pool strips spanning the full page width. The text remains inside the usual content container. The water surface is rendered with resolution-independent CSS using a crisp 32 px grid, so it stays sharp on high-density displays and has a clean straight edge. The transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`; the original source is preserved.
+The homepage hero and the closing section immediately above the black footer on every page use swimming pool strips spanning the full page width, including About, Support, Download, legal pages, and 404. The text remains inside the usual content container. The water surface is rendered with resolution-independent CSS using a crisp 32 px grid, so it stays sharp on high-density displays and has a clean straight edge. The transparent 24 fps swimmer is stabilized and keyed from `assets/capibara swimming right to left.mp4`; the original source is preserved.
 
-Brownie swims from beyond the left edge to beyond the right edge at a constant 45 pixels per second. The loop resets while fully offscreen, so no turn is visible. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together. Without JavaScript, a still pool and capybara remain visible.
+Brownie swims left to right, turns to face left at the right edge, and swims back in a continuous loop at 45 pixels per second. The complete swimmer stays within the pool at both ends. Translation and facing animations share the same duration and pause state. Each strip starts automatically when visible and pauses when offscreen or when the page is hidden. The shared pause controls affect the pool strips and mascot videos together, and also work on pages without mascot videos. Without JavaScript, a still pool and capybara remain visible.
 
 Regenerate the swimming assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`. The legacy raster pool derivative may still be generated for reference, but the website does not load it.
 
-## Redesign branch and rollback
+## Branches and history
 
-The redesign is isolated on `website-redesign`. The pre-redesign baseline is commit `2c83a8e570925df35f35bbd91fde353d7d88ba20`, also the starting point of `main` when this work began.
+`main` includes the website redesign, the shared swimming closing section, and the Light appearance default. The `website-redesign` branch preserves the implementation history. The pre-redesign baseline is commit `2c83a8e570925df35f35bbd91fde353d7d88ba20`; switching to `main` does not restore that old design.
 
-To review the redesign:
+Review earlier versions with Git history. For a shared branch, use a reviewed revert commit when a change must be undone, so later work remains in the history.
 
-```bash
-git switch website-redesign
-```
+## Where to edit
 
-To return to the original version while `main` still points to the baseline:
+| File | Purpose |
+| --- | --- |
+| `index.html` | Homepage copy, sample drink log, and phone preview |
+| `about.html`, `features.html`, and other HTML files | Individual pages and their navigation/footer markup |
+| `styles.css` | Shared colors, layout, responsive rules, and swimming path/facing animations |
+| `theme.js` | Light default, saved appearance, and appearance button |
+| `script.js` | Drink demo, release lookup, animation visibility, speed, and pause controls |
+| `site-config.js` | Public repository, store, and demo configuration; some HTML links and metadata are also written directly in the pages |
+| `assets/` | Website fonts, icons, illustrations, and prepared animation files |
+| `vercel.json` | Clean URLs, caching, and response headers |
 
-```bash
-git switch main
-```
-
-Commit or stash unrelated work before switching branches. If the redesign is later merged, use `git revert` on its commit to undo it while retaining history.
+Each HTML page contains its own navigation, closing section, and footer. When changing shared markup, update all nine pages. Shared CSS and JavaScript changes apply across pages automatically.
 
 ## Local Preview
 
-You can preview the site locally using any static web server:
+Run this from the repository root with Python installed:
 
 ```bash
-# Using Python
-python -m http.server 3000
-
-# Using Node / npx
-npx serve .
+python -m http.server 3000 --bind 127.0.0.1 --directory website
 ```
 
-Open `http://localhost:3000` in your web browser.
+Open [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser. Keep the terminal running, save edits, and refresh the page. Press Ctrl+C in the terminal to stop the preview. No website dependency installation or build command is needed.
+
+Python serves the static files. It does not execute `api/download.js` or apply Vercel's clean URLs, headers, and cache settings. Use paths such as `/about.html` locally. The pages' GitHub release links and browser-side release lookup remain available.
+
+Before committing, run `npm run lint` and `npm run typecheck` from the repository root with the project dependencies installed. Check the changed pages at desktop and phone widths. Verify appearance choices, both swimming directions, pause/resume, navigation, and download links. Results from the latest browser checks are in [design-qa.md](../design-qa.md).
 
 ## Deployment to Vercel
 
-```bash
-# Deploy to production
-npx vercel --prod
-```
+Import the GitHub repository into a Vercel project, or open the existing project's settings. Use these settings for this repository:
 
-Configure `watertrackerbrownie.vercel.app` as the production domain.
+| Setting | Value |
+| --- | --- |
+| Root Directory | `website` |
+| Framework Preset | `Other` |
+| Build Command | Enable Override and leave empty |
+| Output Directory | `.` (the selected website root) |
+| Production branch | `main` |
+
+These static build settings follow [Vercel's build configuration guide](https://vercel.com/docs/builds/configure-a-build). Production branch tracking is configured under **Settings → Environments → Production → Branch Tracking**; see [Vercel's Git deployment guide](https://vercel.com/docs/git#production-branch).
+
+With the Git integration enabled, pushing changes to the configured production branch starts a deployment. Other branches normally receive preview deployments. A local commit becomes available to Vercel after it is pushed to GitHub.
+
+The configured public URL is `https://watertrackerbrownie.vercel.app`. A separate project or fork receives its own URL. If changing the public domain or repository, also review the HTML canonical/social metadata, `robots.txt`, `sitemap.xml`, and hard-coded links alongside `site-config.js`.
+
+The basic website and the current GitHub release resolver do not need database credentials. Keep local environment files and authentication tokens out of public source.
