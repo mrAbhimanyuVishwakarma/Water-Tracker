@@ -6,13 +6,14 @@ import { accountFromUser, isCloudConfigured, startAuthCallbacks, startSessionRef
 import { billingOperation, hasPremium, identifyBillingUser, listenForBillingUpdates } from '../services/billing';
 import { reconcileSync, syncAccount } from '../services/cloudSync';
 import { dayKey, mergeLogs } from '../utils/accountData';
-import { historyFromLogs, loadLocalData, LocalData, removeLocalAccount, resetGuestData, saveLocalData } from '../utils/storage';
+import { historyFromLogs, loadLocalData, loadOwnerPremiumAccess, LocalData, removeLocalAccount, resetGuestData, saveLocalData, saveOwnerPremiumAccess } from '../utils/storage';
 
 export function useAccountData() {
   const [account, setAccount] = useState<UserAccount | null>(null);
   const [data, setData] = useState<LocalData>({ settings: DEFAULT_SETTINGS, logs: [], pendingLogIds: [], settingsRevision: 0 });
   const [ready, setReady] = useState(false);
   const [premium, setPremium] = useState(false);
+  const [ownerPremium, setOwnerPremium] = useState(false);
   const [syncStatus, setSyncStatus] = useState('Saved on this device');
   const [revision, setRevision] = useState(0);
   const [day, setDay] = useState(dayKey());
@@ -46,8 +47,12 @@ export function useAccountData() {
       setAccount(next);
       void enqueue(async () => {
         try {
-          const loaded = await loadLocalData(nextId);
+          const [loaded, ownerAccess] = await Promise.all([
+            loadLocalData(nextId),
+            loadOwnerPremiumAccess(),
+          ]);
           if (!active || ticket !== epoch.current) return;
+          setOwnerPremium(ownerAccess);
           dataRef.current = loaded;
           setData(loaded);
           setSyncStatus(nextId ? 'Waiting to sync' : 'Saved on this device');
@@ -191,13 +196,25 @@ export function useAccountData() {
     if (owner.current === userId) activateAccount.current(null);
   }, [enqueue]);
 
+  const redeemOwnerAccess = useCallback(async (code: string): Promise<boolean> => {
+    if (owner.current || code.trim() !== 'Sherni') return false;
+    try {
+      await saveOwnerPremiumAccess();
+      setOwnerPremium(true);
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
+
   const settings = useMemo(() => {
     const trial = data.settings.mascotTrialStartedAt;
     const trialActive = trial !== null && Date.now() >= trial && Date.now() - trial < 60_000;
-    return { ...data.settings, isPremium: premium, userAccount: account,
-      unlockedCharacters: premium ? ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'] as UserSettings['unlockedCharacters'] : ['brownie'] as UserSettings['unlockedCharacters'],
-      activeCharacter: !premium && !trialActive ? 'brownie' as const : data.settings.activeCharacter };
-  }, [data.settings, premium, account]);
+    const hasPremiumAccess = premium || (!account && ownerPremium);
+    return { ...data.settings, isPremium: hasPremiumAccess, userAccount: account,
+      unlockedCharacters: hasPremiumAccess ? ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin'] as UserSettings['unlockedCharacters'] : ['brownie'] as UserSettings['unlockedCharacters'],
+      activeCharacter: !hasPremiumAccess && !trialActive ? 'brownie' as const : data.settings.activeCharacter };
+  }, [data.settings, premium, ownerPremium, account]);
   const todayLogs = useMemo(() => data.logs.filter(log => dayKey(log.timestamp) === day), [data.logs, day]);
   const history = useMemo(() => {
     const firstDay = data.logs.length ? dayKey(data.logs[0].timestamp) : day;
@@ -205,5 +222,5 @@ export function useAccountData() {
     return historyFromLogs(data.logs, settings, days, day);
   }, [data.logs, settings, day]);
   return { settings, todayLogs, history, ready, syncStatus, updateSettings, addDrink,
-    refreshPremium, syncNow, resetGuest, clearDeletedAccount };
+    refreshPremium, syncNow, resetGuest, clearDeletedAccount, redeemOwnerAccess };
 }

@@ -30,6 +30,7 @@ interface Props {
   logs: DrinkLog[];
   dailyTarget: number; // in ml
   mascotId?: MascotId;
+  soundEnabled?: boolean;
   width?: number;
   height?: number;
 }
@@ -57,6 +58,7 @@ export const CapybaraVessel: React.FC<Props> = ({
   logs,
   dailyTarget,
   mascotId = 'brownie',
+  soundEnabled = true,
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
 }) => {
@@ -64,10 +66,10 @@ export const CapybaraVessel: React.FC<Props> = ({
   const fillAnim = useSharedValue(0);
   const bobbing = useSharedValue(0);
 
-  // Total logged ml and fill ratio
-  const totalLogged = logs.reduce((sum, item) => sum + item.amount, 0);
-  const fillPercent = Math.min(totalLogged / Math.max(dailyTarget, 1), 1.0);
-  const isFilled = dailyTarget > 0 && totalLogged >= dailyTarget;
+  // Effective hydration is the only value that fills the mascot and completes the goal.
+  const totalEffective = Math.max(0, logs.reduce((sum, item) => sum + (item.effectiveAmount ?? item.amount), 0));
+  const fillPercent = Math.min(totalEffective / Math.max(dailyTarget, 1), 1.0);
+  const isFilled = dailyTarget > 0 && totalEffective >= dailyTarget;
   const autoPlayCelebration = useGoalCelebration(isFilled);
 
   // Selected mascot contour path
@@ -91,14 +93,14 @@ export const CapybaraVessel: React.FC<Props> = ({
       -1,
       true
     );
-  }, []);
+  }, [bobbing, wavePhase]);
 
   useEffect(() => {
     fillAnim.value = withSpring(fillPercent, {
       damping: 14,
       stiffness: 90,
     });
-  }, [fillPercent]);
+  }, [fillAnim, fillPercent]);
 
   const bobbingStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: bobbing.value }],
@@ -110,8 +112,16 @@ export const CapybaraVessel: React.FC<Props> = ({
   const TOTAL_HEIGHT = BASE_Y - TOP_Y;
 
   let accumulatedHeight = 0;
-  const layers = logs.map((log, index) => {
-    const fraction = log.amount / Math.max(dailyTarget, 1);
+  const positiveEffectiveTotal = logs.reduce(
+    (sum, log) => sum + Math.max(0, log.effectiveAmount ?? log.amount),
+    0
+  );
+  const netScale = positiveEffectiveTotal > 0 ? totalEffective / positiveEffectiveTotal : 0;
+  const layers = logs
+    .filter((log) => (log.effectiveAmount ?? log.amount) > 0)
+    .map((log, index) => {
+    const effectiveAmount = Math.max(0, log.effectiveAmount ?? log.amount) * netScale;
+    const fraction = effectiveAmount / Math.max(dailyTarget, 1);
     const layerHeight = fraction * TOTAL_HEIGHT;
     const bottom = BASE_Y - accumulatedHeight;
     accumulatedHeight += layerHeight;
@@ -123,16 +133,18 @@ export const CapybaraVessel: React.FC<Props> = ({
       bottom,
       height: layerHeight,
     };
-  });
+    });
 
   return (
     <Animated.View style={[styles.container, { width, height }, !isFilled && bobbingStyle]}>
       {isFilled ? (
         <GoalCelebration
+          key={mascotId}
           mascotId={mascotId}
           width={width}
           height={height}
           autoPlay={autoPlayCelebration}
+          soundEnabled={soundEnabled}
         />
       ) : (
         // IN PROGRESS: Original animal image outlined as a vessel filling with flowing fluid

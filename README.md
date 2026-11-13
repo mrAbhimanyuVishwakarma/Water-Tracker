@@ -16,8 +16,10 @@ This repository is being prepared for Google Play. Login, cloud backups and prem
 
 ## Features
 
-- Personalized daily hydration goals
-- Quick logging for water, tea, coffee, juice, milk, and electrolytes
+- Personalized 1,000–6,000 ml daily hydration goals with a smooth drag control
+- Quick logging for water, tea, coffee, juice, milk, milkshakes, cold drinks, and electrolytes
+- Effective hydration accounting so each drink contributes a realistic amount toward the goal
+- A private user profile for body details, health context, medication, and appointment notes
 - Daily history, progress, and streak tracking
 - Hydration habit prompts and a calendar of logged goal days
 - Six animated mascots and an interactive pool party
@@ -29,7 +31,7 @@ This repository is being prepared for Google Play. Login, cloud backups and prem
 
 Download the latest Android APK from [GitHub Releases](https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases).
 
-The beta APK supports ARM64 Android devices and x86_64 emulators. Android may ask you to allow installation from your browser or file manager.
+The beta APK supports ARM64 Android devices and x86_64 emulators. The GitHub build can check official Releases, download a newer signed APK, and open Android's installer. Android may ask you to allow installation from Brownie. On Samsung, Auto Blocker can prevent sideloading; the app provides plain-language instructions. See [GitHub APK updates](docs/GITHUB_APK_UPDATES.md).
 
 ## Website
 
@@ -78,6 +80,18 @@ Create an installable Android preview with EAS:
 
 ```bash
 npx eas-cli@latest build --platform android --profile preview
+```
+
+Create the GitHub-distributed APK with the in-app update flow enabled:
+
+```bash
+npx eas-cli@latest build --platform android --profile github-apk
+```
+
+The Google Play production profile intentionally excludes the package-install permission:
+
+```bash
+npx eas-cli@latest build --platform android --profile production
 ```
 
 ## Built with

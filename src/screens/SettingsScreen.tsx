@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,6 +8,9 @@ import {
   Switch,
   Alert,
   Linking,
+  TextInput,
+  Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,6 +19,9 @@ import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
 import Constants from 'expo-constants';
 import { openLegalPage } from '../services/legal';
+import { HydrationGoalSlider } from '../components/HydrationGoalSlider';
+import { UserProfileModal } from '../components/UserProfileModal';
+import { CURRENT_APP_VERSION, isGithubUpdaterEnabled, UpdateCheckResult } from '../utils/updater';
 interface Props {
   settings: UserSettings;
   onUpdateSettings: (newSettings: Partial<UserSettings>) => void;
@@ -23,8 +29,10 @@ interface Props {
   onOpenPoolParty: () => void;
   onOpenPaywall: () => void;
   onOpenAuth: () => void;
+  onRedeemCode: (code: string) => Promise<boolean>;
   onResetData: () => void;
   reminderStatus: string;
+  onCheckForUpdates: () => Promise<UpdateCheckResult>;
 }
 
 export const SettingsScreen: React.FC<Props> = ({
@@ -34,10 +42,19 @@ export const SettingsScreen: React.FC<Props> = ({
   onOpenPoolParty,
   onOpenPaywall,
   onOpenAuth,
+  onRedeemCode,
   onResetData,
   reminderStatus,
+  onCheckForUpdates,
 }) => {
   const insets = useSafeAreaInsets();
+  const [showRedeem, setShowRedeem] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [redeemError, setRedeemError] = useState('');
+  const [redeeming, setRedeeming] = useState(false);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState('');
+  const [showProfile, setShowProfile] = useState(false);
   const { dailyTarget, unit, soundEnabled: sound, hapticEnabled: haptic } = settings;
   const saveGoal = (val: number) => {
     onUpdateSettings({ dailyTarget: val });
@@ -47,6 +64,41 @@ export const SettingsScreen: React.FC<Props> = ({
   const toggleUnit = (newUnit: 'ml' | 'oz') => {
     onUpdateSettings({ unit: newUnit });
     feedback.triggerHaptic('light');
+  };
+
+  const submitRedeemCode = async () => {
+    if (!redeemCode.trim() || redeeming) return;
+    setRedeeming(true);
+    setRedeemError('');
+    const redeemed = await onRedeemCode(redeemCode);
+    setRedeeming(false);
+    if (!redeemed) {
+      setRedeemError('That code is not valid. Check it and try again.');
+      feedback.triggerHaptic('medium');
+      return;
+    }
+    Keyboard.dismiss();
+    setRedeemCode('');
+    setShowRedeem(false);
+    feedback.triggerHaptic('success');
+  };
+
+  const checkForUpdates = async () => {
+    if (checkingUpdate) return;
+    setCheckingUpdate(true);
+    setUpdateStatus('Checking GitHub Releases…');
+    const result = await onCheckForUpdates();
+    setCheckingUpdate(false);
+    if (result.available) {
+      setUpdateStatus(`Version ${result.latestVersion} is ready to install.`);
+      feedback.triggerHaptic('success');
+    } else if (result.error) {
+      setUpdateStatus(result.error);
+      feedback.triggerHaptic('medium');
+    } else {
+      setUpdateStatus(`You have the latest version (${result.currentVersion}).`);
+      feedback.triggerHaptic('light');
+    }
   };
 
 
@@ -94,14 +146,34 @@ export const SettingsScreen: React.FC<Props> = ({
           <Text style={styles.sectionSubtitle}>
             Back up hydration logs and preferences to your account. Guest data stays on this device.
           </Text>
-          <TouchableOpacity
-            style={styles.accountCard}
-            activeOpacity={0.85}
-            onPress={() => {
-              feedback.triggerHaptic('light');
-              onOpenAuth();
-            }}
-          >
+          {!settings.userAccount && showRedeem && (
+            <View style={styles.redeemBlock}>
+              <Text style={styles.redeemLabel}>Redeem Brownie Premium</Text>
+              <View style={[styles.redeemInputRow, redeemError ? styles.redeemInputRowError : null]}>
+                <TextInput
+                  style={styles.redeemInput}
+                  value={redeemCode}
+                  onChangeText={(value) => {
+                    setRedeemCode(value);
+                    if (redeemError) setRedeemError('');
+                  }}
+                  placeholder="Enter redeem code"
+                  placeholderTextColor="#64748B"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  secureTextEntry
+                  returnKeyType="done"
+                  editable={!redeeming}
+                  autoFocus
+                  onSubmitEditing={() => void submitRedeemCode()}
+                  accessibilityLabel="Brownie Premium redeem code"
+                />
+                <Ionicons name="return-down-back" size={18} color="#0284C7" />
+              </View>
+              {!!redeemError && <Text style={styles.redeemError}>{redeemError}</Text>}
+            </View>
+          )}
+          <View style={styles.accountCard}>
             <View style={styles.accountCardLeft}>
               <View style={[styles.accountAvatar, settings.userAccount ? styles.accountAvatarConnected : null]}>
                 <Ionicons
@@ -119,12 +191,60 @@ export const SettingsScreen: React.FC<Props> = ({
                 </Text>
               </View>
             </View>
-            <View style={styles.accountCardRight}>
+            <TouchableOpacity
+              style={styles.accountCardRight}
+              activeOpacity={0.8}
+              onPress={() => {
+                feedback.triggerHaptic('light');
+                onOpenAuth();
+              }}
+            >
               <Text style={styles.accountActionText}>
                 {settings.userAccount ? 'MANAGE' : 'SIGN IN'}
               </Text>
               <Ionicons name="chevron-forward" size={14} color="#0284C7" />
+            </TouchableOpacity>
+          </View>
+          {!settings.userAccount && !settings.isPremium && (
+            <TouchableOpacity
+              style={styles.redeemTrigger}
+              activeOpacity={0.8}
+              onPress={() => {
+                feedback.triggerHaptic('light');
+                setRedeemError('');
+                setShowRedeem((visible) => !visible);
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Redeem Brownie Premium code"
+            >
+              <Ionicons name="key-outline" size={15} color="#0369A1" />
+              <Text style={styles.redeemTriggerText}>Redeem</Text>
+            </TouchableOpacity>
+          )}
+          {!settings.userAccount && settings.isPremium && (
+            <View style={styles.redeemedStatus}>
+              <Ionicons name="checkmark-circle" size={17} color="#047857" />
+              <Text style={styles.redeemedStatusText}>Brownie Premium is active on this device</Text>
             </View>
+          )}
+        </View>
+
+        <View style={styles.card}>
+          <View style={styles.profileHeading}>
+            <View style={styles.profileIcon}>
+              <Ionicons name="person-outline" size={22} color="#0284C7" />
+            </View>
+            <View style={styles.profileHeadingCopy}>
+              <Text style={styles.sectionTitle}>Your Profile</Text>
+              <Text style={styles.sectionSubtitle}>
+                {settings.healthProfile.displayName
+                  ? `${settings.healthProfile.displayName} · ${settings.healthProfile.weight} ${settings.healthProfile.weightUnit}`
+                  : 'Body details, health notes, medicine, and appointments'}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.actionBtn} onPress={() => setShowProfile(true)}>
+            <Text style={styles.actionBtnText}>OPEN PROFILE</Text>
           </TouchableOpacity>
         </View>
 
@@ -141,7 +261,10 @@ export const SettingsScreen: React.FC<Props> = ({
             {['06:00', '07:00', '08:00', '09:00'].map(time => <TouchableOpacity key={time}
               style={[styles.chip, settings.healthProfile.wakeTime === time && styles.chipActive]}
               onPress={() => onUpdateSettings({ healthProfile: { ...settings.healthProfile, wakeTime: time } })}>
-              <Text style={styles.chipText}>{time}</Text>
+              <Text style={[
+                styles.chipText,
+                settings.healthProfile.wakeTime === time && styles.chipTextActive,
+              ]}>{time}</Text>
             </TouchableOpacity>)}
           </View>
           <Text style={styles.rowLabel}>Sleep time</Text>
@@ -149,13 +272,23 @@ export const SettingsScreen: React.FC<Props> = ({
             {['21:00', '22:00', '23:00', '00:00'].map(time => <TouchableOpacity key={time}
               style={[styles.chip, settings.healthProfile.sleepTime === time && styles.chipActive]}
               onPress={() => onUpdateSettings({ healthProfile: { ...settings.healthProfile, sleepTime: time } })}>
-              <Text style={styles.chipText}>{time}</Text>
+              <Text style={[
+                styles.chipText,
+                settings.healthProfile.sleepTime === time && styles.chipTextActive,
+              ]}>{time}</Text>
             </TouchableOpacity>)}
           </View>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            {[60, 90, 120].map(minutes => <TouchableOpacity key={minutes} style={styles.actionBtn}
+          <Text style={styles.rowLabel}>Reminder frequency</Text>
+          <View style={styles.reminderIntervalRow}>
+            {[60, 90, 120].map(minutes => <TouchableOpacity key={minutes} style={[
+              styles.reminderIntervalBtn,
+              settings.reminderIntervalMinutes === minutes && styles.reminderIntervalBtnActive,
+            ]}
               onPress={() => onUpdateSettings({ reminderIntervalMinutes: minutes })}>
-              <Text style={styles.actionBtnText}>{settings.reminderIntervalMinutes === minutes ? '* ' : ''}{minutes} min</Text>
+              <Text style={[
+                styles.reminderIntervalText,
+                settings.reminderIntervalMinutes === minutes && styles.reminderIntervalTextActive,
+              ]}>{minutes} min</Text>
             </TouchableOpacity>)}
           </View>
           <TouchableOpacity style={styles.actionBtn} onPress={() => { Linking.openSettings().catch(() => Alert.alert('Open device settings', 'Allow notifications for Brownie Water Tracker.')); }}>
@@ -170,20 +303,7 @@ export const SettingsScreen: React.FC<Props> = ({
             Current goal: {formatVolume(dailyTarget, unit)}
           </Text>
 
-          {/* Quick preset chips */}
-          <View style={styles.chipRow}>
-            {[1500, 2000, 2500, 3000].map((v) => (
-              <TouchableOpacity
-                key={v}
-                style={[styles.chip, dailyTarget === v && styles.chipActive]}
-                onPress={() => saveGoal(v)}
-              >
-                <Text style={[styles.chipText, dailyTarget === v && styles.chipTextActive]}>
-                  {formatVolume(v, unit)}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <HydrationGoalSlider value={dailyTarget} unit={unit} onChange={saveGoal} />
         </View>
 
         {/* Section: Measurement Unit */}
@@ -270,6 +390,51 @@ export const SettingsScreen: React.FC<Props> = ({
           <TouchableOpacity style={styles.actionBtn} onPress={() => void openLegalPage('deletion')}><Text style={styles.actionBtnText}>Account Deletion Help</Text></TouchableOpacity>
         </View>
 
+        {isGithubUpdaterEnabled() && (
+          <View style={styles.card}>
+            <View style={styles.updateHeader}>
+              <View style={styles.updateHeadingCopy}>
+                <Ionicons name="cloud-download-outline" size={22} color="#0284C7" />
+                <Text style={styles.sectionTitle}>App Updates</Text>
+              </View>
+              <View style={styles.versionPill}>
+                <Text style={styles.versionPillText}>v{CURRENT_APP_VERSION}</Text>
+              </View>
+            </View>
+            <Text style={styles.sectionSubtitle}>
+              Brownie checks official GitHub Releases and lets Android install the signed APK.
+            </Text>
+            <View style={styles.settingRow}>
+              <View style={styles.updateToggleCopy}>
+                <Text style={styles.rowLabel}>Check automatically</Text>
+                <Text style={styles.rowSub}>Look for a new release when the app opens</Text>
+              </View>
+              <Switch
+                value={settings.autoCheckUpdates !== false}
+                onValueChange={(value) => {
+                  onUpdateSettings({ autoCheckUpdates: value });
+                  feedback.triggerHaptic('light');
+                }}
+                trackColor={{ false: '#CBD5E1', true: '#0284C7' }}
+              />
+            </View>
+            {!!updateStatus && (
+              <View style={styles.updateStatusBox}>
+                <Text style={styles.updateStatusText}>{updateStatus}</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.actionBtn}
+              disabled={checkingUpdate}
+              onPress={() => void checkForUpdates()}
+            >
+              {checkingUpdate
+                ? <ActivityIndicator size="small" color="#0284C7" />
+                : <Text style={styles.actionBtnText}>Check for updates</Text>}
+            </TouchableOpacity>
+          </View>
+        )}
+
         {/* Section: App Data */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>App Data & Reset</Text>
@@ -292,6 +457,12 @@ export const SettingsScreen: React.FC<Props> = ({
         <Text style={styles.versionText}>Brownie Water Tracker v{Constants.expoConfig?.version || '1.0.0'}</Text>
 
       </ScrollView>
+      {showProfile && <UserProfileModal
+        visible={showProfile}
+        profile={settings.healthProfile}
+        onClose={() => setShowProfile(false)}
+        onSave={(healthProfile) => onUpdateSettings({ healthProfile })}
+      />}
     </View>
   );
 };
@@ -475,6 +646,35 @@ const styles = StyleSheet.create({
     color: '#0284C7',
     letterSpacing: 0.3,
   },
+  reminderIntervalRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  reminderIntervalBtn: {
+    flex: 1,
+    minHeight: 48,
+    borderRadius: 14,
+    backgroundColor: '#F1F5F9',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6,
+  },
+  reminderIntervalBtnActive: {
+    backgroundColor: '#0284C7',
+    borderColor: '#0284C7',
+  },
+  reminderIntervalText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#475569',
+  },
+  reminderIntervalTextActive: {
+    color: '#FFFFFF',
+  },
   accountCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -484,6 +684,23 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1.5,
     borderColor: '#E2E8F0',
+  },
+  profileHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  profileIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: '#E0F2FE',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  profileHeadingCopy: {
+    flex: 1,
   },
   accountCardLeft: {
     flexDirection: 'row',
@@ -517,12 +734,84 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     paddingLeft: 8,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   accountActionText: {
     fontSize: 12,
     fontWeight: '800',
     color: '#0284C7',
     letterSpacing: 0.5,
+  },
+  redeemTrigger: {
+    minHeight: 40,
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#7DD3FC',
+    backgroundColor: '#F0F9FF',
+  },
+  redeemTriggerText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#0369A1',
+  },
+  redeemBlock: {
+    marginBottom: 12,
+  },
+  redeemLabel: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginBottom: 7,
+  },
+  redeemInputRow: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: '#7DD3FC',
+    backgroundColor: '#F8FAFC',
+  },
+  redeemInputRowError: {
+    borderColor: '#DC2626',
+  },
+  redeemInput: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#0F172A',
+    paddingVertical: 0,
+  },
+  redeemError: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#B91C1C',
+    marginTop: 6,
+  },
+  redeemedStatus: {
+    minHeight: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    marginTop: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: '#ECFDF5',
+  },
+  redeemedStatusText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#047857',
   },
   versionText: {
     textAlign: 'center',
@@ -543,6 +832,21 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '800',
     color: '#0284C7',
+  },
+  updateHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  updateHeadingCopy: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  updateToggleCopy: {
+    flex: 1,
+    paddingRight: 12,
   },
   repoBox: {
     flexDirection: 'row',

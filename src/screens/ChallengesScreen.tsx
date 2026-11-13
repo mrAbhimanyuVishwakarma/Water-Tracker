@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   TouchableOpacity,
+  ScrollViewInstance,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +19,7 @@ interface Props {
   history: DayData[];
   onBack: () => void;
   onSelectChallenge: (challengeId: string) => void;
+  initialFocus?: 'top' | 'calendar';
 }
 
 export const ChallengesScreen: React.FC<Props> = ({
@@ -25,11 +27,20 @@ export const ChallengesScreen: React.FC<Props> = ({
   history,
   onBack,
   onSelectChallenge,
+  initialFocus = 'top',
 }) => {
   const insets = useSafeAreaInsets();
   const [selectedChallengeId, setSelectedChallengeId] = useState<string>(
     settings.activeChallengeId || CHALLENGES[0].id
   );
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  const [calendarY, setCalendarY] = useState(0);
+
+  useEffect(() => {
+    if (initialFocus === 'calendar' && calendarY > 0) {
+      scrollRef.current?.scrollTo({ y: Math.max(calendarY - 12, 0), animated: true });
+    }
+  }, [calendarY, initialFocus]);
 
   const selectedChallenge =
     CHALLENGES.find((c) => c.id === selectedChallengeId) || CHALLENGES[0];
@@ -54,7 +65,7 @@ export const ChallengesScreen: React.FC<Props> = ({
         <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+      <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         {/* Horizontal Challenge Mascot Tabs */}
         <ScrollView
           horizontal
@@ -121,7 +132,11 @@ export const ChallengesScreen: React.FC<Props> = ({
         </View>
 
         {/* Calendar Streak History Matrix */}
-        <View style={styles.calendarCard}>
+        <View
+          style={styles.calendarCard}
+          onLayout={(event) => setCalendarY(event.nativeEvent.layout.y)}
+          accessibilityLabel="Hydration calendar"
+        >
           <View style={styles.streakBadgeContainer}>
             <View style={styles.streakCircle}>
               <Text style={styles.streakNumber}>{calculateStreak(history)}</Text>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -17,19 +17,40 @@ import { UserSettings, MascotId } from './src/types';
 import { feedback } from './src/utils/feedback';
 import { useAccountData } from './src/hooks/useAccountData';
 import { useReminders } from './src/hooks/useReminders';
+import { UpdateModal } from './src/components/UpdateModal';
+import { checkGitHubRelease, isGithubUpdaterEnabled, UpdateCheckResult } from './src/utils/updater';
 
 type Screen = TabId | 'onboarding' | 'pool_party' | 'paywall';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('onboarding');
+  const [challengesFocus, setChallengesFocus] = useState<'top' | 'calendar'>('top');
   const {
     settings, todayLogs, history, ready: isReady, syncStatus, updateSettings: handleUpdateSettings,
-    addDrink: handleAddDrink, refreshPremium, syncNow, resetGuest, clearDeletedAccount,
+    addDrink: handleAddDrink, refreshPremium, syncNow, resetGuest, clearDeletedAccount, redeemOwnerAccess,
   } = useAccountData();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<UpdateCheckResult | null>(null);
+  const checkedForUpdate = useRef(false);
   const reminderStatus = useReminders(settings, isReady);
 
+  const handleCheckForUpdates = useCallback(async () => {
+    const result = await checkGitHubRelease();
+    if (result.available) {
+      setUpdateInfo(result);
+      setShowUpdateModal(true);
+    }
+    return result;
+  }, []);
+
   useEffect(() => { feedback.configure(settings.soundEnabled, settings.hapticEnabled); }, [settings.soundEnabled, settings.hapticEnabled]);
+
+  useEffect(() => {
+    if (!isReady || !settings.hasCompletedOnboarding || settings.autoCheckUpdates === false || checkedForUpdate.current || !isGithubUpdaterEnabled()) return;
+    checkedForUpdate.current = true;
+    void handleCheckForUpdates();
+  }, [handleCheckForUpdates, isReady, settings.autoCheckUpdates, settings.hasCompletedOnboarding]);
 
   useEffect(() => {
     if (isReady) setCurrentScreen(settings.hasCompletedOnboarding ? 'dashboard' : 'onboarding');
@@ -90,10 +111,15 @@ export default function App() {
               logs={todayLogs}
               history={history}
               onAddDrink={handleAddDrink}
-              onOpenSettings={() => setCurrentScreen('settings')}
-              onOpenChallenges={() => setCurrentScreen('challenges')}
+              onOpenChallenges={() => {
+                setChallengesFocus('top');
+                setCurrentScreen('challenges');
+              }}
+              onOpenHydrationCalendar={() => {
+                setChallengesFocus('calendar');
+                setCurrentScreen('challenges');
+              }}
               onOpenPoolParty={() => setCurrentScreen('pool_party')}
-              onOpenMascotLocker={() => setCurrentScreen('mascots')}
               onUpdateVisibleBeverages={(keys) => handleUpdateSettings({ visibleBeverages: keys })}
             />
           )}
@@ -112,6 +138,7 @@ export default function App() {
             <ChallengesScreen
               settings={settings}
               history={history}
+              initialFocus={challengesFocus}
               onBack={() => setCurrentScreen('dashboard')}
               onSelectChallenge={(chId) => {
                 handleUpdateSettings({ activeChallengeId: chId });
@@ -139,8 +166,10 @@ export default function App() {
               onOpenPoolParty={() => setCurrentScreen('pool_party')}
               onOpenPaywall={() => setCurrentScreen('paywall')}
               onOpenAuth={() => setShowAuthModal(true)}
+              onRedeemCode={redeemOwnerAccess}
               onResetData={handleResetData}
               reminderStatus={reminderStatus}
+              onCheckForUpdates={handleCheckForUpdates}
             />
           )}
 
@@ -174,7 +203,10 @@ export default function App() {
         {isTabScreen && (
           <BottomTabBar
             activeTab={currentScreen as TabId}
-            onSelectTab={(tab) => setCurrentScreen(tab)}
+            onSelectTab={(tab) => {
+              if (tab === 'challenges') setChallengesFocus('top');
+              setCurrentScreen(tab);
+            }}
           />
         )}
 
@@ -186,6 +218,12 @@ export default function App() {
           syncStatus={syncStatus}
           onSync={syncNow}
           onDeleted={clearDeletedAccount}
+        />}
+
+        {showUpdateModal && <UpdateModal
+          visible={showUpdateModal}
+          updateInfo={updateInfo}
+          onClose={() => setShowUpdateModal(false)}
         />}
 
       </SafeAreaProvider>

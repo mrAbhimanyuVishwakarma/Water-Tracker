@@ -117,6 +117,6 @@ npx.cmd eas-cli@latest build --platform android --profile development
 npx.cmd eas-cli@latest build --platform android --profile production
 ```
 
-Use the production AAB in a Play testing track. Verify real login, reboot/session restoration, two-device recovery, account isolation, reminders, purchase completion/cancellation/pending state, restore after reinstall, renewal/expiry and refund/revocation. Check final merged manifest permissions in the actual AAB as well as app config. Production code removes APK self-updating and blocks its install permission.
+Use the production AAB in a Play testing track. Verify real login, reboot/session restoration, two-device recovery, account isolation, reminders, purchase completion/cancellation/pending state, restore after reinstall, renewal/expiry and refund/revocation. Check final merged manifest permissions in the actual AAB as well as app config. The production profile removes APK self-updating and blocks its install permission; only the separately distributed `github-apk` profile enables it. See [GitHub APK updates](GITHUB_APK_UPDATES.md).
 
 Finally, verify the merchant payments profile, bank/tax details and transaction reports. Sandbox purchases do not generate a bank payout. An eventual real payout is a separate verification after merchant onboarding and real sales.

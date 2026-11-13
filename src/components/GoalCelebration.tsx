@@ -1,20 +1,30 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, ActivityIndicator, AppState, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  AccessibilityInfo,
+  ActivityIndicator,
+  AppState,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEventListener } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { MascotId } from '../types';
 import { dayKey } from '../utils/accountData';
 import { feedback } from '../utils/feedback';
-import { CrispVectorMascot } from './CrispVectorMascot';
 
-const VIDEOS: Partial<Record<MascotId, number>> = {
-  dodo: require('../../assets/dodo_sipping.mp4'),
-  sloth: require('../../assets/sloth_sipping.mp4'),
-  turtle: require('../../assets/turtle_sipping.mp4'),
-  mammoth: require('../../assets/mammoth_sipping.mp4'),
-  penguin: require('../../assets/penguin_sipping.mp4'),
+const VIDEOS: Record<MascotId, number> = {
+  brownie: require('../../assets/brownie_sipping_clean.mp4'),
+  dodo: require('../../assets/dodo_sipping_clean.mp4'),
+  sloth: require('../../assets/sloth_sipping_clean.mp4'),
+  turtle: require('../../assets/turtle_sipping_clean.mp4'),
+  mammoth: require('../../assets/mammoth_sipping_clean.mp4'),
+  penguin: require('../../assets/penguin_sipping_clean.mp4'),
 };
+
 const CELEBRATED_KEY = '@brownie_goal_celebrated_day';
 let celebratedDay: string | null = null;
 
@@ -22,11 +32,14 @@ let celebratedDay: string | null = null;
 export function useGoalCelebration(isFilled: boolean) {
   const previous = useRef(isFilled);
   const [autoPlay, setAutoPlay] = useState(false);
+
   if (!isFilled && autoPlay) setAutoPlay(false);
+
   useEffect(() => {
     const crossed = isFilled && !previous.current;
     previous.current = isFilled;
     let cancelled = false;
+
     if (crossed) {
       const day = dayKey(Date.now());
       void AsyncStorage.getItem(CELEBRATED_KEY).catch(() => null).then(savedDay => {
@@ -34,119 +47,181 @@ export function useGoalCelebration(isFilled: boolean) {
         celebratedDay = day;
         void AsyncStorage.setItem(CELEBRATED_KEY, day).catch(() => {});
         feedback.triggerHaptic('success');
-        feedback.playWaterDropSound();
         setAutoPlay(true);
       });
     }
+
     return () => { cancelled = true; };
   }, [isFilled]);
+
   return autoPlay;
 }
 
-function SippingVideo({ source, onDone, onError }: { source: number; onDone: () => void; onError: () => void }) {
+function SippingVideo({
+  source,
+  playRequest,
+  soundEnabled,
+  onError,
+}: {
+  source: number;
+  playRequest: number;
+  soundEnabled: boolean;
+  onError: () => void;
+}) {
   const [ready, setReady] = useState(false);
+  const wantsPlayback = useRef(false);
   const player = useVideoPlayer(source, instance => {
-    instance.muted = true;
+    instance.muted = !soundEnabled;
     instance.loop = false;
     instance.staysActiveInBackground = false;
   });
-  useEventListener(player, 'playToEnd', onDone);
-  const updatePlayback = useCallback(() => {
+
+  const resetToFirstFrame = useCallback(() => {
+    wantsPlayback.current = false;
+    player.pause();
+    player.currentTime = 0;
+  }, [player]);
+
+  useEventListener(player, 'playToEnd', resetToFirstFrame);
+
+  useEffect(() => {
+    player.muted = !soundEnabled;
+  }, [player, soundEnabled]);
+
+  const updatePlaybackForAppState = useCallback(() => {
     const visible = Platform.OS !== 'web' || typeof document === 'undefined' || !document.hidden;
     // AppState may be null while the native bridge initializes.
     const foreground = AppState.currentState === null || AppState.currentState === 'active';
-    if (player.status === 'error') { onError(); return; }
-    if (foreground && visible && player.status === 'readyToPlay') player.play();
-    else if (!foreground || !visible) player.pause();
-  }, [player, onError]);
-  useEventListener(player, 'statusChange', updatePlayback);
+
+    if (player.status === 'error') {
+      onError();
+      return;
+    }
+
+    if (!foreground || !visible) player.pause();
+    else if (wantsPlayback.current && player.status === 'readyToPlay') player.play();
+  }, [onError, player]);
+
+  useEventListener(player, 'statusChange', updatePlaybackForAppState);
+
   useEffect(() => {
-    updatePlayback();
-    const subscription = AppState.addEventListener('change', updatePlayback);
-    if (Platform.OS === 'web' && typeof document !== 'undefined') document.addEventListener('visibilitychange', updatePlayback);
+    updatePlaybackForAppState();
+    const subscription = AppState.addEventListener('change', updatePlaybackForAppState);
+
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', updatePlaybackForAppState);
+    }
+
     return () => {
       player.pause();
       subscription.remove();
-      if (Platform.OS === 'web' && typeof document !== 'undefined') document.removeEventListener('visibilitychange', updatePlayback);
+      if (Platform.OS === 'web' && typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', updatePlaybackForAppState);
+      }
     };
-  }, [player, updatePlayback]);
+  }, [player, updatePlaybackForAppState]);
+
+  useEffect(() => {
+    if (!ready || playRequest === 0) return;
+    wantsPlayback.current = true;
+    player.currentTime = 0;
+    player.play();
+  }, [playRequest, player, ready]);
+
   useEffect(() => {
     if (ready) return;
     const timeout = setTimeout(onError, 15000);
     return () => clearTimeout(timeout);
   }, [ready, onError]);
-  return <>
-    <VideoView player={player} style={styles.video}
-      contentFit="contain" nativeControls={false} surfaceType="textureView"
-      onFirstFrameRender={() => setReady(true)} />
-    {!ready && <View pointerEvents="none" style={styles.loading}>
-      <ActivityIndicator color="#0284C7" accessibilityLabel="Loading celebration" />
-    </View>}
-  </>;
+
+  return (
+    <>
+      <VideoView
+        player={player}
+        style={styles.video}
+        contentFit="contain"
+        nativeControls={false}
+        surfaceType="textureView"
+        onFirstFrameRender={() => setReady(true)}
+      />
+      {!ready && (
+        <View pointerEvents="none" style={styles.loading}>
+          <ActivityIndicator color="#0284C7" accessibilityLabel="Loading celebration" />
+        </View>
+      )}
+    </>
+  );
 }
 
-export function GoalCelebration({ mascotId, width, height, autoPlay }: {
-  mascotId: MascotId; width: number; height: number; autoPlay: boolean;
+export function GoalCelebration({ mascotId, width, height, autoPlay, soundEnabled }: {
+  mascotId: MascotId;
+  width: number;
+  height: number;
+  autoPlay: boolean;
+  soundEnabled: boolean;
 }) {
   const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);
-  const [playing, setPlaying] = useState(false);
   const [playbackError, setPlaybackError] = useState(false);
-  const [replayId, setReplayId] = useState(0);
+  const [playRequest, setPlayRequest] = useState(0);
+  const attempted = useRef(false);
   const source = VIDEOS[mascotId];
-  const [previousMascot, setPreviousMascot] = useState(mascotId);
-  if (previousMascot !== mascotId) {
-    setPreviousMascot(mascotId);
-    setPlaying(false);
-    setPlaybackError(false);
-  }
+
   useEffect(() => {
     let mounted = true;
-    void AccessibilityInfo.isReduceMotionEnabled().then(value => { if (mounted) setReduceMotion(value); }).catch(() => { if (mounted) setReduceMotion(true); });
-    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', value => {
-      setReduceMotion(value);
-      if (value) setPlaying(false);
-    });
+    void AccessibilityInfo.isReduceMotionEnabled()
+      .then(value => { if (mounted) setReduceMotion(value); })
+      .catch(() => { if (mounted) setReduceMotion(true); });
+    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduceMotion);
     return () => { mounted = false; subscription.remove(); };
   }, []);
-  const attempted = useRef(false);
+
   useEffect(() => {
-    if (!autoPlay || reduceMotion === null || attempted.current) return;
-    if (reduceMotion || !source) return;
-    const timeout = setTimeout(() => {
+    if (!autoPlay || reduceMotion === null || reduceMotion || attempted.current) return;
+    const startPlayback = setTimeout(() => {
       if (attempted.current) return;
       attempted.current = true;
-      setPlaying(true);
-    }, 350);
-    return () => clearTimeout(timeout);
-  }, [autoPlay, reduceMotion, source]);
+      setPlayRequest(value => value + 1);
+    }, 0);
+    return () => clearTimeout(startPlayback);
+  }, [autoPlay, reduceMotion]);
+
   const replay = () => {
+    if (reduceMotion) return;
     attempted.current = true;
     setPlaybackError(false);
-    setReplayId(value => value + 1);
-    setPlaying(true);
+    feedback.triggerHaptic('light');
+    setPlayRequest(value => value + 1);
   };
-  const finish = useCallback(() => setPlaying(false), []);
-  const fail = useCallback(() => {
-    setPlaying(false);
-    setPlaybackError(true);
-  }, []);
+
+  const fail = useCallback(() => setPlaybackError(true), []);
+
   return (
     <View style={[styles.container, { width, height }]}>
-      <Pressable style={styles.mascot} disabled={!source} onPress={replay}
-        accessibilityRole={source ? 'button' : 'image'}
-        accessibilityLabel={source ? 'Replay sipping celebration' : 'Daily hydration goal completed'}>
-        <CrispVectorMascot type="sipping" mascotId={mascotId} width={width} height={height - 70} />
-        {playing && source && <View pointerEvents="none" style={[styles.panel, { width, height: width * 9 / 16 }]}>
-          <SippingVideo key={`${source}-${replayId}`} source={source} onDone={finish} onError={fail} />
-        </View>}
+      <Pressable
+        style={styles.mascot}
+        disabled={reduceMotion === true}
+        onPress={replay}
+        accessibilityRole={reduceMotion ? 'image' : 'button'}
+        accessibilityLabel={reduceMotion ? 'Daily hydration goal completed' : 'Replay sipping celebration'}
+        accessibilityHint={reduceMotion ? undefined : 'Plays the character animation once'}
+      >
+        <View pointerEvents="none" style={styles.panel}>
+          <SippingVideo
+            source={source}
+            playRequest={playRequest}
+            soundEnabled={soundEnabled}
+            onError={fail}
+          />
+        </View>
       </Pressable>
+
       <View style={styles.footer}>
-        <Text style={styles.badge} accessibilityRole="text">🏆 100% GOAL CRUSHED!</Text>
-        {source && <Pressable accessibilityRole="button" accessibilityLabel="Replay sipping celebration"
-          onPress={replay} style={styles.replay}>
-          <Text style={styles.replayText}>? Replay celebration</Text>
-        </Pressable>}
-        {playbackError && <Text accessibilityLiveRegion="polite" style={styles.error}>Couldn?t play the celebration. Tap replay to try again.</Text>}
+        <Text style={styles.badge} accessibilityRole="text">100% GOAL CRUSHED!</Text>
+        {playbackError && (
+          <Text accessibilityLiveRegion="polite" style={styles.error}>
+            Couldn&apos;t play the celebration. Tap the character to try again.
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -154,13 +229,37 @@ export function GoalCelebration({ mascotId, width, height, autoPlay }: {
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', justifyContent: 'center' },
-  mascot: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 70, alignItems: 'center', justifyContent: 'center' },
-  panel: { position: 'absolute', borderRadius: 22, overflow: 'hidden' },
+  mascot: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  panel: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+  },
   video: { width: '100%', height: '100%' },
-  loading: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F9FF' },
-  error: { fontSize: 12, color: '#9A3412', textAlign: 'center' },
+  loading: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  error: { fontSize: 12, color: '#9A3412', textAlign: 'center', marginTop: 8 },
   footer: { position: 'absolute', bottom: 0, alignItems: 'center' },
-  badge: { backgroundColor: '#0284C7', color: '#FFFFFF', fontWeight: '900', fontSize: 12, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
-  replay: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 16 },
-  replayText: { color: '#0369A1', fontSize: 13, fontWeight: '700' },
+  badge: {
+    backgroundColor: '#0284C7',
+    color: '#FFFFFF',
+    fontWeight: '900',
+    fontSize: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 16,
+  },
 });

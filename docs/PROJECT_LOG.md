@@ -1,11 +1,24 @@
 # Water Tracker Project Log & Technical Master Handover
 
-> **Last Updated:** 2026-10-27  
+> **Last Updated:** 2026-11-13
 > **Project Name:** Water Tracker (Brownie the Capybara Water Tracker)  
 > **Framework:** Expo SDK 58 / React Native 0.88 (New Architecture / Fabric / TurboModules Enabled)  
 > **Package ID:** `com.brownie.watertracker`  
 > **Repository:** `https://github.com/mrAbhimanyuVishwakarma/Water-Tracker`  
 > **Releases URL:** `https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases`
+
+---
+
+## v0.0.2 implementation update (2026-11-13)
+
+- Added a reusable 1,000–6,000 ml hydration-goal slider to onboarding and Settings. Pointer math now uses fixed screen coordinates to prevent drag flicker.
+- Reworked onboarding safe-area spacing, made the final target screen scrollable, and replaced the missing vector preview with Brownie's bundled character artwork.
+- Primary hydration goals are now multi-select and appear in the dashboard habit stack beneath the mascot.
+- Added Milkshake and Cold Drink as full beverage types with default servings and effective-hydration multipliers.
+- Added a local/cloud-backed user profile form for name, gender, weight, height, health context, medication notes, and appointment notes. Calendar integration remains a future permission-based feature.
+- Added a user-confirmed GitHub Releases updater using Expo FileSystem and Android IntentLauncher, with Samsung Auto Blocker guidance.
+- Split Android packaging: `github-apk` enables `REQUEST_INSTALL_PACKAGES`; `production` explicitly blocks it for Google Play policy compatibility.
+- Version bumped to 0.0.2 / Android versionCode 2. Release copy is in [`releases/v0.0.2.md`](releases/v0.0.2.md).
 
 ---
 

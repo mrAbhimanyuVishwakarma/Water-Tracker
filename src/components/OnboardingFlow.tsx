@@ -4,10 +4,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Dimensions,
-  SafeAreaView,
   ScrollView,
+  Image,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -18,10 +18,9 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { InteractivePoolScreen } from './InteractivePoolScreen';
-import { CrispVectorMascot } from './CrispVectorMascot';
+import { HydrationGoalSlider } from './HydrationGoalSlider';
 import { UserHealthProfile, UserSettings } from '../types';
 import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
@@ -29,8 +28,6 @@ import {
   DEFAULT_HEALTH_PROFILE,
   calculatePersonalizedGoal,
 } from '../constants/beverages';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface Props {
   onComplete: (settings: Partial<UserSettings>) => void;
@@ -43,6 +40,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
   const [profile, setProfile] = useState<UserHealthProfile>(DEFAULT_HEALTH_PROFILE);
   const [reminders, setReminders] = useState<boolean>(true);
   const [intervalMin, setIntervalMin] = useState<number>(90);
+  const [dailyTarget, setDailyTarget] = useState<number | null>(null);
 
   // Bobbing animation for mascot
   const bobbing = useSharedValue(0);
@@ -55,7 +53,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
       -1,
       true
     );
-  }, []);
+  }, [bobbing]);
 
   const bobbingStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: bobbing.value }],
@@ -63,6 +61,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
   // Target volume computed in real-time from health profile
   const calculatedTarget = calculatePersonalizedGoal(profile);
+  const selectedTarget = dailyTarget ?? calculatedTarget;
 
   // Step 1: The Interactive Swimming Pool Hero (Notion Build 3)
   if (step === 1) {
@@ -80,7 +79,10 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
   if (step === 2) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[styles.introContent, { paddingBottom: Math.max(insets.bottom, 20) + 12 }]}
+        >
           <Animated.View entering={FadeInDown.duration(600)} style={styles.header}>
             <Text style={styles.stepBadge}>STEP 1 OF 5</Text>
             <Text style={styles.title}>Track your intake</Text>
@@ -90,11 +92,11 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
           </Animated.View>
 
           <Animated.View style={[styles.characterCard, bobbingStyle]} entering={FadeIn.delay(200)}>
-            <CrispVectorMascot
-              type="sipping"
-              mascotId="brownie"
-              width={160}
-              height={160}
+            <Image
+              source={require('../../assets/brownie_sipping.png')}
+              style={styles.characterImage}
+              resizeMode="contain"
+              accessibilityLabel="Brownie the capybara"
             />
             <Text style={styles.characterName}>Brownie</Text>
             <Text style={styles.characterBio}>
@@ -119,14 +121,15 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
               <Text style={styles.primaryButtonText}>CONTINUE</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
 
   // Step 3: Motivation & Gender
   if (step === 3) {
-    const goals: { id: UserHealthProfile['primaryGoal']; title: string; icon: string; desc: string }[] = [
+    type GoalId = UserHealthProfile['primaryGoals'][number];
+    const goals: { id: GoalId; title: string; icon: string; desc: string }[] = [
       { id: 'skin', title: 'Glowing Skin', icon: '🌸', desc: 'Moisturized, radiant complexion' },
       { id: 'energy', title: 'Sustained Energy', icon: '⚡', desc: 'Zero afternoon brain fog crashes' },
       { id: 'weight', title: 'Weight Balance', icon: '⚖️', desc: 'Control cravings & boost metabolism' },
@@ -135,7 +138,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: Math.max(insets.bottom, 20) + 28 }]} showsVerticalScrollIndicator={false}>
           <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
             <Text style={styles.stepBadge}>STEP 2 OF 5</Text>
             <Text style={styles.title}>What drives you?</Text>
@@ -179,7 +182,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
           <Text style={[styles.sectionLabel, { marginTop: 24 }]}>PRIMARY GOAL</Text>
           <View style={styles.cardList}>
             {goals.map((g) => {
-              const active = profile.primaryGoal === g.id;
+              const active = profile.primaryGoals.includes(g.id);
               return (
                 <TouchableOpacity
                   key={g.id}
@@ -187,7 +190,10 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
                   activeOpacity={0.8}
                   onPress={() => {
                     feedback.triggerHaptic('light');
-                    setProfile({ ...profile, primaryGoal: g.id });
+                    const primaryGoals = active
+                      ? profile.primaryGoals.filter(goal => goal !== g.id)
+                      : [...profile.primaryGoals, g.id];
+                    setProfile({ ...profile, primaryGoals: primaryGoals.length ? primaryGoals : [g.id] });
                   }}
                 >
                   <Text style={styles.goalIcon}>{g.icon}</Text>
@@ -197,7 +203,9 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
                     </Text>
                     <Text style={styles.goalCardDesc}>{g.desc}</Text>
                   </View>
-                  <View style={[styles.radioCircle, active && styles.radioCircleActive]} />
+                  <View style={[styles.checkbox, active && styles.checkboxActive]}>
+                    {active && <Ionicons name="checkmark" size={15} color="#FFFFFF" />}
+                  </View>
                 </TouchableOpacity>
               );
             })}
@@ -237,7 +245,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: Math.max(insets.bottom, 20) + 28 }]} showsVerticalScrollIndicator={false}>
           <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
             <Text style={styles.stepBadge}>STEP 3 OF 5</Text>
             <Text style={styles.title}>Body & Lifestyle</Text>
@@ -384,7 +392,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={[styles.scrollContent, { paddingBottom: Math.max(insets.bottom, 20) + 28 }]} showsVerticalScrollIndicator={false}>
           <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
             <Text style={styles.stepBadge}>STEP 4 OF 5</Text>
             <Text style={styles.title}>Smart Reminders</Text>
@@ -476,7 +484,10 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
   // Step 6: Grand Celebration & Target Reveal
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.finalContent, { paddingBottom: Math.max(insets.bottom, 20) + 12 }]}
+      >
         <Animated.View entering={FadeInDown.duration(600)} style={styles.header}>
           <Text style={styles.stepBadge}>TARGET READY</Text>
           <Text style={styles.title}>Your Daily Goal</Text>
@@ -487,8 +498,12 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
         {/* Big Volume Metric Display */}
         <Animated.View entering={FadeIn.delay(200)} style={styles.goalDisplayContainer}>
-          <Text style={styles.goalNumberText}>{formatVolume(calculatedTarget, unit)}</Text>
+          <Text style={styles.goalNumberText}>{formatVolume(selectedTarget, unit)}</Text>
           <Text style={styles.goalSubText}>per day</Text>
+
+          <View style={styles.goalSliderInset}>
+            <HydrationGoalSlider value={selectedTarget} unit={unit} onChange={setDailyTarget} />
+          </View>
 
           {/* Unit Toggle Pill */}
           <View style={styles.unitToggleContainer}>
@@ -529,7 +544,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
               feedback.triggerHaptic('success');
               feedback.playPourSound();
               onComplete({
-                dailyTarget: calculatedTarget,
+                dailyTarget: selectedTarget,
                 unit,
                 hasCompletedOnboarding: true,
                 healthProfile: profile,
@@ -541,7 +556,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
             <Text style={styles.primaryButtonText}>START HYDRATING</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -556,6 +571,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingTop: 24,
     justifyContent: 'space-between',
+  },
+  introContent: {
+    flexGrow: 1,
+    paddingHorizontal: 28,
+    paddingTop: 16,
+    justifyContent: 'space-between',
+  },
+  finalContent: {
+    flexGrow: 1,
+    paddingHorizontal: 28,
+    paddingTop: 16,
   },
   scrollContent: {
     paddingHorizontal: 24,
@@ -685,6 +711,19 @@ const styles = StyleSheet.create({
   radioCircleActive: {
     borderColor: '#0284C7',
     borderWidth: 7,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#CBD5E1',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxActive: {
+    borderColor: '#0284C7',
+    backgroundColor: '#0284C7',
   },
   weightBox: {
     backgroundColor: '#F8FAFC',
@@ -890,6 +929,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#0369A1',
     marginTop: 4,
+  },
+  goalSliderInset: {
+    width: '100%',
+    paddingHorizontal: 24,
   },
   unitToggleContainer: {
     flexDirection: 'row',

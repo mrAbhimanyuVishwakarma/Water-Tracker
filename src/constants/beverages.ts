@@ -82,6 +82,16 @@ export const BEVERAGES: Record<string, BeverageConfig> = {
     hydrationMultiplier: 0.9,
     category: 'healthy',
   },
+  milkshake: {
+    type: 'milkshake',
+    label: 'Milkshake',
+    color: '#F472B6',
+    waveColor: '#DB2777',
+    defaultAmount: 300,
+    icon: 'ice-cream-outline',
+    hydrationMultiplier: 0.8,
+    category: 'other',
+  },
   milk: {
     type: 'milk',
     label: 'Milk',
@@ -109,6 +119,16 @@ export const BEVERAGES: Record<string, BeverageConfig> = {
     waveColor: '#DC2626',
     defaultAmount: 330,
     icon: 'sparkles-outline',
+    hydrationMultiplier: 0.7,
+    category: 'other',
+  },
+  cold_drink: {
+    type: 'cold_drink',
+    label: 'Cold Drink',
+    color: '#6366F1',
+    waveColor: '#4F46E5',
+    defaultAmount: 330,
+    icon: 'snow-outline',
     hydrationMultiplier: 0.7,
     category: 'other',
   },
@@ -203,7 +223,7 @@ export const DEFAULT_HEALTH_PROFILE: UserHealthProfile = {
   climate: 'mild',
   wakeTime: '07:30',
   sleepTime: '23:00',
-  primaryGoal: 'energy',
+  primaryGoals: ['energy'],
 };
 
 export function calculatePersonalizedGoal(profile: UserHealthProfile): number {
@@ -298,6 +318,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   mascotTrialStartedAt: null,
   hasUsedMascotTrial: false,
   userAccount: null,
+  autoCheckUpdates: true,
 };
 
 export const CHALLENGES: Challenge[] = [
@@ -359,6 +380,21 @@ export const CHALLENGES: Challenge[] = [
       'Rehydrates brain and body after 8h sleep',
       'Kicks off morning metabolism',
       'Increases immediate morning alertness',
+    ],
+    active: false,
+  },
+  {
+    id: 'skin_glow',
+    name: 'Skin Glow-Up',
+    character: 'Brownie',
+    badge: 'Glow',
+    color: '#DB2777',
+    durationDays: 10,
+    description: 'Log water consistently across the day instead of catching up at night.',
+    benefits: [
+      'Builds a steadier daily hydration rhythm',
+      'Reduces end-of-day water catch-up',
+      'Pairs hydration with a simple self-care cue',
     ],
     active: false,
   },

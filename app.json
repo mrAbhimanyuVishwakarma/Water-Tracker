@@ -2,7 +2,7 @@
   "expo": {
     "name": "WaterTrackerBrownie",
     "slug": "brownie-water-tracker",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,7 +11,7 @@
     },
     "android": {
       "package": "com.brownie.watertracker",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#38BDF8",
         "foregroundImage": "./assets/android-icon-foreground.png",

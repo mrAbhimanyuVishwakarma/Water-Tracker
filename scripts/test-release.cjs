@@ -88,6 +88,34 @@ test('repeated log merges are idempotent and preserve negative effective hydrati
   assert.deepEqual(mergeLogs(result, result), result);
 });
 
+test('daily goals and streak history use effective hydration instead of poured volume', () => {
+  const storage = memoryStorage();
+  const load = loader({ '@react-native-async-storage/async-storage': storage });
+  const { historyFromLogs } = load('src/utils/storage.ts');
+  const { safeSettings } = load('src/utils/accountData.ts');
+  const coffee = { ...log('coffee'), type: 'coffee', amount: 250, effectiveAmount: 200 };
+  const [day] = historyFromLogs([coffee], safeSettings({ dailyTarget: 225 }), 1);
+  assert.equal(day.totalAmount, 250);
+  assert.equal(day.totalEffectiveAmount, 200);
+  assert.equal(day.achieved, false);
+});
+
+test('GitHub updater compares versions and remains gated to the dedicated Android build', () => {
+  const load = loader({
+    'react-native': { Platform: { OS: 'android' }, Linking: { openSettings: async () => {} } },
+    'expo-constants': { __esModule: true, default: { expoConfig: { version: '0.0.2', extra: { githubApkUpdates: true } } } },
+    'expo-device': { manufacturer: 'Samsung' },
+    'expo-file-system/legacy': {},
+    'expo-intent-launcher': {},
+  });
+  const updater = load('src/utils/updater.ts');
+  assert.equal(updater.isNewerVersion('v0.0.3', '0.0.2'), true);
+  assert.equal(updater.isNewerVersion('0.0.2', '0.0.2'), false);
+  assert.equal(updater.isNewerVersion('0.0.1', '0.0.2'), false);
+  assert.equal(updater.isGithubUpdaterEnabled(), true);
+  assert.equal(updater.isSamsungDevice(), true);
+});
+
 test('reminders exclude sleep hours, support overnight waking hours, and reject invalid settings', () => {
   const { reminderTimes } = loader()('src/utils/reminderTimes.ts');
   assert.deepEqual(reminderTimes('08:00', '12:00', 90), [{ hour: 9, minute: 30 }, { hour: 11, minute: 0 }]);

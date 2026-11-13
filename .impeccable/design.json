@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T00:00:00+05:30",
+  "title": "Design System: Brownie Water Tracker",
+  "extensions": {
+    "colorMeta": {
+      "canvas": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#fefcf9" },
+      "surface": { "role": "neutral", "displayName": "Clean Surface", "canonical": "#ffffff" },
+      "ink": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#131313" },
+      "button-hover": { "role": "neutral", "displayName": "Raised Ink", "canonical": "#353535" },
+      "muted-ink": { "role": "neutral", "displayName": "Quiet Gray", "canonical": "#737373" },
+      "positive": { "role": "primary", "displayName": "Fresh Hydration Green", "canonical": "#3cb371", "tonalRamp": ["#0d2819", "#16422a", "#205d3b", "#2a794d", "#3cb371", "#72ca96", "#b3e4c6", "#eefaf3"] },
+      "positive-ink": { "role": "primary", "displayName": "Deep Hydration Green", "canonical": "#25754a" },
+      "coral": { "role": "secondary", "displayName": "Alert Coral", "canonical": "#fe6f61", "tonalRamp": ["#3d1511", "#65221c", "#913027", "#bc4035", "#fe6f61", "#ff9c92", "#ffc9c4", "#fff2f0"] },
+      "danger-ink": { "role": "secondary", "displayName": "Deep Alert Coral", "canonical": "#b54036" },
+      "pool-blue": { "role": "primary", "displayName": "Pool Blue", "canonical": "#6bd6e1", "tonalRamp": ["#0f2d30", "#17494e", "#21676d", "#2c858d", "#3fa8b2", "#6bd6e1", "#b6edf2", "#effcfd"] },
+      "line": { "role": "neutral", "displayName": "Warm Divider", "canonical": "#e9e6e1" },
+      "dark-canvas": { "role": "neutral", "displayName": "Night Canvas", "canonical": "#161615" },
+      "dark-surface": { "role": "neutral", "displayName": "Night Surface", "canonical": "#232321" },
+      "dark-ink": { "role": "neutral", "displayName": "Chalk Ink", "canonical": "#f4f2ed" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and page-opening headlines." },
+      "headline": { "displayName": "Headline", "purpose": "Major section headings." },
+      "title": { "displayName": "Title", "purpose": "Card and subsection titles." },
+      "body": { "displayName": "Body", "purpose": "Default prose and interface copy." },
+      "label": { "displayName": "Eyebrow", "purpose": "Uppercase context labels and metadata." }
+    },
+    "shadows": [
+      { "name": "floating-light", "value": "0 25px 50px -12px rgb(0 0 0 / 25%)", "purpose": "Overlapping hero callouts, mobile navigation, and temporary overlays in light mode." },
+      { "name": "floating-dark", "value": "0 25px 50px -12px rgb(0 0 0 / 50%)", "purpose": "The same floating layer in dark mode." },
+      { "name": "floating-mobile", "value": "0 12px 28px -14px rgb(0 0 0 / 24%)", "purpose": "Hero callouts after they enter mobile document flow." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "200ms ease", "purpose": "Small hover lifts and disclosure rotation." },
+      { "name": "progress", "value": "250ms ease", "purpose": "Hydration progress-width changes." },
+      { "name": "shoreline", "value": "10s linear infinite", "purpose": "Slow repeating wave-mask movement when motion is enabled." },
+      { "name": "swimmer-travel", "value": "distance / 45px per second, out and back", "purpose": "Mascot pool travel with a direction flip at each edge." }
+    ],
+    "breakpoints": [
+      { "name": "wide", "value": "1441px" },
+      { "name": "compact-desktop", "value": "1100px" },
+      { "name": "navigation-collapse", "value": "860px" },
+      { "name": "mobile", "value": "700px" },
+      { "name": "narrow-mobile", "value": "380px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default high-emphasis action: compact, ink-filled, and fully rounded.",
+      "html": "<button class=\"ds-btn-primary\">Get Brownie for Android</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 20px;border:1px solid var(--ink,#131313);border-radius:9999px;background:var(--ink,#131313);color:var(--canvas,#fefcf9);font:700 14px/20px Lato,Arial,sans-serif;cursor:pointer}.ds-btn-primary:hover{background:var(--button-hover,#353535)}.ds-btn-primary:focus-visible{outline:2px solid var(--ink,#131313);outline-offset:5px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "An outlined companion action that inverts on hover.",
+      "html": "<button class=\"ds-btn-secondary\">See how it works</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 20px;border:1px solid var(--ink,#131313);border-radius:9999px;background:transparent;color:var(--ink,#131313);font:700 14px/20px Lato,Arial,sans-serif;cursor:pointer}.ds-btn-secondary:hover{background:var(--ink,#131313);color:var(--canvas,#fefcf9)}.ds-btn-secondary:focus-visible{outline:2px solid var(--ink,#131313);outline-offset:5px}"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A flat, outlined content card with generous padding and an underlined hover title.",
+      "html": "<article class=\"ds-feature-card\"><span class=\"ds-index\">01</span><h3>Gentle reminders</h3><p>Build a rhythm that works around your day.</p></article>",
+      "css": ".ds-feature-card{position:relative;padding:28px;border:1px solid var(--ink,#131313);border-radius:12px;background:var(--surface,#fff);color:var(--ink,#131313);font-family:Lato,Arial,sans-serif}.ds-feature-card h3{margin:28px 0 10px;font-size:18px;line-height:1.45}.ds-feature-card p{margin:0;color:var(--muted-ink,#737373);font-size:15px;line-height:1.5}.ds-feature-card:hover h3{text-decoration:underline;text-underline-offset:5px}.ds-index{position:absolute;top:28px;right:28px;color:var(--muted-ink,#737373);font-size:12px}"
+    },
+    {
+      "name": "Floating Status Card",
+      "kind": "card",
+      "description": "A homepage-only callout that floats around the phone preview and colors only semantic details.",
+      "html": "<div class=\"ds-floating-card\"><span class=\"ds-status-dot\" aria-hidden=\"true\"></span><span><strong>Daily goal</strong><small>Progress, one sip at a time</small></span></div>",
+      "css": ".ds-floating-card{display:flex;align-items:center;gap:16px;width:248px;padding:20px;border:1px solid var(--ink,#131313);border-radius:12px;background:var(--surface,#fff);box-shadow:0 25px 50px -12px rgb(0 0 0 / 25%);color:var(--ink,#131313);font-family:Lato,Arial,sans-serif;transition:translate .2s}.ds-floating-card:hover{translate:0 -4px}.ds-floating-card strong{display:block;color:var(--positive-ink,#25754a);font-size:16px;line-height:1.4}.ds-floating-card small{display:block;margin-top:2px;color:var(--muted-ink,#737373);font-size:13px;line-height:1.5}.ds-status-dot{width:20px;height:20px;border:5px solid var(--positive,#3cb371);border-radius:50%}"
+    },
+    {
+      "name": "FAQ Disclosure",
+      "kind": "custom",
+      "description": "A native, keyboard-friendly disclosure contained in one outlined surface.",
+      "html": "<details class=\"ds-faq\"><summary>Can I use Brownie without an account?<span aria-hidden=\"true\">⌄</span></summary><p>Yes. Core tracking works locally without an account.</p></details>",
+      "css": ".ds-faq{border:1px solid var(--ink,#131313);border-radius:12px;background:var(--surface,#fff);color:var(--ink,#131313);font-family:Lato,Arial,sans-serif}.ds-faq summary{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px;padding:24px;cursor:pointer;list-style:none}.ds-faq summary:focus-visible{outline:2px solid var(--ink,#131313);outline-offset:-5px;border-radius:10px}.ds-faq summary span{transition:rotate .2s}.ds-faq[open] summary span{rotate:180deg}.ds-faq p{margin:0;padding:0 24px 24px;color:var(--muted-ink,#737373);font-size:15px;line-height:1.65}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Friendly Poolside Field Guide",
+    "overview": "Brownie Water Tracker combines the clarity of a practical wellness tool with the companionship of a small illustrated world. Warm paper, a visible grid, ink outlines, and compact Lato typography keep information trustworthy; animated mascots and turquoise water keep it friendly.",
+    "keyCharacteristics": [
+      "Warm, gridded canvas with clean white surfaces and ink-black structure",
+      "Friendly illustrated mascots used as product companions, never decoration alone",
+      "Turquoise water as the signature environmental motif",
+      "Green and coral reserved for meaningful positive and caution states",
+      "Compact, bold Lato hierarchy with plain-spoken, reassuring copy",
+      "Light and dark themes that retain the same hierarchy and semantic color roles"
+    ],
+    "rules": [
+      { "name": "The Ink-First Rule", "body": "Primary actions and structural borders use ink; Pool Blue belongs to the water world, not every control.", "section": "colors" },
+      { "name": "The One-Family Rule", "body": "Use Lato for every interface role. Hierarchy comes from weight, scale, spacing, and case—not a second display face.", "section": "typography" },
+      { "name": "The Mobile-Reflow Rule", "body": "Recompose, do not merely shrink: floating objects enter normal flow, paired layouts stack, and essential actions become full width only when space demands it.", "section": "layout" },
+      { "name": "The Flat-by-Default Rule", "body": "If a surface participates in normal document flow, prefer an ink border over a shadow.", "section": "elevation" },
+      { "name": "The Pill-for-Actions Rule", "body": "Filled and outlined calls to action are pills; content containers are not.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do preserve the warm canvas, visible 32px grid, ink outlines, and white surfaces as the system's default field.",
+      "Do use mascots to demonstrate companionship, progress, or product behavior.",
+      "Do reserve shadows for elements that overlap or temporarily float above the page."
+    ],
+    "donts": [
+      "Don't turn Pool Blue, green, or coral into general-purpose decoration across ordinary controls.",
+      "Don't add gradients, glassmorphism, blurred panels, or glossy app-store styling.",
+      "Don't animate continuously without viewport pausing, a user control, and a reduced-motion fallback."
+    ]
+  }
+}

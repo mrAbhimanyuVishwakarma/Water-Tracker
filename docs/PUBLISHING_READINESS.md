@@ -1,6 +1,6 @@
 # Publishing readiness
 
-Updated 2026-10-28. Target: **Google Play first**. Status: **implementation prepared locally; not approved for public release or real payments**.
+Updated 2026-11-13. Target: **Google Play first, with a separately configured GitHub APK**. Status: **implementation prepared locally; not approved for public release or real payments**.
 
 Follow [GOOGLE_PLAY_SETUP.md](GOOGLE_PLAY_SETUP.md) to configure and verify the external services. No remote database migration, provider setup, store product creation, payment, deployment, or publication was performed.
 
@@ -14,7 +14,7 @@ Follow [GOOGLE_PLAY_SETUP.md](GOOGLE_PLAY_SETUP.md) to configure and verify the 
 - Added authenticated account deletion, explicit confirmation, account-change protection and local cleanup. Google Play subscriptions and billing records remain separate and are disclosed in the flow.
 - Removed beta premium defaults. Integrated RevenueCat Google Play offerings, localized prices, purchase, restore, account association and verified entitlement checks. Pending/cancelled/failed purchases do not unlock premium. No fixed trial eligibility is advertised.
 - Added notification permission handling and daily reminders during waking hours, including overnight waking periods, quiet/sound channels and cancellation when reminders are off.
-- Removed GitHub APK self-updating. Native config explicitly removes installation, microphone, external-storage and overlay permissions, and disables Android OS app backup.
+- Added a user-confirmed GitHub APK updater behind the dedicated `github-apk` build profile, including Samsung Auto Blocker guidance. The Google Play production profile still blocks the package-install permission. Native config also removes microphone, external-storage and overlay permissions, and disables Android OS app backup.
 - Added configurable legal-page actions and a production configuration gate. Incomplete payment/legal configuration blocks the EAS production post-install check.
 - Replaced hardcoded streak/calendar achievements with saved hydration results. Challenges are presented as habit prompts, without fabricated completion milestones. Removed the currency preference that could not change Google Play pricing.
 - Preserved the original public Supabase connection in ignored local `.env`; no secret/service-role key was introduced into the app. Added `.env.example` and the setup guide.
@@ -23,9 +23,9 @@ Follow [GOOGLE_PLAY_SETUP.md](GOOGLE_PLAY_SETUP.md) to configure and verify the 
 
 | Check | Result |
 | --- | --- |
-| `npm.cmd test` | 14 passed, including actual embedded Postgres ownership/grant/constraint/cascade tests |
+| `npm.cmd test` | 16 passed, including updater gating/version tests and embedded Postgres ownership/grant/constraint/cascade tests |
 | `npx.cmd tsc --noEmit` | Passed |
-| `npx.cmd expo lint` | 0 errors; 28 remaining warnings in existing UI components, primarily unused variables/imports and animation hook dependencies |
+| `npx.cmd expo lint` | 0 errors; 12 remaining warnings in existing UI components, primarily unused variables/imports and one animation hook dependency |
 | `npx.cmd expo install --check` | Passed after updating to Expo 58.0.20; see subsequent Expo Doctor result for final dependencies |
 | `npx.cmd expo-doctor` | 20/20 checks passed with final native dependencies |
 | `npx.cmd expo export --platform android --output-dir dist/release-check` | Passed; Android Hermes bundle exported |

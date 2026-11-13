@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
-  Dimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,8 +13,6 @@ import { DayData, DrinkLog, UserSettings } from '../types';
 import { BEVERAGES } from '../constants/beverages';
 import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface Props {
   settings: UserSettings;
@@ -34,8 +30,6 @@ export const HistoryScreen: React.FC<Props> = ({
   onOpenChallenges,
 }) => {
   const insets = useSafeAreaInsets();
-  const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
-
   // Compute metrics for today
   const totalRaw = todayLogs.reduce((sum, l) => sum + l.amount, 0);
   const totalEffective = todayLogs.reduce((sum, l) => sum + (l.effectiveAmount ?? l.amount), 0);
@@ -52,7 +46,7 @@ export const HistoryScreen: React.FC<Props> = ({
 
   // 7-day display data
   const days7 = history.slice(-7);
-  const maxBarVolume = Math.max(settings.dailyTarget * 1.3, ...days7.map((d) => d.totalAmount), 2500);
+  const maxBarVolume = Math.max(settings.dailyTarget * 1.3, ...days7.map((d) => d.totalEffectiveAmount), 2500);
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 24) }]}>
@@ -119,8 +113,8 @@ export const HistoryScreen: React.FC<Props> = ({
           {/* Bar Chart Canvas */}
           <View style={styles.barChartContainer}>
             {days7.map((day, idx) => {
-              const heightPercent = Math.min((day.totalAmount / maxBarVolume) * 100, 100);
-              const isTargetMet = day.totalAmount >= settings.dailyTarget;
+              const heightPercent = Math.max(0, Math.min((day.totalEffectiveAmount / maxBarVolume) * 100, 100));
+              const isTargetMet = day.totalEffectiveAmount >= settings.dailyTarget;
               const dateObj = new Date(day.date);
               const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dateObj.getDay()] || `D${idx+1}`;
 
@@ -164,10 +158,12 @@ export const HistoryScreen: React.FC<Props> = ({
                 return (
                   <View key={type} style={styles.breakdownItem}>
                     <View style={[styles.bevDot, { backgroundColor: bev.color }]} />
-                    <Text style={styles.bevLabel}>{bev.label}</Text>
-                    <Text style={styles.bevFactorBadge}>
-                      {bev.hydrationMultiplier > 0 ? `${Math.round(bev.hydrationMultiplier * 100)}% Hydration` : 'Dehydrating'}
-                    </Text>
+                    <View style={styles.breakdownCopy}>
+                      <Text style={styles.bevLabel} numberOfLines={1}>{bev.label}</Text>
+                      <Text style={styles.bevFactorBadge} numberOfLines={1}>
+                        {bev.hydrationMultiplier > 0 ? `${Math.round(bev.hydrationMultiplier * 100)}% Hydration` : 'Dehydrating'}
+                      </Text>
+                    </View>
                     <Text style={styles.bevAmountText}>
                       {formatVolume(amount, settings.unit)} ({percent}%)
                     </Text>
@@ -196,8 +192,8 @@ export const HistoryScreen: React.FC<Props> = ({
                     <View style={[styles.feedIconCircle, { backgroundColor: bev.color }]}>
                       <Ionicons name={bev.icon as any} size={18} color="#FFFFFF" />
                     </View>
-                    <View style={{ flex: 1, marginLeft: 12 }}>
-                      <Text style={styles.feedTitle}>{bev.label}</Text>
+                    <View style={styles.feedCopy}>
+                      <Text style={styles.feedTitle} numberOfLines={1}>{bev.label}</Text>
                       <Text style={styles.feedTime}>{timeStr}</Text>
                     </View>
                     <Text style={styles.feedAmount}>
@@ -394,6 +390,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 16,
     gap: 10,
+    minHeight: 64,
   },
   bevDot: {
     width: 12,
@@ -404,7 +401,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#1E293B',
+  },
+  breakdownCopy: {
     flex: 1,
+    minWidth: 0,
+    gap: 4,
   },
   bevFactorBadge: {
     fontSize: 11,
@@ -414,11 +415,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
+    alignSelf: 'flex-start',
   },
   bevAmountText: {
     fontSize: 13,
     fontWeight: '800',
     color: '#475569',
+    flexShrink: 0,
+    textAlign: 'right',
   },
   feedCard: {
     backgroundColor: '#FFFFFF',
@@ -451,6 +455,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  feedCopy: {
+    flex: 1,
+    minWidth: 0,
+    marginLeft: 12,
+    marginRight: 12,
+  },
   feedTitle: {
     fontSize: 14,
     fontWeight: '700',
@@ -466,5 +476,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '800',
     color: '#0284C7',
+    flexShrink: 0,
+    fontVariant: ['tabular-nums'],
   },
 });

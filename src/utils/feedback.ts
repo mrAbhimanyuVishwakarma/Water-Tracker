@@ -60,6 +60,25 @@ class FeedbackManager {
     }
   }
 
+  async triggerSelectionHaptic() {
+    if (!this.hapticEnabled) return;
+    try {
+      if (Platform.OS === 'web') {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(8);
+        return;
+      }
+
+      if (Platform.OS === 'android' && typeof Haptics.performAndroidHapticsAsync === 'function') {
+        await Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Segment_Frequent_Tick).catch(() => {});
+        return;
+      }
+
+      await Haptics.selectionAsync().catch(() => {});
+    } catch {
+      // Selection feedback is optional on devices without a haptics engine.
+    }
+  }
+
   playWaterDropSound() {
     if (!this.soundEnabled) return;
     try {

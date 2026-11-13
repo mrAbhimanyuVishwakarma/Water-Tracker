@@ -4,7 +4,16 @@ import { backupSettings, dayKey, mergeLogs, safeSettings } from './accountData';
 
 export interface LocalData { settings: UserSettings; logs: DrinkLog[]; pendingLogIds: string[]; settingsRevision: number; }
 const keyFor = (userId: string | null) => `@brownie_v2:${userId || 'guest'}`;
+const OWNER_PREMIUM_KEY = '@brownie_owner_premium';
 export const getTodayKey = dayKey;
+
+export async function loadOwnerPremiumAccess(): Promise<boolean> {
+  return (await AsyncStorage.getItem(OWNER_PREMIUM_KEY)) === 'active';
+}
+
+export async function saveOwnerPremiumAccess(): Promise<void> {
+  await AsyncStorage.setItem(OWNER_PREMIUM_KEY, 'active');
+}
 
 export async function loadLocalData(userId: string | null): Promise<LocalData> {
   const raw = await AsyncStorage.getItem(keyFor(userId));
@@ -59,7 +68,7 @@ export function historyFromLogs(logs: DrinkLog[], settings: UserSettings, numDay
     const totalAmount = entries.reduce((sum, log) => sum + log.amount, 0);
     const totalEffectiveAmount = entries.reduce((sum, log) => sum + log.effectiveAmount, 0);
     result.push({ date: dateStr, logs: entries, totalAmount, totalEffectiveAmount,
-      target: settings.dailyTarget, achieved: totalAmount >= settings.dailyTarget });
+      target: settings.dailyTarget, achieved: totalEffectiveAmount >= settings.dailyTarget });
   }
   return result;
 }

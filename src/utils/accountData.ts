@@ -11,6 +11,7 @@ export function backupSettings(settings: UserSettings) {
     visibleBeverages: settings.visibleBeverages, healthProfile: settings.healthProfile,
     reminderIntervalMinutes: settings.reminderIntervalMinutes, smartRemindersEnabled: settings.smartRemindersEnabled,
     mascotTrialStartedAt: settings.mascotTrialStartedAt, hasUsedMascotTrial: settings.hasUsedMascotTrial,
+    autoCheckUpdates: settings.autoCheckUpdates,
   };
 }
 
@@ -21,6 +22,11 @@ export function safeSettings(value: unknown): UserSettings {
     choices.includes(candidate as T) ? candidate as T : fallback;
   const boolean = (candidate: unknown, fallback: boolean) => typeof candidate === 'boolean' ? candidate : fallback;
   const time = (candidate: unknown, fallback: string) => typeof candidate === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(candidate) ? candidate : fallback;
+  const goals = Array.isArray(profile.primaryGoals)
+    ? [...new Set(profile.primaryGoals.filter(goal => ['energy', 'skin', 'weight', 'focus'].includes(goal)))].slice(0, 4)
+    : [];
+  const legacyGoal = member(profile.primaryGoal, ['energy', 'skin', 'weight', 'focus'], 'energy');
+  const optionalText = (candidate: unknown, maximum: number) => typeof candidate === 'string' ? candidate.trim().slice(0, maximum) : '';
   return { ...DEFAULT_SETTINGS,
     dailyTarget: Number.isFinite(raw.dailyTarget) && raw.dailyTarget! >= 250 && raw.dailyTarget! <= 10000 ? raw.dailyTarget! : DEFAULT_SETTINGS.dailyTarget,
     unit: raw.unit === 'oz' ? 'oz' : 'ml',
@@ -30,14 +36,20 @@ export function safeSettings(value: unknown): UserSettings {
     activeChallengeId: CHALLENGES.some(challenge => challenge.id === raw.activeChallengeId) ? raw.activeChallengeId! : null,
     activeCharacter: MASCOTS.some(mascot => mascot.id === raw.activeCharacter) ? raw.activeCharacter! : 'brownie',
     cupPresets: Array.isArray(raw.cupPresets) && raw.cupPresets.length ? raw.cupPresets.filter(amount => Number.isFinite(amount) && amount >= 10 && amount <= 2000).slice(0, 12) : DEFAULT_SETTINGS.cupPresets,
-    visibleBeverages: Array.isArray(raw.visibleBeverages) ? [...new Set(raw.visibleBeverages.filter(type => Object.hasOwn(BEVERAGES, type)))].slice(0, 11) : DEFAULT_SETTINGS.visibleBeverages,
+    visibleBeverages: Array.isArray(raw.visibleBeverages) ? [...new Set(raw.visibleBeverages.filter(type => Object.hasOwn(BEVERAGES, type)))].slice(0, Object.keys(BEVERAGES).length) : DEFAULT_SETTINGS.visibleBeverages,
     healthProfile: {
       gender: member(profile.gender, ['male', 'female', 'other'], DEFAULT_SETTINGS.healthProfile.gender),
       weight: Number.isFinite(profile.weight) && profile.weight >= 20 && profile.weight <= 500 ? profile.weight : DEFAULT_SETTINGS.healthProfile.weight,
       weightUnit: profile.weightUnit === 'lbs' ? 'lbs' : 'kg',
       activityLevel: member(profile.activityLevel, ['low', 'moderate', 'high', 'athlete'], 'moderate'),
       climate: member(profile.climate, ['mild', 'hot', 'dry'], 'mild'),
-      primaryGoal: member(profile.primaryGoal, ['energy', 'skin', 'weight', 'focus'], 'energy'),
+      primaryGoals: (goals.length ? goals : [legacyGoal]) as UserSettings['healthProfile']['primaryGoals'],
+      displayName: optionalText(profile.displayName, 80),
+      heightCm: Number.isFinite(profile.heightCm) && profile.heightCm! >= 80 && profile.heightCm! <= 250 ? profile.heightCm : undefined,
+      healthConditions: optionalText(profile.healthConditions, 500),
+      takesMedication: boolean(profile.takesMedication, false),
+      medicationNotes: optionalText(profile.medicationNotes, 500),
+      appointmentNotes: optionalText(profile.appointmentNotes, 500),
       wakeTime: time(profile.wakeTime, DEFAULT_SETTINGS.healthProfile.wakeTime),
       sleepTime: time(profile.sleepTime, DEFAULT_SETTINGS.healthProfile.sleepTime),
     },
@@ -45,6 +57,7 @@ export function safeSettings(value: unknown): UserSettings {
     reminderIntervalMinutes: [60, 90, 120].includes(raw.reminderIntervalMinutes!) ? raw.reminderIntervalMinutes! : 90,
     mascotTrialStartedAt: typeof raw.mascotTrialStartedAt === 'number' && Number.isFinite(raw.mascotTrialStartedAt) && raw.mascotTrialStartedAt > 0 ? raw.mascotTrialStartedAt : null,
     hasUsedMascotTrial: boolean(raw.hasUsedMascotTrial, false),
+    autoCheckUpdates: boolean(raw.autoCheckUpdates, true),
     isPremium: false, userAccount: null, unlockedCharacters: ['brownie'] };
 }
 

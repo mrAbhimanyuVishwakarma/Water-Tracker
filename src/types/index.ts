@@ -6,9 +6,11 @@ export type BeverageType =
   | 'espresso'
   | 'juice'
   | 'smoothie'
+  | 'milkshake'
   | 'milk'
   | 'electrolyte'
   | 'soda'
+  | 'cold_drink'
   | 'alcohol';
 
 export type MeasurementUnit = 'ml' | 'oz';
@@ -56,7 +58,7 @@ export interface DayData {
   totalAmount: number; // in ml raw
   totalEffectiveAmount: number; // in ml effective
   target: number; // in ml
-  achieved: boolean;
+  achieved: boolean; // true when effective hydration reaches the target
 }
 
 export interface UserHealthProfile {
@@ -67,7 +69,15 @@ export interface UserHealthProfile {
   climate: 'mild' | 'hot' | 'dry';
   wakeTime: string; // HH:mm
   sleepTime: string; // HH:mm
-  primaryGoal: 'energy' | 'skin' | 'weight' | 'focus';
+  primaryGoals: ('energy' | 'skin' | 'weight' | 'focus')[];
+  /** Kept optional so older local/cloud backups can be migrated safely. */
+  primaryGoal?: 'energy' | 'skin' | 'weight' | 'focus';
+  displayName?: string;
+  heightCm?: number;
+  healthConditions?: string;
+  takesMedication?: boolean;
+  medicationNotes?: string;
+  appointmentNotes?: string;
 }
 
 export interface UserAccount {

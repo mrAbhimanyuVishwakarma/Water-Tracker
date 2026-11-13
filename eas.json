@@ -15,6 +15,16 @@
       },
       "environment": "preview"
     },
+    "github-apk": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "environment": "preview",
+      "env": {
+        "GITHUB_APK_UPDATES": "true"
+      }
+    },
     "production": {
       "android": {
         "buildType": "app-bundle"

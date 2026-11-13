@@ -1,0 +1,194 @@
+BROWNIE WATER TRACKER - PRODUCT IDEAS
+Last updated: 13 November 2026
+
+PURPOSE
+This file records future product ideas only. Implement features one at a time after the interaction, privacy model, platform behavior, and reference designs are agreed.
+
+
+1. USER PROFILE AND HEALTH PROFILE
+
+Status: Basic editable profile form implemented in v0.0.2 (name, gender, weight, height, health context, medication notes, and appointment notes). Profile photo, date of birth, allergies, emergency contacts, dedicated export/delete controls, and field-level cloud encryption remain future work.
+
+Add a User Profile section inside Settings, near Account & Cloud Backup.
+
+Possible profile information:
+- Name, profile photo, date of birth, and gender (optional)
+- Height and weight, including metric and imperial units
+- Activity level, climate, wake time, and sleep time
+- Hydration and wellness goals
+- Medical conditions or diseases (optional and user-entered)
+- Allergies (optional)
+- Whether the user takes regular medicines
+- Emergency contact information (optional)
+
+Product requirements:
+- Every sensitive field must be optional.
+- Explain why each field is requested and how it changes the experience.
+- Allow users to view, edit, export, and permanently delete their health data.
+- Encrypt sensitive cloud data and avoid placing medical details in analytics or logs.
+- Clearly state that the app does not diagnose conditions or replace medical advice.
+- Health conditions and medicines must not automatically change hydration targets without a carefully reviewed safety model.
+
+
+2. MEDICINE TRACKING
+
+Status: The v0.0.2 profile can store medication notes only. Scheduling, dose records, reminders, and adherence tracking remain future work.
+
+Allow users to record and track regular medicines.
+
+Possible capabilities:
+- Medicine name, dosage, form, instructions, and optional notes
+- Schedule by time, day, interval, or as-needed status
+- Start date, end date, and refill reminder
+- Taken, skipped, missed, or snoozed status
+- Medication history and adherence summary
+- Optional link between a medicine and a medical condition
+- Reminder notification with safe actions such as Taken, Snooze, or Open App
+
+Safety requirements:
+- Never recommend a dosage or tell users to start, stop, or combine medicines.
+- Do not infer medical advice from adherence data.
+- Use neutral reminder language and include a clear emergency disclaimer where relevant.
+- Require deliberate confirmation before recording a dose from a notification.
+
+
+3. MEDICAL APPOINTMENTS AND CALENDAR
+
+Status: The v0.0.2 profile can store appointment notes only. Structured appointments and calendar connection remain future work.
+
+Add appointment tracking for doctor visits, tests, therapy, pharmacy visits, and other fixed medical events.
+
+Possible appointment information:
+- Appointment title and type
+- Doctor or clinic name
+- Date, time, timezone, duration, and location
+- Preparation notes, documents, questions, and follow-up tasks
+- Reminder timing
+- Completed, cancelled, or rescheduled status
+
+Google Calendar plan:
+- Offer Google Calendar connection only after Google sign-in and explicit permission.
+- Let users choose which appointments are added to the calendar.
+- Support creating, updating, and removing the linked calendar event.
+- Store the calendar event ID so app and calendar changes can be reconciled.
+- Request the smallest possible Google Calendar permission scope.
+- Clearly explain whether synchronization is one-way or two-way before enabling it.
+
+Future consideration:
+- Apple Calendar and device-calendar support should be evaluated separately for iOS.
+
+
+4. ACCOUNT AND CLOUD BACKUP EXPANSION
+
+Extend the existing Account & Cloud Backup area to include profile, health, medicine, and appointment data.
+
+Possible controls:
+- Last successful backup time
+- Manual Sync Now action
+- Per-category sync controls
+- Conflict handling when two devices edit the same record
+- Export all user data
+- Delete cloud backup
+- Delete account and all associated health data
+- Clear explanation of what remains only on-device and what is stored in the cloud
+
+
+5. NOTIFICATION QUICK-LOG PANEL
+
+Status: Idea only. Wait for the user's screenshots and interaction references before designing or implementing.
+
+Hydration reminder concept:
+- A reminder appears as an interactive notification surface.
+- Users can quickly log their normal water amount without opening the app.
+- Additional actions may include choosing another amount, snoozing, or opening the app.
+- The app must prevent accidental duplicate logs and show clear confirmation.
+
+iOS direction:
+- Study Dynamic Island and Live Activities behavior after references are supplied.
+- Respect Apple's interaction, timing, privacy, and Live Activity limitations.
+- Do not assume every iPhone supports Dynamic Island.
+
+Android direction:
+- Design an equivalent experience using notification actions and supported live-notification patterns.
+- Keep feature behavior consistent even when the visual presentation differs from iOS.
+
+Open decisions for the future:
+- Default amount and available custom amounts
+- Undo behavior
+- Whether the notification remains visible after logging
+- Lock-screen privacy
+- Animation timing and visual style
+- Behavior when the phone is offline
+
+
+6. LIVING, INTERACTIVE CHARACTERS
+
+Goal:
+Make each mascot feel alive and responsive, inspired by virtual-pet interactions such as Talking Tom, while keeping every character original to Brownie Water Tracker.
+
+Interaction ideas:
+- Tap ears: character-specific ear reaction
+- Tap face or head: facial expression or playful response
+- Tap belly, hands, feet, shell, trunk, wings, or another character-specific body area
+- Double tap: a distinct surprise or celebration animation
+- Long press: another optional reaction
+- Swipe direction: look, lean, wave, spin, or dodge
+- Idle reactions after a period without interaction
+- Hydration-state reactions for empty, partially filled, almost complete, and goal completed
+- Time-of-day reactions for morning, afternoon, evening, and sleep hours
+- Streak and milestone celebrations
+
+Implementation principles:
+- Each mascot needs its own interaction map because body regions differ.
+- Define tappable regions with invisible hit areas that scale with the character artwork.
+- Prevent competing gestures from triggering multiple animations at once.
+- Use a small state machine: idle, reacting, drinking, celebrating, and resting.
+- Queue or interrupt animations intentionally.
+- Respect Reduce Motion and provide a calm static alternative.
+- Pause idle animation when the screen or app is not visible.
+- Keep animation assets optimized for mobile memory, battery, and download size.
+- Avoid sound on every interaction; respect the existing sound and haptic settings.
+- Preserve accessibility labels and alternative actions for users who cannot tap precise body regions.
+
+Asset plan for every mascot:
+- Neutral idle loop
+- Blink and look-around variations
+- Ear or head reaction
+- Face reaction
+- Character-specific body reaction
+- Double-tap surprise
+- Drinking animation
+- Goal-completion celebration
+- Resting first frame for each animation
+
+
+SUGGESTED IMPLEMENTATION ORDER
+
+Phase 1 - Product and privacy foundation
+1. Define the health-profile fields and consent language.
+2. Define local and cloud data models, encryption, export, and deletion behavior.
+3. Add the basic editable User Profile and Health Profile screens.
+
+Phase 2 - Medicine and appointments
+4. Build medicine records and in-app schedules without notification actions first.
+5. Build appointment records and an in-app agenda.
+6. Add carefully scoped reminders.
+7. Add Google Calendar connection after sign-in and permission UX are approved.
+
+Phase 3 - Notification quick actions
+8. Review the user's Dynamic Island and notification references.
+9. Specify iOS and Android equivalents.
+10. Prototype quick log, confirmation, undo, offline behavior, and duplicate prevention.
+
+Phase 4 - Interactive mascots
+11. Prototype the full interaction state machine with Brownie.
+12. Validate gesture conflicts, performance, accessibility, and Reduce Motion.
+13. Produce character-specific assets and interaction maps for the remaining mascots.
+
+
+REFERENCE MATERIAL STILL NEEDED
+- Dynamic Island and notification-panel screenshots or videos
+- Preferred notification animations and action layout
+- Examples of the desired character reactions
+- Decision on which health-profile fields should appear in the first version
+- Decision on whether medicine and appointment tracking should be free, Pro, or partially gated
