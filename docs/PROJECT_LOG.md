@@ -93,11 +93,11 @@ All required adaptive and static icons were generated and configured in [`assets
 - `assets/android-icon-background.png`: Adaptive background with turquoise pool water texture.
 - `assets/android-icon-monochrome.png`: Monochrome silhouette for Android dynamic Material You theming.
 - Floating donut floats:
-  - `assets/dodo_donut_float.png`
-  - `assets/mammoth_donut_float.png`
-  - `assets/penguin_donut_float.png`
-  - `assets/sloth_donut_float.png`
-  - `assets/turtle_donut_float.png`
+  - `assets/characters/dodo/float.png`
+  - `assets/characters/mammoth/float.png`
+  - `assets/characters/penguin/float.png`
+  - `assets/characters/sloth/float.png`
+  - `assets/characters/turtle/float.png`
 
 ---
 

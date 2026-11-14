@@ -9,8 +9,11 @@ assets = [
 ]
 
 for src, name in assets:
-    png_out = f"assets/{name}.png"
-    svg_out = f"assets/{name}.svg"
+    character = name.removesuffix('_sipping')
+    folder = os.path.join('assets', 'characters', character)
+    os.makedirs(folder, exist_ok=True)
+    png_out = os.path.join(folder, 'vessel.png')
+    svg_out = os.path.join(folder, 'vessel.svg')
     
     # 1. Save as PNG
     im = Image.open(src).convert("RGBA")

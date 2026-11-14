@@ -2,7 +2,7 @@
   "expo": {
     "name": "WaterTrackerBrownie",
     "slug": "brownie-water-tracker",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,7 +11,7 @@
     },
     "android": {
       "package": "com.brownie.watertracker",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "backgroundColor": "#38BDF8",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -41,7 +41,16 @@
       "./plugins/withAndroidArchitectures",
       "expo-web-browser",
       "expo-notifications",
-      "expo-video"
+      "expo-video",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ]
     ],
     "scheme": "browniewater",
     "extra": {

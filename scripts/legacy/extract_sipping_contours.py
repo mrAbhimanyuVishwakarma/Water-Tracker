@@ -43,7 +43,7 @@ def extract_contour(image_path, target_width=270, target_height=330):
 
 contours = {}
 for mascot in ['sloth', 'turtle', 'penguin']:
-    path = f"assets/{mascot}_sipping.png"
+    path = f"assets/characters/{mascot}/vessel.png"
     if os.path.exists(path):
         c = extract_contour(path)
         contours[mascot] = c

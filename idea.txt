@@ -123,8 +123,18 @@ Open decisions for the future:
 
 6. LIVING, INTERACTIVE CHARACTERS
 
+Current scope (character-interaction branch):
+- Brownie prototype: ear tap, face tap, belly tap, double-tap happy hop, and long-press relaxation.
+- Brownie extensions: head petting, finger-following eyes, foot kicks, and tail tap with closed eyes and a left/right head shake saying no no. Touching the character locks scrolling until release/cancellation.
+- New drink logs trigger a nod and bubbles; quiet idle blinks/glances run only while visible, with Reduce Motion respected.
+- After 100% hydration, show the exact first frame of the selected character's sipping video in full color.
+- Play the goal video once on completion, then enable Brownie's interactions again. Tap the water glass to replay.
+- Distinct Brownie interaction sounds use the original animation giggle and matching voice cues, preserving natural durations without a 1–2 second cap. Interact directly with the character, with no reaction/replay buttons below it. The existing Sound setting controls audio.
+- Voice recording/mimicking is excluded from this phase.
+- Implementation and validation notes: docs/character-interactions.md
+
 Goal:
-Make each mascot feel alive and responsive, inspired by virtual-pet interactions such as Talking Tom, while keeping every character original to Brownie Water Tracker.
+Make each mascot feel alive and responsive through original reactions that fit Brownie Water Tracker's calm, playful personality.
 
 Interaction ideas:
 - Tap ears: character-specific ear reaction
@@ -192,3 +202,17 @@ REFERENCE MATERIAL STILL NEEDED
 - Examples of the desired character reactions
 - Decision on which health-profile fields should appear in the first version
 - Decision on whether medicine and appointment tracking should be free, Pro, or partially gated
+
+
+*pro will be monthly/yearly charged as in-app purchase. no ads!
+will have 3 varients of monthly subscription along with yearly for that 
+
+only characters 
+₹25/monthly 
+₹149/6months
+₹299/year
+
+full features
+₹49/month
+₹299/6months
+₹499/year

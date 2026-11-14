@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const flag = process.argv.indexOf('--ffmpeg');
 const ffmpeg = flag >= 0 ? process.argv[flag + 1] : process.env.FFMPEG_BIN || 'ffmpeg';
 const poolInput = path.join(root, 'assets', 'Recording 2026-11-09 203247.mp4');
-const swimmerInput = path.join(root, 'assets', 'capibara swimming right to left.mp4');
+const swimmerInput = path.join(root, 'assets', 'characters', 'brownie', 'sources', 'swimming-green.mp4');
 const output = path.join(root, 'website', 'assets', 'swimming');
 fs.mkdirSync(output, { recursive: true });
 

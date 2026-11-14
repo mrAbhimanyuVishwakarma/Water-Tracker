@@ -19,7 +19,10 @@ function loader(mocks = {}) {
     }).outputText;
     const localRequire = name => {
       if (Object.hasOwn(mocks, name)) return mocks[name];
-      if (/\.png$/.test(name)) return name;
+      if (/\.(png|mp4|wav)$/.test(name)) {
+        assert.ok(fs.existsSync(path.resolve(path.dirname(absolute), name)), `Missing bundled asset: ${name}`);
+        return name;
+      }
       if (name.startsWith('.')) {
         const target = path.resolve(path.dirname(absolute), name);
         return load(fs.existsSync(target) ? target : `${target}.ts`);

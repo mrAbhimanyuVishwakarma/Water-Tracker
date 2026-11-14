@@ -24,6 +24,7 @@ import { HydrationGoalSlider } from './HydrationGoalSlider';
 import { UserHealthProfile, UserSettings } from '../types';
 import { feedback } from '../utils/feedback';
 import { formatVolume } from '../utils/storage';
+import { MASCOT_MEDIA } from '../constants/mascotMedia';
 import {
   DEFAULT_HEALTH_PROFILE,
   calculatePersonalizedGoal,
@@ -93,7 +94,7 @@ export const OnboardingFlow: React.FC<Props> = ({ onComplete }) => {
 
           <Animated.View style={[styles.characterCard, bobbingStyle]} entering={FadeIn.delay(200)}>
             <Image
-              source={require('../../assets/brownie_sipping.png')}
+              source={MASCOT_MEDIA.brownie.vessel}
               style={styles.characterImage}
               resizeMode="contain"
               accessibilityLabel="Brownie the capybara"

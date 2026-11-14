@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  AppState,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -50,6 +51,30 @@ export const DashboardScreen: React.FC<Props> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const [activeBeverage, setActiveBeverage] = useState<BeverageConfig | null>(null);
+  const [mascotVisible, setMascotVisible] = useState(true);
+  const [scrolling, setScrolling] = useState(false);
+  const [touchingMascot, setTouchingMascot] = useState(false);
+  const scrollView = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const mascotTouches = useRef(new Set<number>());
+  const setTouchLock = useCallback((locked: boolean) => {
+    // Apply immediately too, before a move can become a native scroll gesture.
+    scrollView.current?.setNativeProps({ scrollEnabled: !locked });
+    setTouchingMascot(locked);
+    if (locked) setScrolling(false);
+  }, []);
+  const releaseTouchLock = useCallback(() => {
+    mascotTouches.current.clear();
+    setTouchLock(false);
+  }, [setTouchLock]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state !== 'active') releaseTouchLock();
+    });
+    return () => subscription.remove();
+  }, [releaseTouchLock]);
+  const vesselBounds = useRef({ top: 0, height: 0 });
+  const viewportHeight = useRef(0);
 
   // Total raw and effective hydration
   const totalMl = logs.reduce((sum, item) => sum + item.amount, 0);
@@ -115,8 +140,29 @@ export const DashboardScreen: React.FC<Props> = ({
       </View>
 
       <ScrollView
+        ref={scrollView}
+        scrollEnabled={!touchingMascot}
+        onTouchEnd={event => {
+          for (const touch of event.nativeEvent.changedTouches) mascotTouches.current.delete(touch.identifier);
+          if (!mascotTouches.current.size) setTouchLock(false);
+        }}
+        onTouchCancel={event => {
+          for (const touch of event.nativeEvent.changedTouches) mascotTouches.current.delete(touch.identifier);
+          if (!mascotTouches.current.size) setTouchLock(false);
+        }}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        onLayout={event => { viewportHeight.current = event.nativeEvent.layout.height; }}
+        scrollEventThrottle={32}
+        onScroll={event => {
+          const offset = event.nativeEvent.contentOffset.y;
+          const bounds = vesselBounds.current;
+          setMascotVisible(offset < bounds.top + bounds.height && offset + viewportHeight.current > bounds.top);
+        }}
+        onScrollBeginDrag={() => setScrolling(true)}
+        onScrollEndDrag={() => setScrolling(false)}
+        onMomentumScrollBegin={() => setScrolling(true)}
+        onMomentumScrollEnd={() => setScrolling(false)}
       >
         {/* 2. Big Hydration Metric Indicator */}
         <Animated.View entering={FadeInDown.duration(400)} style={styles.metricSection}>
@@ -155,7 +201,11 @@ export const DashboardScreen: React.FC<Props> = ({
         </Animated.View>
 
         {/* 3. Centerpiece Mascot Fluid Vessel */}
-        <View style={styles.vesselWrapper}>
+        <View style={styles.vesselWrapper}
+          onLayout={event => {
+            const { y, height } = event.nativeEvent.layout;
+            vesselBounds.current = { top: y, height };
+          }}>
           <CapybaraVessel
             logs={logs}
             dailyTarget={settings.dailyTarget}
@@ -163,6 +213,11 @@ export const DashboardScreen: React.FC<Props> = ({
             soundEnabled={settings.soundEnabled}
             width={SCREEN_WIDTH * 0.72}
             height={SCREEN_WIDTH * 0.88}
+            interactionEnabled={mascotVisible && !scrolling && activeBeverage === null}
+            onCharacterTouchStart={identifiers => {
+              for (const identifier of identifiers) mascotTouches.current.add(identifier);
+              setTouchLock(true);
+            }}
           />
         </View>
 
@@ -209,7 +264,10 @@ export const DashboardScreen: React.FC<Props> = ({
         visibleBeverages={settings.visibleBeverages || ['water', 'green_tea', 'herbal_tea']}
         unit={settings.unit}
         onQuickAdd={(beverage) => onAddDrink(beverage, beverage.defaultAmount)}
-        onEditAmount={setActiveBeverage}
+        onEditAmount={beverage => {
+          releaseTouchLock();
+          setActiveBeverage(beverage);
+        }}
         onUpdateVisibleBeverages={onUpdateVisibleBeverages}
       />
 

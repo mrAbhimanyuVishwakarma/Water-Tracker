@@ -4,7 +4,7 @@ import * as Device from 'expo-device';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as IntentLauncher from 'expo-intent-launcher';
 
-export const CURRENT_APP_VERSION = Constants.expoConfig?.version || '0.0.2';
+export const CURRENT_APP_VERSION = Constants.expoConfig?.version || '0.0.3';
 export const DEFAULT_GITHUB_REPO = 'mrAbhimanyuVishwakarma/Water-Tracker';
 const MAX_APK_BYTES = 300 * 1024 * 1024;
 
