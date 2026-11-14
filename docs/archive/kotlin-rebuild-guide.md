@@ -1,5 +1,7 @@
 # Brownie Water Tracker: Kotlin Build Guide
 
+Archived alternative-platform proposal. The maintained application uses Expo/React Native.
+
 This guide explains how to rebuild Brownie Water Tracker for Android and iOS using Kotlin Multiplatform and Compose Multiplatform.
 
 Keep the existing Expo application as a working reference. Create the Kotlin version as a separate project; this is a manual rebuild, not an automatic conversion.

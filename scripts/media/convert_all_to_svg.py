@@ -1,9 +1,11 @@
 import os
 import glob
 import vtracer
+from pathlib import Path
 
-ASSETS_DIR = 'assets/characters'
-OUTPUT_TS = 'src/constants/svgAssets.ts'
+ROOT = Path(__file__).resolve().parents[2]
+ASSETS_DIR = ROOT / 'assets/characters'
+OUTPUT_TS = ROOT / 'src/constants/svgAssets.ts'
 
 characters = ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin']
 images_to_convert = [

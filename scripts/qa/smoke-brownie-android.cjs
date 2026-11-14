@@ -1,4 +1,4 @@
-// Run against the Android test emulator after installing the candidate release APK.
+// Run from the repository root against an installed candidate release APK.
 // Uses existing local test data; does not add drinks, sign in, or clear app data.
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');

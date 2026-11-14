@@ -180,7 +180,7 @@ The Android app and website share this repository, which is a project folder tra
 
 ### 2. Start the website preview
 
-On Windows, the easiest option is to double-click `testlocal.bat` in the project folder. It starts the preview and opens http://localhost:3000 in your browser. Keep its window open while you work. Press Ctrl+C in that window when you want to stop. Python must be installed first.
+On Windows, double-click `scripts/windows/preview-website.bat` in the project folder, or run `npm run website:preview` from the repository root. It starts the preview and opens http://localhost:3000 in your browser. Keep its window open while you work. Press Ctrl+C in that window when you want to stop. Python must be installed first.
 
 If you prefer using the terminal, follow the steps below instead.
 

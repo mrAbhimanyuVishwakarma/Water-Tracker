@@ -10,7 +10,7 @@ from pathlib import Path
 import subprocess
 import time
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CHARACTER = ROOT / 'assets/characters/brownie'
 SCRATCH = ROOT / '.expo/brownie-generated-voice'
 PROMPTS = {

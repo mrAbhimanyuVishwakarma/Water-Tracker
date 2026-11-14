@@ -1,8 +1,8 @@
 // Original, repeatable water-note signatures. No third-party recordings or microphone data.
-// Run with: node scripts/generate-character-sounds.cjs
+// Run with: node scripts/media/generate-character-sounds.cjs
 const fs = require('node:fs');
 const path = require('node:path');
-const characters = path.join(__dirname, '../assets/characters');
+const characters = path.join(__dirname, '../../assets/characters');
 const rate = 22050;
 const signatures = {
   brownie: [420, 550, 0.08, 0.30],

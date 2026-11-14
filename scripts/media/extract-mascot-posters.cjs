@@ -1,7 +1,7 @@
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const characters = path.join(root, 'assets/characters');
 for (const mascot of ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin']) {
   const folder = path.join(characters, mascot);

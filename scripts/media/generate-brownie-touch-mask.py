@@ -8,7 +8,7 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import binary_closing, binary_fill_holes, label
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / 'assets/characters/brownie'
 STEP = 3
 output = {}

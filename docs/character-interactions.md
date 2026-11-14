@@ -36,11 +36,11 @@ Touch maps use separate vessel and completed-pose coordinates. Artwork-derived m
 
 Original downloads remain untouched under `assets/characters/brownie/sources/reactions/`. Prompt packs remain in each character's folder: [Brownie](../assets/characters/brownie/animation-prompts.md), [Manni](../assets/characters/mammoth/animation-prompts.md).
 
-Run `node scripts/prepare-brownie-reactions.cjs` with FFmpeg and FFprobe on PATH, or set `BROWNIE_FFMPEG_DIR` to their directory. The script writes runtime MP4s, common poster, habitat, and `clips.json` recording trim ranges. Movement and audio activity determine conservative leading/trailing trims. Original sipping keeps its complete performance. Idle and directional-look outputs are muted. No voice is synthesized or layered over video playback.
+Run `node scripts/media/prepare-brownie-reactions.cjs` with FFmpeg and FFprobe on PATH, or set `BROWNIE_FFMPEG_DIR` to their directory. The script writes runtime MP4s, common poster, habitat, and `clips.json` recording trim ranges. Movement and audio activity determine conservative leading/trailing trims. Original sipping keeps its complete performance. Idle and directional-look outputs are muted. No voice is synthesized or layered over video playback.
 
 The asset registry is `src/constants/mascotMedia.ts`. Only runtime media are consumed by Brownie's interaction player; legacy WAVs remain preserved for provenance. One finite `expo-video` player owns a reaction and its audio. Completion/error returns to the still, and unmount stops the player. A separate goal player is paused outside goal playback.
 
-After changing the master or vessel artwork, regenerate touch masks with `python scripts/generate-brownie-touch-mask.py` (Pillow, NumPy, SciPy; authoring only). Masks derive from the original square character image, excluding the decorative habitat.
+After changing the master or vessel artwork, regenerate touch masks with `python scripts/media/generate-brownie-touch-mask.py` (Pillow, NumPy, SciPy; authoring only). Masks derive from the original square character image, excluding the decorative habitat.
 
 ## Verification
 
@@ -48,6 +48,6 @@ Run `npm test`, `npm run typecheck`, and `npm run lint`. Tests cover touch geome
 
 The Android Babel-transformed regression is essential: worklets capture dependencies at module initialization. `brownieContainsPoint` must be initialized before the `brownieDragIntent` worklet captures it. TypeScript-only helper tests bypass that transform and previously missed a first-touch release crash.
 
-Install the actual candidate APK on the test emulator before handoff. Run `node scripts/smoke-brownie-android.cjs` on the Today screen before completion, or add `--completed` when the local guest test data has reached the goal. The script cold-launches the app, exercises 16 gestures, checks the process and fatal logs through playback/cleanup, captures screenshots, and backgrounds the app during playback. It does not sign in, clear data, or add drinks. Set `BROWNIE_TEST_DEVICE` to change the emulator serial and `BROWNIE_ADB` if ADB is outside `ANDROID_HOME`. Review the screenshots as well as process survival; a successful build alone is not a runtime test.
+Install the actual candidate APK on the test emulator before handoff. Run `node scripts/qa/smoke-brownie-android.cjs` on the Today screen before completion, or add `--completed` when the local guest test data has reached the goal. The script cold-launches the app, exercises 16 gestures, checks the process and fatal logs through playback/cleanup, captures screenshots, and backgrounds the app during playback. It does not sign in, clear data, or add drinks. Set `BROWNIE_TEST_DEVICE` to change the emulator serial and `BROWNIE_ADB` if ADB is outside `ANDROID_HOME`. Review the screenshots as well as process survival; a successful build alone is not a runtime test.
 
 Android export validates Metro's literal media requires. Processed poster and video contact sheets are visually reviewed. Physical-device gesture feel, audible balance, and native video transitions still require a live phone check.

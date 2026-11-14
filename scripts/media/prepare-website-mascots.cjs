@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const ffmpegIndex = process.argv.indexOf('--ffmpeg');
 const ffmpeg = ffmpegIndex >= 0 ? process.argv[ffmpegIndex + 1] : process.env.FFMPEG_BIN || 'ffmpeg';
 const output = path.join(root, 'website', 'assets', 'mascots');
