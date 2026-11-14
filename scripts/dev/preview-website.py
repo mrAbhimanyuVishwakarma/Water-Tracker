@@ -28,7 +28,7 @@ def main():
     if not 1 <= args.port <= 65535:
         parser.error("Choose a port between 1 and 65535.")
 
-    website = Path(__file__).resolve().parent.parent / "website"
+    website = Path(__file__).resolve().parents[2] / "website"
     homepage = website / "index.html"
     if not homepage.is_file():
         print("Cannot find website/index.html in the project folder.", file=sys.stderr)
@@ -51,7 +51,7 @@ def main():
                 webbrowser.open(url, new=2)
             return 0
         print(f"Cannot start the preview: {error}", file=sys.stderr)
-        print("Try a different port: testlocal.bat --port 3001", file=sys.stderr)
+        print("Try a different port: npm run website:preview -- --port 3001", file=sys.stderr)
         return 1
 
     with server:

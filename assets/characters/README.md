@@ -4,7 +4,7 @@ Each mobile character has its own folder. The app's static asset references are 
 
 Keep animation prompt packs inside their character folders as `animation-prompts.md`: [Brownie](brownie/animation-prompts.md) and [Manni](mammoth/animation-prompts.md). Each pack names its own shared `sources/reaction-master.png` and individual MP4s. Future character prompt packs should follow the same structure.
 
-Brownie's current interaction and celebration assets are in `brownie/runtime/`: trimmed square reaction videos, the processed original sipping video, a common `poster.png`, shared static `habitat.png`, and measured trim ranges in `clips.json`. Regenerate with `node scripts/prepare-brownie-reactions.cjs` (FFmpeg/FFprobe; optionally set `BROWNIE_FFMPEG_DIR`). Original generated downloads stay in `brownie/sources/reactions/`; `brownie/sources/sipping-original.mp4` remains the celebration source. Legacy root-level files and synthesized sounds are retained but no longer drive Brownie's interaction playback.
+Brownie's current interaction and celebration assets are in `brownie/runtime/`: trimmed square reaction videos, the processed original sipping video, a common `poster.png`, shared static `habitat.png`, and measured trim ranges in `clips.json`. Regenerate with `node scripts/media/prepare-brownie-reactions.cjs` (FFmpeg/FFprobe; optionally set `BROWNIE_FFMPEG_DIR`). Original generated downloads stay in `brownie/sources/reactions/`; `brownie/sources/sipping-original.mp4` remains the celebration source. Legacy root-level files and synthesized sounds are retained but no longer drive Brownie's interaction playback.
 
 ```text
 characters/
@@ -45,10 +45,10 @@ The other characters share the core file names; only applicable expression, vect
 From the project root:
 
 ```sh
-node scripts/extract-mascot-posters.cjs
-node scripts/generate-character-sounds.cjs
-python scripts/generate-brownie-touch-mask.py
-powershell -File scripts/generate-brownie-voices.ps1
+node scripts/media/extract-mascot-posters.cjs
+node scripts/media/generate-character-sounds.cjs
+python scripts/media/generate-brownie-touch-mask.py
+powershell -File scripts/media/generate-brownie-voices.ps1
 ```
 
 Poster extraction needs FFmpeg. The first script reads each `sipping.mp4` and writes its adjacent `poster.png`; Brownie's blink also comes from that clip. The second writes the deterministic character signatures. Brownie's voice script uses the original video giggle for laughter and Chatterbox Nano conditioned on that reference for other cues; its PowerShell file launches the Python generator. Authoring requires a separate Python environment with Chatterbox and FFmpeg. The app bundles only the finished WAVs and their timing metadata. Natural durations are retained, with no forced speech truncation or speed-up. Sipping playback uses the original audio embedded in the video.

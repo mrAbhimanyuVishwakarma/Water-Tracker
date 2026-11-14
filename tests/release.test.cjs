@@ -312,7 +312,7 @@ test('cloud retries are idempotent, preserve offline edits and upload only pendi
 });
 
 test('production gate rejects missing configuration and non-production payment keys', () => {
-  const { validateReleaseEnvironment } = require('./check-release.cjs');
+  const { validateReleaseEnvironment } = require('../scripts/release/check-release.cjs');
   assert.ok(validateReleaseEnvironment({}).length >= 6);
   const environment = {
     EXPO_PUBLIC_SUPABASE_URL: 'https://project.supabase.co', EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_public',

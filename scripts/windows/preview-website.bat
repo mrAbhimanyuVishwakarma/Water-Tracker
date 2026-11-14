@@ -1,10 +1,11 @@
 @echo off
 setlocal
 title Brownie Website - Local Preview
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
+set "BROWNIE_PREVIEW_SCRIPT=%~dp0..\dev\preview-website.py"
 
-if not exist "%~dp0scripts\preview-website.py" (
-  echo Cannot find scripts\preview-website.py. Keep this file in the project folder.
+if not exist "%BROWNIE_PREVIEW_SCRIPT%" (
+  echo Cannot find scripts\dev\preview-website.py. Keep this launcher in scripts\windows.
   pause
   exit /b 1
 )
@@ -21,12 +22,12 @@ pause
 exit /b 1
 
 :use_py
-py -3 "%~dp0scripts\preview-website.py" %*
+py -3 "%BROWNIE_PREVIEW_SCRIPT%" %*
 set "BROWNIE_PREVIEW_EXIT=%ERRORLEVEL%"
 goto finished
 
 :use_python
-python "%~dp0scripts\preview-website.py" %*
+python "%BROWNIE_PREVIEW_SCRIPT%" %*
 set "BROWNIE_PREVIEW_EXIT=%ERRORLEVEL%"
 
 :finished

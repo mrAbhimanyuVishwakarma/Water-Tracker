@@ -6,7 +6,7 @@ Official website for **Brownie Water Tracker**, a calm, friendly Android hydrati
 - **GitHub Repository:** [mrAbhimanyuVishwakarma/Water-Tracker](https://github.com/mrAbhimanyuVishwakarma/Water-Tracker)
 - **Latest Release:** [GitHub Releases](https://github.com/mrAbhimanyuVishwakarma/Water-Tracker/releases/latest)
 
-New to websites? Follow [How to create a website](<../how to create a website>) for a small practice project and step-by-step instructions for working on this site.
+New to websites? Follow [How to create a website](../docs/development/website-guide.md) for a small practice project and step-by-step instructions for working on this site.
 
 ---
 
@@ -16,7 +16,7 @@ New to websites? Follow [How to create a website](<../how to create a website>) 
 - **Hosting:** Static pages on Vercel, with an optional Node.js download redirect at `api/download.js`.
 - **Privacy First:** No advertising cookies, no trackers loaded without explicit user consent.
 - **Progressive Enhancement:** Downloads fall back statically to GitHub Releases and dynamically query the GitHub Releases API to resolve direct `.apk` downloads, file size, and publication dates.
-- **Accessibility:** Semantic landmarks, native disclosure menus and FAQs, visible keyboard focus, responsive layouts, and reduced-motion support. Browser and accessibility check results are recorded in the repository's `design-qa.md`.
+- **Accessibility:** Semantic landmarks, native disclosure menus and FAQs, visible keyboard focus, responsive layouts, and reduced-motion support. Browser and accessibility check results are recorded in `docs/qa/website-design-review.md`.
 
 ## Pages
 
@@ -68,7 +68,7 @@ Animations start playing automatically. Videos load and play only while their ca
 Regenerate the website media with a full FFmpeg build:
 
 ```bash
-node scripts/prepare-website-mascots.cjs
+node scripts/media/prepare-website-mascots.cjs
 ```
 
 Run from the repository root. Use `--ffmpeg <executable-path>` if FFmpeg is not on PATH, `--posters-only` to review the key, `--dark-only` to regenerate dark card variants, `--size 720` to create HD renditions, or `--only brownie` to process one mascot. HD output includes MP4 and WebP; standard output also includes transparent WebM. If the dark surface color changes, update the matching matte in the script and regenerate those variants.
@@ -83,7 +83,7 @@ Brownie swims left to right, turns to face left at the right edge, and swims bac
 
 The shoreline moves independently of the stationary water grid in a seamless ten-second loop. Only the narrow edge is animated. Waves follow the same pause, visibility, and hidden-page state as their swimmer, and stay static with reduced motion or without JavaScript. The page's background grid shows through the curved edges in both appearances.
 
-Regenerate the swimming assets with `node scripts/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`. The legacy raster pool derivative may still be generated for reference, but the website does not load it.
+Regenerate the swimming assets with `node scripts/media/prepare-website-swimming.cjs`, adding `--ffmpeg <executable-path>` if FFmpeg is not on PATH. Website derivatives are in `website/assets/swimming/`. The legacy raster pool derivative may still be generated for reference, but the website does not load it.
 
 ## Branches and history
 
@@ -108,7 +108,7 @@ Each HTML page contains its own navigation, closing section, and footer. When ch
 
 ## Local Preview
 
-On Windows, double-click `testlocal.bat` in the repository root. It starts the server before opening `http://localhost:3000` in your browser. Double-clicking again reopens the same preview if it is already running. Keep its window open while working, and press Ctrl+C to stop it. If another application uses that port, run `testlocal.bat --port 3001`. Python 3 is required.
+Run `npm run website:preview` from the repository root, or on Windows double-click `scripts/windows/preview-website.bat`. It starts the server before opening `http://localhost:3000` in your browser. Starting it again reopens the same preview if it is already running. Keep its window open while working, and press Ctrl+C to stop it. If another application uses that port, run `npm run website:preview -- --port 3001`. Python 3 is required.
 
 Run this from the repository root with Python installed:
 
@@ -120,7 +120,7 @@ Open [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser. Keep the te
 
 Python serves the static files. It does not execute `api/download.js` or apply Vercel's clean URLs, headers, and cache settings. Use paths such as `/about.html` locally. The pages' GitHub release links and browser-side release lookup remain available.
 
-Before committing, run `npm run lint` and `npm run typecheck` from the repository root with the project dependencies installed. Check the changed pages at desktop and phone widths. Verify appearance choices, both swimming directions, pause/resume, navigation, and download links. Results from the latest browser checks are in [design-qa.md](../design-qa.md).
+Before committing, run `npm run lint` and `npm run typecheck` from the repository root with the project dependencies installed. Check the changed pages at desktop and phone widths. Verify appearance choices, both swimming directions, pause/resume, navigation, and download links. Results from the latest browser checks are in the [website design review](../docs/qa/website-design-review.md).
 
 ## Deployment to Vercel
 

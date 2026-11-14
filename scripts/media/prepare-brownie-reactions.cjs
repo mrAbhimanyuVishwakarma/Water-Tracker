@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const base = path.join(root, 'assets/characters/brownie');
 const bin = process.env.BROWNIE_FFMPEG_DIR || '';
 const exe = name => path.join(bin, process.platform === 'win32' ? `${name}.exe` : name);

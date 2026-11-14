@@ -5,7 +5,7 @@ final result: passed
 ## Scope and reference
 
 - Website only: all nine pages in `website/`. The Expo application is outside this change.
-- Design contract: [`DESIGN.md`](DESIGN.md), the Oasis Health system selected by the user.
+- Design contract: [`DESIGN.md`](../../website/DESIGN.md), the Oasis Health system selected by the user.
 - Source gallery: https://opendesignmd.com/designs/oasishealth-app/
 - Source visual: https://opendesignmd.com/shots/oasishealth-app/8461.webp
 - Locally opened source: `%TEMP%/brownie-oasis-8461.webp`.

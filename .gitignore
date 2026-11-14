@@ -1,66 +1,83 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
+# Dependencies and package-manager caches (commit package-lock.json)
 node_modules/
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.pnp.*
 
-# editors
-.idea/
-.vscode/
-*.iml
-
-# Expo
-.expo/
-dist/
-web-build/
+# Expo / generated native projects / local build output
+/.expo/
+/android/
+/ios/
+/dist/
+/build/
+/web-build/
+/apk installer/
 expo-env.d.ts
-.cache/
-.eslintcache
-
-# Native
-.kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
+**/.gradle/
+**/.kotlin/
+**/.cxx/
 *.apk
 *.aab
-**/.cxx/
-
-# Metro
+*.ipa
+*.tsbuildinfo
 .metro-health-check*
 
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS
-.DS_Store
-Thumbs.db
-*.pem
-
-# local env files
-.env*.local
-
-# Supabase CLI local state
-supabase/.temp/
-
-# Python tooling
-__pycache__/
-*.py[cod]
-
-# typescript
-*.tsbuildinfo
-
-# generated native folders
-/ios
-/android
-/apk installer
-# Local app configuration
+# Environment files and signing credentials
 .env
 .env.*
 !.env.example
-.vercel
-.env*
+!.env.*.example
+credentials.json
+credentials.*.json
+!credentials.example.json
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# Local IDE, assistant integrations and deployment state
+.idea/
+.vscode/
+*.iml
+/.codex/
+/.mcp.json
+/.claude/settings.local.json
+/.claude/projects/
+/.claude/cache/
+/.claude/memory/
+/.impeccable/hook.cache.json
+.vercel/
+
+# Diagnostics, test reports and temporary output
+.cache/
+.eslintcache
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+*.log
+*.orig.*
+*.tmp
+/scripts/legacy/generated/
+
+# Python authoring environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Backend CLI local state
+supabase/.temp/
+supabase/.branches/
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

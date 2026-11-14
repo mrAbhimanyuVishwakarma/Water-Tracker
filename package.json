@@ -50,10 +50,14 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "node --test scripts/test-release.cjs scripts/test-brownie-interactions.cjs",
+    "test": "node --test tests/release.test.cjs tests/brownie-interactions.test.cjs",
+    "test:android": "node scripts/qa/smoke-brownie-android.cjs",
     "typecheck": "tsc --noEmit",
-    "release:check": "node scripts/check-release.cjs",
-    "eas-build-post-install": "node scripts/check-release.cjs --eas"
+    "release:check": "node scripts/release/check-release.cjs",
+    "eas-build-post-install": "node scripts/release/check-release.cjs --eas",
+    "website:preview": "python scripts/dev/preview-website.py",
+    "media:brownie": "node scripts/media/prepare-brownie-reactions.cjs",
+    "media:touch-mask": "python scripts/media/generate-brownie-touch-mask.py"
   },
   "private": true
 }

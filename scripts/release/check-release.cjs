@@ -1,3 +1,4 @@
+// Validate build configuration without changing provider state.
 const fs = require('node:fs');
 
 function validateReleaseEnvironment(env) {

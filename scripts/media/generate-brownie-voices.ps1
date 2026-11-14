@@ -2,7 +2,7 @@
 param([string]$Python = '', [string]$ModelDir = '')
 $ErrorActionPreference = 'Stop'
 if (-not $Python) {
-    $localPython = Join-Path $PSScriptRoot '../.expo/brownie-audio-env/Scripts/python.exe'
+    $localPython = Join-Path $PSScriptRoot '../../.expo/brownie-audio-env/Scripts/python.exe'
     $Python = if (Test-Path -LiteralPath $localPython) { $localPython } else { 'python' }
 }
 $generator = Join-Path $PSScriptRoot 'generate-brownie-voices.py'

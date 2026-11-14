@@ -3,10 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
-const root = path.resolve(__dirname, '..');
+const root = path.resolve(__dirname, '../..');
 const flag = process.argv.indexOf('--ffmpeg');
 const ffmpeg = flag >= 0 ? process.argv[flag + 1] : process.env.FFMPEG_BIN || 'ffmpeg';
-const poolInput = path.join(root, 'assets', 'Recording 2026-11-09 203247.mp4');
+const poolInput = path.join(root, 'assets/sources/recordings/Recording 2026-11-09 203247.mp4');
 const swimmerInput = path.join(root, 'assets', 'characters', 'brownie', 'sources', 'swimming-green.mp4');
 const output = path.join(root, 'website', 'assets', 'swimming');
 fs.mkdirSync(output, { recursive: true });
