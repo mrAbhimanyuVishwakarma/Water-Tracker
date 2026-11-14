@@ -6,6 +6,7 @@ import {
   UserHealthProfile,
   UserSettings,
 } from '../types';
+import { MASCOT_MEDIA } from './mascotMedia';
 
 export const BEVERAGES: Record<string, BeverageConfig> = {
   water: {
@@ -156,7 +157,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🦫',
     accentColor: '#8A5844',
     isPro: false,
-    avatarImage: require('../../assets/brownie_sipping.png'),
+    avatarImage: MASCOT_MEDIA.brownie.vessel,
   },
   {
     id: 'dodo',
@@ -167,7 +168,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🦤',
     accentColor: '#8B5CF6',
     isPro: true,
-    avatarImage: require('../../assets/dodo_sipping.png'),
+    avatarImage: MASCOT_MEDIA.dodo.vessel,
   },
   {
     id: 'mammoth',
@@ -178,7 +179,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🦣',
     accentColor: '#D97706',
     isPro: true,
-    avatarImage: require('../../assets/mammoth_sipping.png'),
+    avatarImage: MASCOT_MEDIA.mammoth.vessel,
   },
   {
     id: 'sloth',
@@ -189,7 +190,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🦥',
     accentColor: '#10B981',
     isPro: true,
-    avatarImage: require('../../assets/sloth_sipping.png'),
+    avatarImage: MASCOT_MEDIA.sloth.vessel,
   },
   {
     id: 'turtle',
@@ -200,7 +201,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🐢',
     accentColor: '#14B8A6',
     isPro: true,
-    avatarImage: require('../../assets/turtle_sipping.png'),
+    avatarImage: MASCOT_MEDIA.turtle.vessel,
   },
   {
     id: 'penguin',
@@ -211,7 +212,7 @@ export const MASCOTS: MascotConfig[] = [
     badge: '🐧',
     accentColor: '#3B82F6',
     isPro: true,
-    avatarImage: require('../../assets/penguin_sipping.png'),
+    avatarImage: MASCOT_MEDIA.penguin.vessel,
   },
 ];
 

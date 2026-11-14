@@ -1,0 +1,104 @@
+{
+  "belly-tickle": {
+    "start": 0.125,
+    "end": 5.97,
+    "duration": 5.845,
+    "originalDuration": 5.97
+  },
+  "drink-nod": {
+    "start": 0,
+    "end": 2.525,
+    "duration": 2.525,
+    "originalDuration": 3.92
+  },
+  "ear-left": {
+    "start": 0.125,
+    "end": 3.525,
+    "duration": 3.4,
+    "originalDuration": 3.92
+  },
+  "ear-right": {
+    "start": 0,
+    "end": 2.775,
+    "duration": 2.775,
+    "originalDuration": 3.92
+  },
+  "face-oh": {
+    "start": 0.5,
+    "end": 7.93,
+    "duration": 7.43,
+    "originalDuration": 7.93
+  },
+  "foot-left": {
+    "start": 0.25,
+    "end": 3.446542,
+    "duration": 3.196542,
+    "originalDuration": 5.97
+  },
+  "happy-hop": {
+    "start": 0.375,
+    "end": 5.97,
+    "duration": 5.595,
+    "originalDuration": 5.97
+  },
+  "head-pet": {
+    "start": 0,
+    "end": 3.025,
+    "duration": 3.025,
+    "originalDuration": 3.92
+  },
+  "idle-blink": {
+    "start": 0.5,
+    "end": 1.525,
+    "duration": 1.025,
+    "originalDuration": 3
+  },
+  "look-down": {
+    "start": 0.25,
+    "end": 2.9,
+    "duration": 2.65,
+    "originalDuration": 3.92
+  },
+  "look-left": {
+    "start": 0.125,
+    "end": 3.025,
+    "duration": 2.9,
+    "originalDuration": 3.92
+  },
+  "look-right": {
+    "start": 0.125,
+    "end": 2.9,
+    "duration": 2.775,
+    "originalDuration": 3.92
+  },
+  "look-up": {
+    "start": 0,
+    "end": 3.025,
+    "duration": 3.025,
+    "originalDuration": 3.92
+  },
+  "relax": {
+    "start": 0.25,
+    "end": 4.525,
+    "duration": 4.275,
+    "originalDuration": 5.97
+  },
+  "sip-celebrate": {
+    "start": 0.25,
+    "end": 4.924229,
+    "duration": 4.674229,
+    "originalDuration": 5.97
+  },
+  "tail-no-no": {
+    "start": 0.25,
+    "end": 4.884667,
+    "duration": 4.634667,
+    "originalDuration": 7.93
+  },
+  "sipping": {
+    "start": 0,
+    "end": 10.026667,
+    "duration": 10.026667,
+    "originalDuration": 10.026667
+  }
+}

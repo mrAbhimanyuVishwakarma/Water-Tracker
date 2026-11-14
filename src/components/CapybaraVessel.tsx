@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -13,18 +13,11 @@ import Svg, {
   LinearGradient,
   Stop,
 } from 'react-native-svg';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-  Easing,
-  withSpring,
-} from 'react-native-reanimated';
 import { DrinkLog, MascotId } from '../types';
 import { GoalCelebration, useGoalCelebration } from './GoalCelebration';
 import { CrispVectorMascot } from './CrispVectorMascot';
+import { BrownieInteraction } from './BrownieInteraction';
+import { CompletedMascot } from './CompletedMascot';
 
 interface Props {
   logs: DrinkLog[];
@@ -33,6 +26,8 @@ interface Props {
   soundEnabled?: boolean;
   width?: number;
   height?: number;
+  interactionEnabled?: boolean;
+  onCharacterTouchStart?: (identifiers: number[]) => void;
 }
 
 const DEFAULT_WIDTH = 270;
@@ -61,10 +56,9 @@ export const CapybaraVessel: React.FC<Props> = ({
   soundEnabled = true,
   width = DEFAULT_WIDTH,
   height = DEFAULT_HEIGHT,
+  interactionEnabled = true,
+  onCharacterTouchStart,
 }) => {
-  const wavePhase = useSharedValue(0);
-  const fillAnim = useSharedValue(0);
-  const bobbing = useSharedValue(0);
 
   // Effective hydration is the only value that fills the mascot and completes the goal.
   const totalEffective = Math.max(0, logs.reduce((sum, item) => sum + (item.effectiveAmount ?? item.amount), 0));
@@ -74,37 +68,6 @@ export const CapybaraVessel: React.FC<Props> = ({
 
   // Selected mascot contour path
   const contourPath = MASCOT_CONTOURS[mascotId] || MASCOT_CONTOURS.brownie;
-
-  useEffect(() => {
-    wavePhase.value = withRepeat(
-      withTiming(Math.PI * 2, {
-        duration: 2200,
-        easing: Easing.linear,
-      }),
-      -1,
-      false
-    );
-
-    bobbing.value = withRepeat(
-      withSequence(
-        withTiming(-5, { duration: 1600, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0, { duration: 1600, easing: Easing.inOut(Easing.ease) })
-      ),
-      -1,
-      true
-    );
-  }, [bobbing, wavePhase]);
-
-  useEffect(() => {
-    fillAnim.value = withSpring(fillPercent, {
-      damping: 14,
-      stiffness: 90,
-    });
-  }, [fillAnim, fillPercent]);
-
-  const bobbingStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: bobbing.value }],
-  }));
 
   // Stacking calculation inside the vessel outline
   const BASE_Y = 325;
@@ -135,28 +98,11 @@ export const CapybaraVessel: React.FC<Props> = ({
     };
     });
 
-  return (
-    <Animated.View style={[styles.container, { width, height }, !isFilled && bobbingStyle]}>
-      {isFilled ? (
-        <GoalCelebration
-          key={mascotId}
-          mascotId={mascotId}
-          width={width}
-          height={height}
-          autoPlay={autoPlayCelebration}
-          soundEnabled={soundEnabled}
-        />
-      ) : (
-        // IN PROGRESS: Original animal image outlined as a vessel filling with flowing fluid
+  const renderVessel = (artwork: React.ReactNode) => isFilled ? (
+    <View style={{ width, height }}>{artwork}</View>
+  ) : (
         <View style={{ width, height, alignItems: 'center', justifyContent: 'center' }}>
-          {/* Base Original Image as outlined/translucent vessel container */}
-          <CrispVectorMascot
-            type="sipping"
-            mascotId={mascotId}
-            width={width - 8}
-            height={height - 8}
-            opacity={0.38}
-          />
+          {artwork}
 
           {/* Flowing Fluid Layer Stacked Inside Animal Vessel Contour */}
           <View style={StyleSheet.absoluteFill}>
@@ -234,9 +180,36 @@ export const CapybaraVessel: React.FC<Props> = ({
             </Svg>
           </View>
         </View>
-      )}
-    </Animated.View>
   );
+
+  const renderBrownie = (onGlassPress?: () => void, sceneActive = true) => (
+    <BrownieInteraction width={width} height={height} enabled={interactionEnabled && sceneActive}
+      soundEnabled={soundEnabled} artworkOpacity={isFilled ? 1 : 0.38} onGlassPress={onGlassPress} onCharacterTouchStart={onCharacterTouchStart} variant={isFilled ? 'poster' : 'vessel'} drinkLogs={logs}>
+      {renderVessel}
+    </BrownieInteraction>
+  );
+
+  if (isFilled) {
+    return <GoalCelebration
+      key={mascotId}
+      mascotId={mascotId}
+      width={width}
+      height={height}
+      autoPlay={autoPlayCelebration}
+      onCharacterTouchStart={onCharacterTouchStart}
+      soundEnabled={soundEnabled}
+      restingContent={(replay, sceneActive) => mascotId === 'brownie' ? renderBrownie(replay, sceneActive) : (
+        <CompletedMascot mascotId={mascotId} width={width} height={height} onGlassPress={replay} enabled={interactionEnabled && sceneActive} />
+      )}
+      active={interactionEnabled}
+    />;
+  }
+
+  return <View style={styles.container}>
+    {mascotId === 'brownie' ? renderBrownie() : renderVessel(
+      <CrispVectorMascot type="sipping" mascotId={mascotId} width={width - 8} height={height - 8} opacity={0.38} />
+    )}
+  </View>;
 };
 
 const styles = StyleSheet.create({

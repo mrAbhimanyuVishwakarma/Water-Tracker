@@ -28,7 +28,7 @@ function run(args, options = {}) {
 }
 
 for (const name of names) {
-  const input = path.join(root, 'assets', name + '_sipping.mp4');
+  const input = path.join(root, 'assets', 'characters', name, 'sources', 'sipping-original.mp4');
   // Sample the backdrop, outside the character, instead of assuming pure #00ff00.
   const color = run(['-i', input, '-vf', 'crop=32:32:0:0,scale=1:1,format=rgb24',
     '-frames:v', '1', '-f', 'rawvideo', 'pipe:1']);

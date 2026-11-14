@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AccessibilityInfo,
   ActivityIndicator,
   AppState,
   Platform,
@@ -15,18 +14,20 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { MascotId } from '../types';
 import { dayKey } from '../utils/accountData';
 import { feedback } from '../utils/feedback';
-
-const VIDEOS: Record<MascotId, number> = {
-  brownie: require('../../assets/brownie_sipping_clean.mp4'),
-  dodo: require('../../assets/dodo_sipping_clean.mp4'),
-  sloth: require('../../assets/sloth_sipping_clean.mp4'),
-  turtle: require('../../assets/turtle_sipping_clean.mp4'),
-  mammoth: require('../../assets/mammoth_sipping_clean.mp4'),
-  penguin: require('../../assets/penguin_sipping_clean.mp4'),
-};
+import { useMascotActivity } from '../hooks/useMascotActivity';
+import { MASCOT_MEDIA } from '../constants/mascotMedia';
+import { brownieContainsPoint } from '../utils/brownieInteractions';
 
 const CELEBRATED_KEY = '@brownie_goal_celebrated_day';
 let celebratedDay: string | null = null;
+
+function RestingCharacter({ render, onReplay, active }: {
+  render: (replay: () => void, active: boolean) => React.ReactNode;
+  onReplay: () => void;
+  active: boolean;
+}) {
+  return render(onReplay, active);
+}
 
 // Mounted alongside the vessel so opening an already-completed day never autoplays.
 export function useGoalCelebration(isFilled: boolean) {
@@ -62,14 +63,19 @@ function SippingVideo({
   playRequest,
   soundEnabled,
   onError,
+  onEnd,
+  playbackAllowed,
 }: {
   source: number;
   playRequest: number;
   soundEnabled: boolean;
   onError: () => void;
+  onEnd: () => void;
+  playbackAllowed: boolean;
 }) {
   const [ready, setReady] = useState(false);
   const wantsPlayback = useRef(false);
+  const handledRequest = useRef(0);
   const player = useVideoPlayer(source, instance => {
     instance.muted = !soundEnabled;
     instance.loop = false;
@@ -80,7 +86,8 @@ function SippingVideo({
     wantsPlayback.current = false;
     player.pause();
     player.currentTime = 0;
-  }, [player]);
+    onEnd();
+  }, [onEnd, player]);
 
   useEventListener(player, 'playToEnd', resetToFirstFrame);
 
@@ -98,9 +105,12 @@ function SippingVideo({
       return;
     }
 
-    if (!foreground || !visible) player.pause();
+    if (!playbackAllowed) {
+      if (wantsPlayback.current) resetToFirstFrame();
+      else player.pause();
+    } else if (!foreground || !visible) player.pause();
     else if (wantsPlayback.current && player.status === 'readyToPlay') player.play();
-  }, [onError, player]);
+  }, [onError, playbackAllowed, player, resetToFirstFrame]);
 
   useEventListener(player, 'statusChange', updatePlaybackForAppState);
 
@@ -122,11 +132,16 @@ function SippingVideo({
   }, [player, updatePlaybackForAppState]);
 
   useEffect(() => {
-    if (!ready || playRequest === 0) return;
+    if (!ready || playRequest === 0 || handledRequest.current === playRequest) return;
+    handledRequest.current = playRequest;
+    if (!playbackAllowed) {
+      onEnd();
+      return;
+    }
     wantsPlayback.current = true;
     player.currentTime = 0;
     player.play();
-  }, [playRequest, player, ready]);
+  }, [onEnd, playbackAllowed, playRequest, player, ready]);
 
   useEffect(() => {
     if (ready) return;
@@ -153,47 +168,74 @@ function SippingVideo({
   );
 }
 
-export function GoalCelebration({ mascotId, width, height, autoPlay, soundEnabled }: {
+export function GoalCelebration({ mascotId, width, height, autoPlay, soundEnabled, restingContent, active = true, onCharacterTouchStart }: {
   mascotId: MascotId;
   width: number;
   height: number;
   autoPlay: boolean;
   soundEnabled: boolean;
+  restingContent?: (replay: () => void, active: boolean) => React.ReactNode;
+  active?: boolean;
+  onCharacterTouchStart?: (identifiers: number[]) => void;
 }) {
-  const [reduceMotion, setReduceMotion] = useState<boolean | null>(null);
+  const { reduceMotion, foreground } = useMascotActivity();
+  const playbackAllowed = !reduceMotion && foreground && active;
   const [playbackError, setPlaybackError] = useState(false);
   const [playRequest, setPlayRequest] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
   const attempted = useRef(false);
-  const source = VIDEOS[mascotId];
+  const source = MASCOT_MEDIA[mascotId].sippingVideo;
 
   useEffect(() => {
-    let mounted = true;
-    void AccessibilityInfo.isReduceMotionEnabled()
-      .then(value => { if (mounted) setReduceMotion(value); })
-      .catch(() => { if (mounted) setReduceMotion(true); });
-    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduceMotion);
-    return () => { mounted = false; subscription.remove(); };
-  }, []);
-
-  useEffect(() => {
-    if (!autoPlay || reduceMotion === null || reduceMotion || attempted.current) return;
+    if (!autoPlay || !playbackAllowed || attempted.current) return;
     const startPlayback = setTimeout(() => {
       if (attempted.current) return;
       attempted.current = true;
+      setShowVideo(true);
       setPlayRequest(value => value + 1);
     }, 0);
     return () => clearTimeout(startPlayback);
-  }, [autoPlay, reduceMotion]);
+  }, [autoPlay, playbackAllowed]);
 
   const replay = () => {
-    if (reduceMotion) return;
+    if (!playbackAllowed) return;
     attempted.current = true;
     setPlaybackError(false);
+    setShowVideo(true);
     feedback.triggerHaptic('light');
     setPlayRequest(value => value + 1);
   };
 
-  const fail = useCallback(() => setPlaybackError(true), []);
+  const fail = useCallback(() => {
+    setPlaybackError(true);
+    setShowVideo(false);
+  }, []);
+  const end = useCallback(() => setShowVideo(false), []);
+
+  // Keep the poster mounted so it preloads and preserves layout throughout playback.
+  // Both poster and VideoView use contain in the same width/height rectangle.
+  if (restingContent) {
+    return <View style={{ width }} onTouchStart={event => {
+      if (!showVideo || mascotId !== 'brownie' || !active) return;
+      const identifiers = event.nativeEvent.changedTouches
+        .filter(touch => brownieContainsPoint(touch.locationX, touch.locationY, width, height, 'poster'))
+        .map(touch => touch.identifier);
+      if (identifiers.length) onCharacterTouchStart?.(identifiers);
+    }}>
+      <View pointerEvents={showVideo ? 'none' : 'auto'} accessibilityElementsHidden={showVideo}
+        importantForAccessibility={showVideo ? 'no-hide-descendants' : 'auto'} style={{ opacity: showVideo ? 0 : 1 }}>
+        <RestingCharacter render={restingContent} onReplay={replay} active={!showVideo} />
+      </View>
+      <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants"
+        style={[styles.panel, styles.preloaded, { width, height, opacity: showVideo ? 1 : 0 }]}>
+        <SippingVideo source={source} playRequest={playRequest} soundEnabled={soundEnabled} onError={fail} onEnd={end} playbackAllowed={playbackAllowed && showVideo} />
+      </View>
+      <View style={styles.interactiveFooter}>
+        <Text style={styles.badge}>100% GOAL CRUSHED!</Text>
+        {playbackError && <Text accessibilityLiveRegion="polite" style={styles.error}>Couldn&apos;t play the celebration. You can try again.</Text>}
+      </View>
+    </View>;
+  }
 
   return (
     <View style={[styles.container, { width, height }]}>
@@ -211,6 +253,8 @@ export function GoalCelebration({ mascotId, width, height, autoPlay, soundEnable
             playRequest={playRequest}
             soundEnabled={soundEnabled}
             onError={fail}
+            onEnd={end}
+            playbackAllowed={playbackAllowed && showVideo}
           />
         </View>
       </Pressable>
@@ -253,6 +297,8 @@ const styles = StyleSheet.create({
   },
   error: { fontSize: 12, color: '#9A3412', textAlign: 'center', marginTop: 8 },
   footer: { position: 'absolute', bottom: 0, alignItems: 'center' },
+  preloaded: { position: 'absolute', top: 0, left: 0 },
+  interactiveFooter: { alignItems: 'center', paddingTop: 8 },
   badge: {
     backgroundColor: '#0284C7',
     color: '#FFFFFF',

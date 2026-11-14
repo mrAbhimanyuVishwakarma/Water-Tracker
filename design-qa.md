@@ -140,7 +140,7 @@ Browser verification passed 12 responsive scenarios across Home and Features, Li
 
 ## Follow-up: stabilized swimming source
 
-The user's screen recording showed visible frame-to-frame wobble in the original 18 fps cutout. The swimmer was rebuilt from the cleaner `assets/capibara swimming right to left.mp4` source at 24 fps. A smooth tracking curve stabilizes the body, and color keying with green despill produces softer transparent edges. The external page movement remains the verified constant 45 px/s offscreen path.
+The user's screen recording showed visible frame-to-frame wobble in the original 18 fps cutout. The swimmer was rebuilt from the cleaner `assets/characters/brownie/sources/swimming-green.mp4` source at 24 fps. A smooth tracking curve stabilizes the body, and color keying with green despill produces softer transparent edges. The external page movement remains the verified constant 45 px/s offscreen path.
 
 Measured median character-center movement between decoded frames fell from 5.82 px to 0.93 px; the 95th percentile fell from 10.45 px to 2.39 px. Browser captures at 1440 and 390 px show clean edges over the pool, with at most one residual green-classified pixel in the full 320 × 240 source frame. Chrome produced ten distinct consecutive rendered frames, confirming active playback. Screenshots and comparison artifacts are in `.cache/website-redesign/smooth-swimmer/` and `.cache/swim-smooth-review/`.
 

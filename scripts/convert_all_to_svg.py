@@ -2,22 +2,17 @@ import os
 import glob
 import vtracer
 
-ASSETS_DIR = 'assets'
+ASSETS_DIR = 'assets/characters'
 OUTPUT_TS = 'src/constants/svgAssets.ts'
 
+characters = ['brownie', 'dodo', 'mammoth', 'sloth', 'turtle', 'penguin']
 images_to_convert = [
-    ('assets/capybara_donut_float.png', 'assets/capybara_donut_float.svg', 'CAPYBARA_DONUT_FLOAT_SVG'),
-    ('assets/dodo_donut_float.png', 'assets/dodo_donut_float.svg', 'DODO_DONUT_FLOAT_SVG'),
-    ('assets/mammoth_donut_float.png', 'assets/mammoth_donut_float.svg', 'MAMMOTH_DONUT_FLOAT_SVG'),
-    ('assets/sloth_donut_float.png', 'assets/sloth_donut_float.svg', 'SLOTH_DONUT_FLOAT_SVG'),
-    ('assets/turtle_donut_float.png', 'assets/turtle_donut_float.svg', 'TURTLE_DONUT_FLOAT_SVG'),
-    ('assets/penguin_donut_float.png', 'assets/penguin_donut_float.svg', 'PENGUIN_DONUT_FLOAT_SVG'),
-    ('assets/brownie_sipping.png', 'assets/brownie_sipping.svg', 'BROWNIE_SIPPING_SVG'),
-    ('assets/dodo_sipping.png', 'assets/dodo_sipping.svg', 'DODO_SIPPING_SVG'),
-    ('assets/mammoth_sipping.png', 'assets/mammoth_sipping.svg', 'MAMMOTH_SIPPING_SVG'),
-    ('assets/sloth_sipping.png', 'assets/sloth_sipping.svg', 'SLOTH_SIPPING_SVG'),
-    ('assets/turtle_sipping.png', 'assets/turtle_sipping.svg', 'TURTLE_SIPPING_SVG'),
-    ('assets/penguin_sipping.png', 'assets/penguin_sipping.svg', 'PENGUIN_SIPPING_SVG'),
+    (f'{ASSETS_DIR}/{character}/{artwork}.png',
+     f'{ASSETS_DIR}/{character}/{artwork}.svg',
+     ('CAPYBARA' if character == 'brownie' else character.upper()) + '_DONUT_FLOAT_SVG'
+     if artwork == 'float' else character.upper() + '_SIPPING_SVG')
+    for character in characters
+    for artwork in ['float', 'vessel']
 ]
 
 svg_exports = {}
